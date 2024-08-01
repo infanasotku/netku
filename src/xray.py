@@ -17,6 +17,7 @@ class Xray:
     def __init__(self):
         self._executable_dir = settings.get().xray_executable_dir
         self._executable_name = settings.get().xray_executable_name
+        self._restart_minutes = settings.get().xray_restart_minutes
         self._inst: Optional[Popen] = None
 
     async def lifespan(self, _: FastAPI) -> AsyncGenerator:
@@ -26,7 +27,7 @@ class Xray:
         yield
 
     def _run_restart_task(self) -> Coroutine[Any, Any, None]:
-        @repeat_every(seconds=10, logger=logging.getLogger("uvicorn.error"))
+        @repeat_every(seconds=self._restart_minutes * 60, logger=logging.getLogger("uvicorn.error"))
         def restart():
             self._restart()
 
