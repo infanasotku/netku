@@ -12,7 +12,10 @@ class Settings(BaseSettings):
     host: str = Field(validation_alias="HOST", default="127.0.0.1")
     port: int = Field(validation_alias="PORT", default=5100)
 
+    #region Xray
     xray_executable_dir: str = Field(validation_alias="XRAY_EXECUTABLE_DIR")
+    xray_executable_name: str = Field(validation_alias="XRAY_EXECUTABLE_NAME")
+    #endregion
 
     @computed_field
     @property

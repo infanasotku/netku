@@ -1,10 +1,10 @@
 import asyncio
 import logging
-from typing import Any, AsyncGenerator, Coroutine
+from typing import Any, AsyncGenerator, Coroutine, Optional
 from fastapi import FastAPI
 from fastapi_utils.tasks import repeat_every
 
-# import subprocess as sub
+from subprocess import Popen
 import settings
 
 
@@ -16,7 +16,8 @@ def create() -> FastAPI:
 class Xray:
     def __init__(self):
         self._executable_dir = settings.get().xray_executable_dir
-        # self._inst = sub.Popen()
+        self._executable_name = settings.get().xray_executable_name
+        self._inst: Optional[Popen] = None
 
     async def lifespan(self, _: FastAPI) -> AsyncGenerator:
         restart_task = asyncio.create_task(self._run_restart_task())
@@ -25,11 +26,33 @@ class Xray:
         yield
 
     def _run_restart_task(self) -> Coroutine[Any, Any, None]:
-        @repeat_every(seconds=5, logger=logging.getLogger("uvicorn.error"))
+        @repeat_every(seconds=10, logger=logging.getLogger("uvicorn.error"))
         def restart():
             self._restart()
 
         return restart()
 
     def _restart(self):
-        print(f"hello! {self._executable_dir}")
+        self._stop()
+        self._start()
+
+    def _stop(self):
+        if self._inst:
+            logging.getLogger("uvicorn.error").info("Stopping xray")
+            try:
+                self._inst.kill()
+                self._inst = None
+            except Exception as e:
+                logging.getLogger("uvicorn.error").warning(f"Xray starting failed: {e}")
+                return
+            logging.getLogger("uvicorn.error").info("Xray stopped")
+    
+    def _start(self):
+        if not self._inst:
+            logging.getLogger("uvicorn.error").info("Starting xray")
+            try:
+                self._inst = Popen([f"{self._executable_dir}/{self._executable_name}"])
+            except Exception as e:
+                logging.getLogger("uvicorn.error").warning(f"Xray starting failed: {e}")
+                return
+            logging.getLogger("uvicorn.error").info("Xray started")
