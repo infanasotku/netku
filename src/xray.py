@@ -2,8 +2,9 @@ import asyncio
 import logging
 from typing import Any, AsyncGenerator, Coroutine
 from fastapi import FastAPI
-from fastapi_utils.tasks import repeat_every, NoArgsNoReturnAsyncFuncT
-import subprocess as sub
+from fastapi_utils.tasks import repeat_every
+
+# import subprocess as sub
 import settings
 
 
