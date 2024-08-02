@@ -14,6 +14,8 @@ def run():
         host=settings.get().host,
         port=settings.get().port,
         log_config=log_config_path,
+        ssl_keyfile=settings.get().ssl_keyfile,
+        ssl_certfile=settings.get().ssl_certfile,
     )
 
 
