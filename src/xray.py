@@ -16,7 +16,6 @@ def create() -> FastAPI:
 
 
 class Xray:
-
     def __init__(self):
         self._executable_dir = settings.get().xray_executable_dir
         self._executable_name = settings.get().xray_executable_name
@@ -34,11 +33,21 @@ class Xray:
         yield
 
     def _init_config(self):
-        self._xray_config["inbounds"][0]["settings"]["fallbacks"][0]["dest"] = settings.get().xray_fallback
+        self._xray_config["inbounds"][0]["settings"]["fallbacks"][0]["dest"] = (
+            settings.get().xray_fallback
+        )
+        self._xray_config["inbounds"][0]["streamSettings"]["tlsSettings"][
+            "certificates"
+        ][0]["certificateFile"] = settings.get().ssl_certfile
+        self._xray_config["inbounds"][0]["streamSettings"]["tlsSettings"][
+            "certificates"
+        ][0]["keyFile"] = settings.get().ssl_keyfile
         self._update_config()
 
     def _update_config(self):
-        self._xray_config["inbounds"][0]["settings"]["clients"][0]["id"] = str(uuid.uuid4())
+        self._xray_config["inbounds"][0]["settings"]["clients"][0]["id"] = str(
+            uuid.uuid4()
+        )
 
     def _run_restart_task(self) -> Coroutine[Any, Any, None]:
         @repeat_every(seconds=self._restart_minutes * 60, logger=self._logger)
@@ -62,12 +71,17 @@ class Xray:
                 self._logger.warning(f"Xray starting failed: {e}")
                 return
             self._logger.info("Xray stopped")
-    
+
     def _start(self):
         if not self._inst:
             self._logger.info("Starting xray")
             try:
-                self._inst = Popen([f"{self._executable_dir}/{self._executable_name}"], stdin=PIPE, stderr=PIPE, text=True)
+                self._inst = Popen(
+                    [f"{self._executable_dir}/{self._executable_name}"],
+                    stdin=PIPE,
+                    stderr=PIPE,
+                    text=True,
+                )
                 self._inst.communicate(json.dumps(self._xray_config))
             except Exception as e:
                 self._logger.warning(f"Xray starting failed: {e}")
