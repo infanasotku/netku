@@ -5,10 +5,13 @@ services:
 
     volumes:
       - cert-dir:/etc/cert:ro
+      - xray-dir:/etc/xray
 
     env_file:
       - .env
 
 volumes:
   cert-dir:
+    external: true
+  xray-dir:
     external: true
