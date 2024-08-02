@@ -45,9 +45,9 @@ class Xray:
         self._update_config()
 
     def _update_config(self):
-        self._xray_config["inbounds"][0]["settings"]["clients"][0]["id"] = str(
-            uuid.uuid4()
-        )
+        id = str(uuid.uuid4())
+        self._xray_config["inbounds"][0]["settings"]["clients"][0]["id"] = id
+        self._logger.info(f"New id: {id}")
 
     def _run_restart_task(self) -> Coroutine[Any, Any, None]:
         @repeat_every(seconds=self._restart_minutes * 60, logger=self._logger)
