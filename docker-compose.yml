@@ -1,0 +1,20 @@
+services:
+  app-backend:
+    build:
+      context: src
+
+    volumes:
+      - cert-dir:/etc/cert:ro
+      - xray-dir:/etc/xray
+
+    env_file:
+      - .env
+
+    ports:
+      - 443:443
+
+volumes:
+  cert-dir:
+    external: true
+  xray-dir:
+    external: true
