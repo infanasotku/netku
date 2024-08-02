@@ -1,0 +1,14 @@
+services:
+  app-backend:
+    build:
+      context: src/backend
+
+    volumes:
+      - cert-dir:/etc/cert:ro
+
+    env_file:
+      - .env
+
+volumes:
+  cert-dir:
+    external: true
