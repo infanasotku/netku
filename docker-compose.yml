@@ -38,6 +38,7 @@ services:
 
     ports:
       - 443:443
+      - 80:5100
 
     env_file:
       - .env
