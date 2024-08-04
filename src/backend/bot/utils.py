@@ -67,3 +67,23 @@ def registrate_user(contact: Contact) -> Optional[UserSchema]:
     user.telegram_id = contact.user_id
     service.update_user(user)
     return user
+
+
+def subscribe_user(user: UserSchema, subscription: str):
+    """Subscribes user to `subscription`."""
+    match subscription:
+        case "proxy":
+            user.proxy_subscription = True
+
+    service.update_user(user)
+
+
+def unsubscribe_user(user: UserSchema, subscription: str):
+    """Unsubscribes user from `subscription`."""
+    match subscription:
+        case "proxy":
+            user.proxy_subscription = False
+        case "all":
+            user.proxy_subscription = False
+
+    service.update_user(user)

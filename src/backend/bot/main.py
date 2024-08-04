@@ -29,6 +29,7 @@ def create_lifespan() -> Callable[[FastAPI], AsyncGenerator]:
             [
                 BotCommand(command="start", description="Registration"),
                 BotCommand(command="stop", description="Cancels all subscriptions"),
+                BotCommand(command="proxy", description="Subscribe to proxy"),
             ]
         )
         logger.info("Webhook info: " + str(await _webhook_info()).split()[0])

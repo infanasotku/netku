@@ -9,6 +9,7 @@ from aiogram.types import (
 )
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
+from aiogram.utils.markdown import hbold
 
 from bot.states import BaseState
 import bot.utils as utils
@@ -40,7 +41,26 @@ async def start(message: Message, state: FSMContext):
 
 @router.message(Command("stop"))
 async def stop(message: Message):
-    await message.answer("Subscription canceled!")
+    user = utils.get_user(message)
+
+    if not user:
+        await message.answer(f"Hello! Use {hbold('/start')} to continue.")
+        return
+
+    utils.unsubscribe_user(user, "all")
+    await message.answer("Subscriptions canceled!")
+
+
+@router.message(Command("proxy"))
+async def sign_up_for_proxy(message: Message):
+    user = utils.get_user(message)
+
+    if not user:
+        await message.answer(f"Hello! Use {hbold('/start')} to continue.")
+        return
+
+    utils.subscribe_user(user, "proxy")
+    await message.answer("You subscribeted to proxy!")
 
 
 @router.message(BaseState.registration)
