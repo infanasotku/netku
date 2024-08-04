@@ -3,7 +3,7 @@ from fastapi import FastAPI, Header
 from aiogram.types import Update, WebhookInfo, BotCommand
 import aiogram.loggers as aloggers
 
-import settings
+from settings import settings
 from bot.bot import bot, dispatcher, logger
 from bot.router import router
 
@@ -19,8 +19,8 @@ def create_lifespan() -> Callable[[FastAPI], AsyncGenerator]:
         await bot.delete_webhook(drop_pending_updates=True)
 
         await bot.set_webhook(
-            url=settings.get().bot_webhook_url,
-            secret_token=settings.get().telegram_token,
+            url=settings.bot_webhook_url,
+            secret_token=settings.telegram_token,
             allowed_updates=dispatcher.resolve_used_update_types(),
             drop_pending_updates=True,
         )
@@ -50,7 +50,7 @@ async def _webhook(
     x_telegram_bot_api_secret_token: Annotated[str | None, Header()] = None,
 ):
     """Registers webhook endpoint for telegram bot"""
-    if x_telegram_bot_api_secret_token != settings.get().telegram_token:
+    if x_telegram_bot_api_secret_token != settings.telegram_token:
         logger().error("Wrong secret token !")
         return {"status": "error", "message": "Wrong secret token !"}
     try:

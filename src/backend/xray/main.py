@@ -7,7 +7,7 @@ import uuid
 import json
 
 from subprocess import Popen, PIPE
-import settings
+from settings import settings
 
 
 def create_lifespan() -> Callable[["Xray", FastAPI], AsyncGenerator]:
@@ -16,10 +16,10 @@ def create_lifespan() -> Callable[["Xray", FastAPI], AsyncGenerator]:
 
 class Xray:
     def __init__(self):
-        self._executable_dir = settings.get().xray_executable_dir
-        self._executable_name = settings.get().xray_executable_name
-        self._restart_minutes = settings.get().xray_restart_minutes
-        self._xray_config = settings.get().xray_config
+        self._executable_dir = settings.xray_executable_dir
+        self._executable_name = settings.xray_executable_name
+        self._restart_minutes = settings.xray_restart_minutes
+        self._xray_config = settings.xray_config
         self._logger = logging.getLogger("uvicorn.error")
         self._inst: Optional[Popen] = None
 
@@ -33,20 +33,16 @@ class Xray:
 
     def _init_config(self):
         self._xray_config["inbounds"][0]["settings"]["fallbacks"][0]["dest"] = (
-            settings.get().xray_fallback
+            settings.xray_fallback
         )
         self._xray_config["inbounds"][0]["streamSettings"]["tlsSettings"][
             "certificates"
-        ][0]["certificateFile"] = settings.get().ssl_certfile
+        ][0]["certificateFile"] = settings.ssl_certfile
         self._xray_config["inbounds"][0]["streamSettings"]["tlsSettings"][
             "certificates"
-        ][0]["keyFile"] = settings.get().ssl_keyfile
-        self._xray_config["log"]["access"] = (
-            f"{settings.get().xray_config_dir}/access.log"
-        )
-        self._xray_config["log"]["error"] = (
-            f"{settings.get().xray_config_dir}/error.log"
-        )
+        ][0]["keyFile"] = settings.ssl_keyfile
+        self._xray_config["log"]["access"] = f"{settings.xray_config_dir}/access.log"
+        self._xray_config["log"]["error"] = f"{settings.xray_config_dir}/error.log"
 
     def _update_config(self):
         id = str(uuid.uuid4())

@@ -1,4 +1,3 @@
-from functools import cache
 import logging
 import pathlib
 import sys
@@ -56,8 +55,7 @@ class Settings(BaseSettings):
         return (pathlib.Path(__file__).parent).resolve().as_posix()
 
 
-@cache
-def get() -> Settings:
+def _generate() -> Settings:
     """Gets cached settings of app."""
     try:
         load_dotenv(override=True)
@@ -65,3 +63,6 @@ def get() -> Settings:
     except Exception as e:
         logging.critical(f"Settings generated with error: {e}")
         sys.exit(1)
+
+
+settings = _generate()
