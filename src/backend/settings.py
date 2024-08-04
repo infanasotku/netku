@@ -49,7 +49,7 @@ class Settings(BaseSettings):
     bot_webhook_url: str = Field(validation_alias="BOT_WEBHOOK_URL")
     # endregion
 
-    # psql
+    # region psql
     psql_pass: str = Field(validation_alias="POSTGRES_PASSWORD")
     psql_user: str = Field(validation_alias="POSTGRES_USER")
     psql_host: str = Field(validation_alias="POSTGRES_HOST", default="127.0.0.1")
@@ -83,3 +83,4 @@ def _generate() -> Settings:
 
 
 settings = _generate()
+logger = logging.getLogger("uvicorn.error")

@@ -3,8 +3,8 @@ from fastapi import FastAPI, Header
 from aiogram.types import Update, WebhookInfo, BotCommand
 import aiogram.loggers as aloggers
 
-from settings import settings
-from bot.bot import bot, dispatcher, logger
+from settings import settings, logger
+from bot.bot import bot, dispatcher
 from bot.router import router
 
 
