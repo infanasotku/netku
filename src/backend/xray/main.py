@@ -29,6 +29,7 @@ class Xray:
         restart_task = asyncio.create_task(self._run_restart_task())
         yield
         restart_task.cancel()
+        await self._stop()
         yield
 
     def _init_config(self):
