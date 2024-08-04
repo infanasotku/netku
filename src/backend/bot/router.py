@@ -26,7 +26,7 @@ async def start(message: Message, state: FSMContext):
         await message.answer(f"Hello! {message.from_user.first_name}!")
     else:
         await state.set_state(BaseState.registration)
-        share_phone = KeyboardButton(text="Поделиться", request_contact=True)
+        share_phone = KeyboardButton(text="Share", request_contact=True)
         keyboard = ReplyKeyboardMarkup(keyboard=[[share_phone]])
         await message.answer(
             "Hello! For identification you need to share your phone.",
@@ -48,11 +48,11 @@ async def registrate(message: Message):
     user = utils.registrate_user(message.contact)
     if user:
         await message.answer(
-            "Subscription registrated!", reply_markup=ReplyKeyboardRemove()
+            "Registration successful!", reply_markup=ReplyKeyboardRemove()
         )
     if not user:
         await message.answer(
-            "Sorry, you have not enough permissions for subscription",
+            "Sorry, you have not enough permissions for registration.",
             reply_markup=ReplyKeyboardRemove(),
         )
 
