@@ -7,7 +7,7 @@ intpk = Annotated[int, mapped_column(primary_key=True)]
 
 
 class User(Base):
-    __tablename__ = "workers"
+    __tablename__ = "users"
 
     id: Mapped[intpk]
     phone_number: Mapped[str] = mapped_column(nullable=True)
