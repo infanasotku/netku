@@ -12,3 +12,6 @@ class BaseSchema(BaseModel):
 class UserSchema(BaseSchema):
     phone_number: Optional[str]
     telegram_id: Optional[int]
+
+    # Subscriptions
+    proxy_subscription: bool
