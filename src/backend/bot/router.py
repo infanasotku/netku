@@ -1,15 +1,19 @@
+import asyncio
 from aiogram import Router
 from aiogram.types import (
     Message,
     KeyboardButton,
     ReplyKeyboardMarkup,
     ReplyKeyboardRemove,
+    ErrorEvent,
 )
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 
 from bot.states import BaseState
 import bot.utils as utils
+
+from settings import logger
 
 
 router = Router(name="main")
@@ -60,3 +64,15 @@ async def registrate(message: Message):
 @router.message(BaseState.none)
 async def delete_extra(message: Message):
     await utils.try_delete_message(message)
+
+
+@router.error()
+async def error_handler(event: ErrorEvent):
+    logger.error(f"Error occurred: {event.exception}")
+    message = event.update.callback_query.message
+    await utils.try_delete_message(message)
+    msg = await message.answer(
+        "Error occurred! Contact your admin.", reply_markup=ReplyKeyboardRemove()
+    )
+    await asyncio.sleep(3)
+    await msg.delete()
