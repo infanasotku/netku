@@ -30,7 +30,7 @@ class Settings(BaseSettings):
     def xray_config(self) -> dict:
         try:
             logging.info("Loading xray config")
-            with open(f"{self.app_directory_path}/xray_config.json", "r") as f:
+            with open(f"{self.app_directory_path}/xray/xray_config.json", "r") as f:
                 config = json.loads(f.read())
                 logging.info("Xray config loaded")
                 return config

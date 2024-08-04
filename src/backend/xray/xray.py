@@ -1,6 +1,6 @@
 import asyncio
 import logging
-from typing import Any, AsyncGenerator, Coroutine, Optional
+from typing import Any, AsyncGenerator, Callable, Coroutine, Optional
 from fastapi import FastAPI
 from fastapi_utils.tasks import repeat_every
 import uuid
@@ -10,9 +10,8 @@ from subprocess import Popen, PIPE
 import settings
 
 
-def create() -> FastAPI:
-    xray = Xray()
-    return FastAPI(docs_url=None, redoc_url=None, lifespan=xray.lifespan)
+def create_lifespan() -> Callable[["Xray", FastAPI], AsyncGenerator]:
+    return Xray().lifespan
 
 
 class Xray:
@@ -42,7 +41,6 @@ class Xray:
         self._xray_config["inbounds"][0]["streamSettings"]["tlsSettings"][
             "certificates"
         ][0]["keyFile"] = settings.get().ssl_keyfile
-        self._update_config()
 
     def _update_config(self):
         id = str(uuid.uuid4())
