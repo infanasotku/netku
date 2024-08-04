@@ -21,4 +21,14 @@ def update_user(user: UserSchema):
     """Updates user."""
 
     if not orm.update_user(user):
-        logger.warning("User updating failed")
+        logger.warning("User updating failed.")
+
+
+def get_users() -> list[UserSchema]:
+    """Returns all user in db."""
+    users = orm.get_users()
+
+    if not users:
+        logger.warning("User table is empty.")
+
+    return users

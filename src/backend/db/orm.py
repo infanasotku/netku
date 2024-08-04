@@ -33,3 +33,11 @@ def update_user(new_user: UserSchema) -> bool:
         raw_user.proxy_subscription = new_user.proxy_subscription
 
     return True
+
+
+def get_users() -> list[UserSchema]:
+    """Returns all user in db."""
+    with session.begin() as s:
+        raw_users = s.query(User).all()
+
+        return [UserSchema.model_validate(raw_user) for raw_user in raw_users]
