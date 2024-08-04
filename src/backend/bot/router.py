@@ -13,6 +13,7 @@ from aiogram.utils.markdown import hbold
 
 from bot.states import BaseState
 import bot.utils as utils
+import bot.text as text
 
 from settings import logger
 
@@ -44,7 +45,7 @@ async def stop(message: Message):
     user = utils.get_user(message)
 
     if not user:
-        await message.answer(f"Hello! Use {hbold('/start')} to continue.")
+        await message.answer(text.please_click_start)
         return
 
     utils.unsubscribe_user(user, "all")
@@ -56,7 +57,7 @@ async def sign_up_for_proxy(message: Message):
     user = utils.get_user(message)
 
     if not user:
-        await message.answer(f"Hello! Use {hbold('/start')} to continue.")
+        await message.answer(text.please_click_start)
         return
 
     utils.subscribe_user(user, "proxy")
