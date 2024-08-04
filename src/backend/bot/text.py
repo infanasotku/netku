@@ -6,5 +6,6 @@ please_click_start = f"Hello! Use {hbold('/start')} to continue."
 def generate_proxy_task_message(proxy_id: str) -> str:
     """Generates template message text by `proxy_id`"""
     return f"""{hbold("[Proxy subscription]:")}
-New generated proxy id: {proxy_id}
+New generated proxy id:
+{hbold(proxy_id)}
 """
