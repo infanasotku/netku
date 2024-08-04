@@ -16,6 +16,7 @@ def create() -> FastAPI:
 
 def create_lifespan() -> Callable[[FastAPI], AsyncGenerator]:
     async def _lifespan(_: FastAPI) -> AsyncGenerator:
+        logger.info("Registrating bot webhook")
         await bot.delete_webhook(drop_pending_updates=True)
 
         await bot.set_webhook(
@@ -25,7 +26,10 @@ def create_lifespan() -> Callable[[FastAPI], AsyncGenerator]:
             drop_pending_updates=True,
         )
         await bot.set_my_commands(
-            [BotCommand(command="start", description="Регистрирует подписку")]
+            [
+                BotCommand(command="start", description="Registrates subscription"),
+                BotCommand(command="stop", description="Cancels subscription"),
+            ]
         )
         logger.info("Webhook info: " + str(await _webhook_info()).split()[0])
         yield
