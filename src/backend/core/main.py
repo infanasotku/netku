@@ -1,5 +1,5 @@
 from contextlib import asynccontextmanager
-from typing import Any, AsyncGenerator, Callable
+from typing import AsyncGenerator, Callable
 from fastapi import FastAPI
 
 import xray
@@ -9,7 +9,9 @@ import bot
 def create() -> FastAPI:
     """Creates core."""
     app = FastAPI(
-        lifespan=create_lifespan(xray.create_lifespan()), docs_url=None, redoc_url=None
+        lifespan=create_lifespan(xray.create_lifespan(), bot.create_lifespan()),
+        docs_url=None,
+        redoc_url=None,
     )
     _configure(app)
     return app
@@ -20,7 +22,7 @@ def _configure(app: FastAPI):
     app.mount(path="/bot", app=bot.create())
 
 
-def create_lifespan(*lifespans: Callable) -> Callable[[Any], AsyncGenerator]:
+def create_lifespan(*lifespans: Callable) -> Callable[[FastAPI], AsyncGenerator]:
     """Creates core lifespan which handle `lifespans` of all app."""
 
     @asynccontextmanager
