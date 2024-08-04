@@ -5,7 +5,7 @@ from fastapi_utils.tasks import repeat_every
 import uuid
 import json
 
-from subprocess import Popen, PIPE
+from subprocess import Popen, PIPE, TimeoutExpired
 from settings import settings, logger
 from bot import tasks
 
@@ -82,7 +82,9 @@ class Xray:
                     stderr=PIPE,
                     text=True,
                 )
-                self._inst.communicate(json.dumps(self._xray_config), timeout=0)
+                self._inst.communicate(json.dumps(self._xray_config), timeout=0.5)
+            except TimeoutExpired:
+                pass
             except Exception as e:
                 logger.warning(f"Xray starting failed: {e}.")
                 return
