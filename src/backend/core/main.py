@@ -3,6 +3,7 @@ from typing import Any, AsyncGenerator, Callable
 from fastapi import FastAPI
 
 import xray
+import bot
 
 
 def create() -> FastAPI:
@@ -10,7 +11,13 @@ def create() -> FastAPI:
     app = FastAPI(
         lifespan=create_lifespan(xray.create_lifespan()), docs_url=None, redoc_url=None
     )
+    _configure(app)
     return app
+
+
+def _configure(app: FastAPI):
+    "Mounts app services."
+    app.mount(path="/bot", app=bot.create())
 
 
 def create_lifespan(*lifespans: Callable) -> Callable[[Any], AsyncGenerator]:
