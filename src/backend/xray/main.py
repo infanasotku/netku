@@ -7,6 +7,7 @@ import json
 
 from subprocess import Popen, PIPE
 from settings import settings, logger
+from bot import tasks
 
 
 def create_lifespan() -> Callable[["Xray", FastAPI], AsyncGenerator]:
@@ -43,21 +44,22 @@ class Xray:
         self._xray_config["log"]["access"] = f"{settings.xray_config_dir}/access.log"
         self._xray_config["log"]["error"] = f"{settings.xray_config_dir}/error.log"
 
-    def _update_config(self):
+    async def _update_config(self):
         id = str(uuid.uuid4())
         self._xray_config["inbounds"][0]["settings"]["clients"][0]["id"] = id
         logger.info(f"New id: ({id}).")
+        await tasks.send_proxy_id(id)
 
     def _run_restart_task(self) -> Coroutine[Any, Any, None]:
         @repeat_every(seconds=self._restart_minutes * 60, logger=logger)
-        def restart():
-            self._restart()
+        async def restart():
+            await self._restart()
 
         return restart()
 
-    def _restart(self):
+    async def _restart(self):
         self._stop()
-        self._update_config()
+        await self._update_config()
         self._start()
 
     def _stop(self):
