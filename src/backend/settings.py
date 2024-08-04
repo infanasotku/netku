@@ -49,6 +49,7 @@ class Settings(BaseSettings):
 
 @cache
 def get() -> Settings:
+    """Gets cached settings of app."""
     try:
         load_dotenv(override=True)
         return Settings()
