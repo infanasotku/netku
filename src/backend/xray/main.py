@@ -82,7 +82,7 @@ class Xray:
                     stderr=PIPE,
                     text=True,
                 )
-                self._inst.communicate(json.dumps(self._xray_config))
+                self._inst.communicate(json.dumps(self._xray_config), timeout=0)
             except Exception as e:
                 logger.warning(f"Xray starting failed: {e}.")
                 return
