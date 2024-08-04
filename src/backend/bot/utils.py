@@ -1,5 +1,7 @@
 from typing import Any
-from aiogram.types import Message
+from aiogram.types import Message, Contact
+
+from db.schemas import UserSchema
 
 
 async def try_delete_message(message: Message) -> bool:
@@ -43,3 +45,20 @@ async def try_edit_or_answer(message: Message, text: str, reply_markup: Any = No
         return False
 
     return True
+
+
+def get_user(message: Message) -> UserSchema | None:
+    """Finds user by `message.chat.id`
+
+    - Returns `UserSchema` if user and his `UserSchema.telegram_id` exist,
+    `None` otherwise."""
+    return
+
+
+def registrate_user(contact: Contact) -> UserSchema | None:
+    """Registrates user by `contact.user_id` and `contact.phone_number`
+
+    - Returns `UserSchema` if user registrated successful
+    (User registrated successful if he founded by his `contact.phone_number` in db
+    ), `None` otherwise."""
+    return
