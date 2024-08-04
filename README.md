@@ -1,5 +1,7 @@
-## Simple [xray](https://github.com/XTLS/Xray-core) implementation.
+## My own server unit.
 
-Contains server side dockerized app with access token regeneration.
+### Contains:
 
-Access token sends to telegram every day.
+1. Simple [xray](https://github.com/XTLS/Xray-core) implementation.
+2. Bot - alerter.
+3. Business card page for xray fallback.
