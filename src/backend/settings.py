@@ -24,6 +24,7 @@ class Settings(BaseSettings):
     xray_executable_name: str = Field(validation_alias="XRAY_EXECUTABLE_NAME")
     xray_restart_minutes: float = Field(validation_alias="XRAY_RESTART_MINUTES")
     xray_fallback: str = Field(validation_alias="XRAY_FALLBACK")
+    xray_config_dir: str = Field(validation_alias="XRAY_CONFIG_DIR")
 
     @computed_field
     @property

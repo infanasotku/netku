@@ -41,6 +41,12 @@ class Xray:
         self._xray_config["inbounds"][0]["streamSettings"]["tlsSettings"][
             "certificates"
         ][0]["keyFile"] = settings.get().ssl_keyfile
+        self._xray_config["log"]["access"] = (
+            f"{settings.get().xray_config_dir}/access.log"
+        )
+        self._xray_config["log"]["error"] = (
+            f"{settings.get().xray_config_dir}/error.log"
+        )
 
     def _update_config(self):
         id = str(uuid.uuid4())
