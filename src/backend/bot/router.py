@@ -1,5 +1,10 @@
 from aiogram import Router
-from aiogram.types import Message, KeyboardButton, ReplyKeyboardMarkup
+from aiogram.types import (
+    Message,
+    KeyboardButton,
+    ReplyKeyboardMarkup,
+    ReplyKeyboardRemove,
+)
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 
@@ -42,10 +47,13 @@ async def registrate(message: Message):
 
     user = utils.registrate_user(message.contact)
     if user:
-        await message.answer("Subscription registrated!")
+        await message.answer(
+            "Subscription registrated!", reply_markup=ReplyKeyboardRemove()
+        )
     if not user:
         await message.answer(
             "Sorry, you have not enough permissions for subscription",
+            reply_markup=ReplyKeyboardRemove(),
         )
 
 

@@ -61,4 +61,5 @@ def registrate_user(contact: Contact) -> UserSchema | None:
     - Returns `UserSchema` if user registrated successful
     (User registrated successful if he founded by his `contact.phone_number` in db
     ), `None` otherwise."""
-    return
+    print(contact.phone_number)
+    return UserSchema(id=None, phone_number=None, telegram_id=None)

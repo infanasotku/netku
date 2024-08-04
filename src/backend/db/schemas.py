@@ -6,7 +6,7 @@ class BaseSchema(BaseModel):
     class Config:
         from_attributes = True
 
-    id: int
+    id: Optional[int]
 
 
 class UserSchema(BaseSchema):
