@@ -26,6 +26,7 @@ services:
     volumes:
       - cert-dir:/etc/cert:ro
       - xray-dir:/etc/xray
+      - xray-log-dir:/etc/xray/log
 
     env_file:
       - .env
