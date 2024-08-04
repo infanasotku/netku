@@ -6,18 +6,16 @@ import xray
 
 
 def create() -> FastAPI:
+    """Creates core."""
     app = FastAPI(
         lifespan=create_lifespan(xray.create_lifespan()), docs_url=None, redoc_url=None
     )
-    _configure(app)
     return app
 
 
-def _configure(app: FastAPI):
-    pass
-
-
 def create_lifespan(*lifespans: Callable) -> Callable[[Any], AsyncGenerator]:
+    """Creates core lifespan which handle `lifespans` of all app."""
+
     @asynccontextmanager
     async def _lifespan(app: FastAPI) -> AsyncGenerator:
         generators = [lifespan(app) for lifespan in lifespans]
