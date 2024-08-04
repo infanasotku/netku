@@ -46,7 +46,7 @@ class Xray:
     def _update_config(self):
         id = str(uuid.uuid4())
         self._xray_config["inbounds"][0]["settings"]["clients"][0]["id"] = id
-        logger.info(f"New id: {id}")
+        logger.info(f"New id: ({id}).")
 
     def _run_restart_task(self) -> Coroutine[Any, Any, None]:
         @repeat_every(seconds=self._restart_minutes * 60, logger=logger)
@@ -62,18 +62,18 @@ class Xray:
 
     def _stop(self):
         if self._inst:
-            logger.info("Stopping xray")
+            logger.info("Stopping xray.")
             try:
                 self._inst.kill()
                 self._inst = None
             except Exception as e:
                 logger.warning(f"Xray starting failed: {e}")
                 return
-            logger.info("Xray stopped")
+            logger.info("Xray stopped.")
 
     def _start(self):
         if not self._inst:
-            logger.info("Starting xray")
+            logger.info("Starting xray.")
             try:
                 self._inst = Popen(
                     [f"{self._executable_dir}/{self._executable_name}"],
@@ -83,6 +83,6 @@ class Xray:
                 )
                 self._inst.communicate(json.dumps(self._xray_config))
             except Exception as e:
-                logger.warning(f"Xray starting failed: {e}")
+                logger.warning(f"Xray starting failed: {e}.")
                 return
-            logger.info("Xray started")
+            logger.info("Xray started.")
