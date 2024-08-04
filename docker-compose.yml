@@ -7,7 +7,9 @@ services:
       - db-dir:/var/lib/postgresql/data
 
     networks:
-      - netku-net
+      - backend-net
+
+    hostname: postgresql
 
     ports:
       - 5432:5432
@@ -32,7 +34,7 @@ services:
       - xray-log-dir:/etc/xray/log
 
     networks:
-      - netku-net
+      - backend-net
 
     ports:
       - 443:443
@@ -55,4 +57,5 @@ volumes:
     external: true
 
 networks:
-  netku-net:
+  backend-net:
+    name: backend-net
