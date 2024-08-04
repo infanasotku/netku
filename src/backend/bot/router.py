@@ -9,7 +9,6 @@ from aiogram.types import (
 )
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
-from aiogram.utils.markdown import hbold
 
 from bot.states import BaseState
 import bot.utils as utils
