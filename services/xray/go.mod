@@ -1,4 +1,4 @@
-module github.com/infanasotku/netku/xray
+module github.com/infanasotku/netku/services/xray
 
 go 1.22.6
 
