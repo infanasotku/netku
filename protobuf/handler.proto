@@ -1,8 +1,6 @@
 syntax = "proto3";
 package handler;
 
-option go_package = "github.com/infanasotku/netku/xray/handler";
-
 message RestartResponse {
     string uuid = 1;
 }

@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.5.1
 // - protoc             v5.27.3
-// source: handler.proto
+// source: protobuf/handler.proto
 
 package handler
 
@@ -117,5 +117,5 @@ var HandlerService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "handler.proto",
+	Metadata: "protobuf/handler.proto",
 }
