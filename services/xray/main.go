@@ -5,6 +5,8 @@ import (
 	"net"
 
 	"google.golang.org/grpc"
+
+	"github.com/infanasotku/netku/services/xray/handler"
 )
 
 func main() {
@@ -16,6 +18,8 @@ func main() {
 	}
 
 	grpcServer := grpc.NewServer()
+
+	handler.RegisterHandlerServiceServer(grpcServer, handler.Server{})
 
 	if err := grpcServer.Serve(lis); err != nil {
 		log.Fatalf("Failed to serve gRPC server over port %o: %v", port, err)
