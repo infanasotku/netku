@@ -27,22 +27,13 @@ class Xray:
         restart_task.cancel()
         self._stop()
 
-    def _init_config(self):
-        # self._xray_config["inbounds"][0]["settings"]["fallbacks"][0]["dest"] = (
-        #     settings.xray_fallback
-        # )
-        # self._xray_config["inbounds"][0]["streamSettings"]["tlsSettings"][
-        #     "certificates"
-        # ][0]["certificateFile"] = settings.ssl_certfile
-        # self._xray_config["inbounds"][0]["streamSettings"]["tlsSettings"][
-        #     "certificates"
-        # ][0]["keyFile"] = settings.ssl_keyfile
-        # self._xray_config["log"]["access"] = f"{settings.xray_config_dir}/access.log"
-        # self._xray_config["log"]["error"] = f"{settings.xray_config_dir}/error.log"
-        # self._xray_config["inbounds"][0]["settings"]["clients"][0]["id"] = id
-        pass
-
     def _run_restart_task(self) -> Coroutine[Any, Any, None]:
+        """Registers `self._restart` as repeat task.
+
+        Returns:
+        Wrapped `self._restart` task.
+        """
+
         @repeat_every(seconds=self._restart_minutes * 60, logger=logger)
         async def restart():
             await self._restart()
@@ -51,14 +42,12 @@ class Xray:
 
     async def _restart(self):
         """Sends grpc request to xray service for restart,
-        obtains new uid.
-        """
-        print(f"{self._xray_host}:{self._xray_host}")
+        obtains new uid."""
         with grpc.insecure_channel(f"{self._xray_host}:{self._xray_port}") as ch:
             stub = HandlerServiceStub(ch)
             resp: RestartResponse = stub.RestartXray(Null())
 
-            id = resp.uuid
-            print(id)
+            if not resp:
+                logger.error("Couldn't send restarting request to xray.")
 
-        # await tasks.send_proxy_id(id)
+            await tasks.send_proxy_id(resp.uuid)
