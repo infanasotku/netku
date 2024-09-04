@@ -20,11 +20,9 @@ class Settings(BaseSettings):
     # endregion
 
     # region Xray
-    xray_executable_dir: str = Field(validation_alias="XRAY_EXECUTABLE_DIR")
-    xray_executable_name: str = Field(validation_alias="XRAY_EXECUTABLE_NAME")
     xray_restart_minutes: float = Field(validation_alias="XRAY_RESTART_MINUTES")
-    xray_fallback: str = Field(validation_alias="XRAY_FALLBACK")
-    xray_config_dir: str = Field(validation_alias="XRAY_CONFIG_DIR")
+    xray_port: int = Field(validation_alias="XRAY_PORT", default=9000)
+    xray_host: str = Field(validation_alias="XRAY_HOST", default="127.0.0.1")
 
     @computed_field
     @property
