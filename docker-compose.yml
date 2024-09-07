@@ -64,6 +64,22 @@ services:
       db:
         condition: service_healthy
 
+  app-server:
+    build:
+      context: services/server
+
+    volumes:
+      - cert-dir:/etc/cert:ro
+
+    networks:
+      - netku-net
+
+    ports:
+      - 443:443
+
+    env_file:
+      - .env
+
 volumes:
   cert-dir:
     external: true
