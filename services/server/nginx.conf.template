@@ -1,6 +1,6 @@
-map $host $assistant_port {
-  default "$PORT";
-}
 map $host $server_domain {
   default "$DOMAIN";
+}
+upstream assistant_href {
+    server assistant:$PORT;
 }
