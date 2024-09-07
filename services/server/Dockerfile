@@ -2,6 +2,13 @@ FROM nginx:stable-alpine
 
 ADD nginx.conf.template /etc/nginx/conf.templates/default.conf
 ADD nginx.conf /etc/nginx/conf.d/infanasotku.conf
-ADD run.sh /etc/run.sh
+ADD install.sh /etc/install.sh
 
-CMD /etc/run.sh && nginx -g 'daemon off;'
+ARG PORT
+ARG DOMAIN
+ENV PORT $PORT
+ENV DOMAIN $DOMAIN
+
+RUN /etc/install.sh
+
+CMD ["nginx", "-g", "daemon off;"]

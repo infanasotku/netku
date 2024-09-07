@@ -64,6 +64,9 @@ services:
     container_name: netku-server
     build:
       context: services/server
+      args:
+        PORT:
+        DOMAIN:
 
     volumes:
       - cert-dir:/etc/cert:ro
