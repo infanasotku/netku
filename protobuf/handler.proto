@@ -1,0 +1,12 @@
+syntax = "proto3";
+package handler;
+
+message RestartResponse {
+    string uuid = 1;
+}
+
+message Null {}
+
+service HandlerService {
+    rpc RestartXray(Null) returns (RestartResponse) {}
+}

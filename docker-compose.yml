@@ -1,13 +1,13 @@
 services:
-  app-db:
-    image: postgres
+  db:
     container_name: netku-db
+    image: postgres
 
     volumes:
       - db-dir:/var/lib/postgresql/data
 
     networks:
-      - backend-net
+      - netku-net
 
     hostname: postgresql
 
@@ -23,34 +23,65 @@ services:
       timeout: 5s
       retries: 10
 
-  app-backend:
-    container_name: netku-backend
+  xray:
+    container_name: netku-xray
     build:
-      context: src/backend
+      context: services/xray
 
     volumes:
       - cert-dir:/etc/cert:ro
-      - xray-dir:/etc/xray
       - xray-log-dir:/etc/xray/log
 
     networks:
-      - backend-net
+      - netku-net
 
     ports:
-      - 443:443
-      - 80:5100
+      - 80:80
+
+    env_file:
+      - .env
+
+  assistant:
+    container_name: netku-assistant
+    build:
+      context: services/assistant
+
+    volumes:
+      - cert-dir:/etc/cert:ro
+      - xray-log-dir:/etc/xray/log
+
+    networks:
+      - netku-net
 
     env_file:
       - .env
 
     depends_on:
-      app-db:
+      db:
         condition: service_healthy
+
+  server:
+    container_name: netku-server
+    build:
+      context: services/server
+      args:
+        PORT:
+        DOMAIN:
+
+    volumes:
+      - cert-dir:/etc/cert:ro
+
+    networks:
+      - netku-net
+
+    ports:
+      - 443:443
+
+    env_file:
+      - .env
 
 volumes:
   cert-dir:
-    external: true
-  xray-dir:
     external: true
   xray-log-dir:
     external: true
@@ -58,5 +89,5 @@ volumes:
     external: true
 
 networks:
-  backend-net:
-    name: backend-net
+  netku-net:
+    name: netku-net

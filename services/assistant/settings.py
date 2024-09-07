@@ -1,7 +1,6 @@
 import logging
 import pathlib
 import sys
-import json
 from typing import Optional
 import uuid
 
@@ -20,25 +19,9 @@ class Settings(BaseSettings):
     # endregion
 
     # region Xray
-    xray_executable_dir: str = Field(validation_alias="XRAY_EXECUTABLE_DIR")
-    xray_executable_name: str = Field(validation_alias="XRAY_EXECUTABLE_NAME")
     xray_restart_minutes: float = Field(validation_alias="XRAY_RESTART_MINUTES")
-    xray_fallback: str = Field(validation_alias="XRAY_FALLBACK")
-    xray_config_dir: str = Field(validation_alias="XRAY_CONFIG_DIR")
-
-    @computed_field
-    @property
-    def xray_config(self) -> dict:
-        try:
-            logging.info("Loading xray config")
-            with open(f"{self.app_directory_path}/xray/xray_config.json", "r") as f:
-                config = json.loads(f.read())
-                logging.info("Xray config loaded")
-                return config
-        except Exception as e:
-            logging.critical(f"Xray config loaded with error: {e}")
-            sys.exit(1)
-
+    xray_port: int = Field(validation_alias="XRAY_PORT", default=9000)
+    xray_host: str = Field(validation_alias="XRAY_HOST", default="127.0.0.1")
     # endregion
 
     # region Bot
