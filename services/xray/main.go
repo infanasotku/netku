@@ -17,7 +17,7 @@ func main() {
 
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%s", port))
 	if err != nil {
-		log.Fatalf("Failde to listen on port %s: %v", port, err)
+		log.Fatalf("Failed to listen on port %s: %v", port, err)
 	}
 
 	grpcServer := grpc.NewServer()
