@@ -23,6 +23,24 @@ services:
       timeout: 5s
       retries: 10
 
+  xray:
+    container_name: netku-xray
+    build:
+      context: services/xray
+
+    volumes:
+      - cert-dir:/etc/cert:ro
+      - xray-log-dir:/etc/xray/log
+
+    networks:
+      - netku-net
+
+    ports:
+      - 80:80
+
+    env_file:
+      - .env
+
   assistant:
     container_name: netku-assistant
     build:
@@ -37,8 +55,7 @@ services:
       - netku-net
 
     ports:
-      - 443:443
-      - 80:5100
+      - 443:5100
 
     env_file:
       - .env
@@ -49,8 +66,6 @@ services:
 
 volumes:
   cert-dir:
-    external: true
-  xray-dir:
     external: true
   xray-log-dir:
     external: true
