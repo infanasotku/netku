@@ -12,7 +12,7 @@ import (
 )
 
 func main() {
-	Configure()
+	ConfigureEnvs()
 	port := os.Getenv("XRAY_PORT")
 
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%s", port))

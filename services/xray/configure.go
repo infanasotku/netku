@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"log"
 	"os"
 	"path"
@@ -12,38 +13,18 @@ import (
 	_ "github.com/xtls/xray-core/main/distro/all"
 )
 
-func Configure() {
-	err := godotenv.Overload()
-
+func ConfigureEnvs() {
+	err := checkEnvs()
 	if err != nil {
-		log.Fatal("Error loading .env file")
+		err = godotenv.Overload()
+		if err != nil {
+			log.Fatal("Error loading .env file")
+		}
+		err = checkEnvs()
+		if err != nil {
+			log.Fatal("Error reading env: ", err)
+		}
 	}
-	//#region Checks vars
-	_, ok := os.LookupEnv("XRAY_PORT")
-	if !ok {
-		log.Fatal("XRAY_PORT not specified.")
-	}
-
-	_, ok = os.LookupEnv("XRAY_CONFIG_DIR")
-	if !ok {
-		log.Fatal("XRAY_CONFIG_DIR not specified.")
-	}
-
-	_, ok = os.LookupEnv("XRAY_LOG_DIR")
-	if !ok {
-		log.Fatal("XRAY_LOG_DIR not specified.")
-	}
-
-	_, ok = os.LookupEnv("SSL_KEYFILE")
-	if !ok {
-		log.Fatal("SSL_KEYFILE not specified.")
-	}
-
-	_, ok = os.LookupEnv("SSL_CERTFILE")
-	if !ok {
-		log.Fatal("SSL_CERTFILE not specified.")
-	}
-	//#endregion
 }
 
 func ConfigureServer(s *handler.Server) {
@@ -70,4 +51,33 @@ func ConfigureServer(s *handler.Server) {
 	if err != nil {
 		log.Fatal("Failed to load config file: ", err)
 	}
+}
+
+func checkEnvs() error {
+	_, ok := os.LookupEnv("XRAY_PORT")
+	if !ok {
+		return errors.New("XRAY_PORT not specified")
+	}
+
+	_, ok = os.LookupEnv("XRAY_CONFIG_DIR")
+	if !ok {
+		return errors.New("XRAY_CONFIG_DIR not specified")
+	}
+
+	_, ok = os.LookupEnv("XRAY_LOG_DIR")
+	if !ok {
+		return errors.New("XRAY_LOG_DIR not specified")
+	}
+
+	_, ok = os.LookupEnv("SSL_KEYFILE")
+	if !ok {
+		return errors.New("SSL_KEYFILE not specified")
+	}
+
+	_, ok = os.LookupEnv("SSL_CERTFILE")
+	if !ok {
+		return errors.New("SSL_CERTFILE not specified")
+	}
+
+	return nil
 }
