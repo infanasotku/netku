@@ -1,11 +1,11 @@
 FROM golang:1.23
 
 WORKDIR /app
-
-COPY go.mod go.sum ./
-RUN go mod download && go mod verify
-
+COPY go.mod .
+COPY go.sum .
+RUN go mod download
 COPY . .
-RUN go build -v -o /usr/local/bin/app ./...
+ENV GOCACHE=/root/.cache/go-build
 
-CMD ["app"]
+RUN --mount=type=cache,target="/root/.cache/go-build" go build
+CMD ./xray
