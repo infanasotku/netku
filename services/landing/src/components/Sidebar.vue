@@ -1,5 +1,49 @@
 <script setup lang="ts">
 import NavBar from "@/components/NavBar.vue";
+import { ref } from "vue";
+
+const groups = ref([
+  {
+    header: "First",
+    list: [
+      {
+        content: "First",
+        href: "/First",
+        active: true,
+      },
+      {
+        content: "Second",
+        href: "/Second",
+        active: false,
+      },
+      {
+        content: "Third",
+        href: "/Third",
+        active: false,
+      },
+    ],
+  },
+  {
+    header: "Second",
+    list: [
+      {
+        content: "First",
+        href: "/First",
+        active: false,
+      },
+      {
+        content: "Second",
+        href: "/Second",
+        active: false,
+      },
+      {
+        content: "Third",
+        href: "/Third",
+        active: false,
+      },
+    ],
+  },
+]);
 </script>
 
 <template>
@@ -10,7 +54,7 @@ import NavBar from "@/components/NavBar.vue";
         <span>Netku</span>
       </a>
     </div>
-    <NavBar class="sb-navbar"></NavBar>
+    <NavBar class="sb-navbar" :nav-groups="groups"></NavBar>
   </aside>
 </template>
 
@@ -24,7 +68,7 @@ import NavBar from "@/components/NavBar.vue";
 }
 
 .sb-navbar {
-  border-top: 1px solid var(--divider-color);
+  padding: 0;
   height: 100%;
 }
 
@@ -44,6 +88,7 @@ import NavBar from "@/components/NavBar.vue";
 .sb-header span {
   font-size: 16px;
   font-weight: 600;
+  color: var(--text-color-1);
 }
 /*#endregion */
 </style>
