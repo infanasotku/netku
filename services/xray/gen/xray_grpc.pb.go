@@ -19,7 +19,7 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	XrayService_RestartXray_FullMethodName = "/xray_gen.XrayService/RestartXray"
+	XrayService_RestartXray_FullMethodName = "/xray.XrayService/RestartXray"
 )
 
 // XrayServiceClient is the client API for XrayService service.
@@ -108,7 +108,7 @@ func _XrayService_RestartXray_Handler(srv interface{}, ctx context.Context, dec 
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var XrayService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "xray_gen.XrayService",
+	ServiceName: "xray.XrayService",
 	HandlerType: (*XrayServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

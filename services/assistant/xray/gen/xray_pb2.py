@@ -20,7 +20,7 @@ _sym_db = _symbol_database.Default()
 
 
 DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(
-    b'\n\x13xray/gen/xray.proto\x12\x03gen"\x1f\n\x0fRestartResponse\x12\x0c\n\x04uuid\x18\x01 \x01(\t"\x06\n\x04Null2?\n\x0bXrayService\x12\x30\n\x0bRestartXray\x12\t.gen.Null\x1a\x14.gen.RestartResponse"\x00\x62\x06proto3'
+    b'\n\x13xray/gen/xray.proto\x12\x04xray"\x1f\n\x0fRestartResponse\x12\x0c\n\x04uuid\x18\x01 \x01(\t"\x06\n\x04Null2A\n\x0bXrayService\x12\x32\n\x0bRestartXray\x12\n.xray.Null\x1a\x15.xray.RestartResponse"\x00\x62\x06proto3'
 )
 
 _globals = globals()
@@ -28,10 +28,10 @@ _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, "xray.gen.xray_pb2", _globals)
 if not _descriptor._USE_C_DESCRIPTORS:
     DESCRIPTOR._loaded_options = None
-    _globals["_RESTARTRESPONSE"]._serialized_start = 28
-    _globals["_RESTARTRESPONSE"]._serialized_end = 59
-    _globals["_NULL"]._serialized_start = 61
-    _globals["_NULL"]._serialized_end = 67
-    _globals["_XRAYSERVICE"]._serialized_start = 69
-    _globals["_XRAYSERVICE"]._serialized_end = 132
+    _globals["_RESTARTRESPONSE"]._serialized_start = 29
+    _globals["_RESTARTRESPONSE"]._serialized_end = 60
+    _globals["_NULL"]._serialized_start = 62
+    _globals["_NULL"]._serialized_end = 68
+    _globals["_XRAYSERVICE"]._serialized_start = 70
+    _globals["_XRAYSERVICE"]._serialized_end = 135
 # @@protoc_insertion_point(module_scope)
