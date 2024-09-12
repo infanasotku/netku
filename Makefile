@@ -1,11 +1,11 @@
-generate-go:
+generate-xray-go:
 	protoc --go_out=services/xray \
-	--go_opt=Mprotobuf/handler.proto=./handler \
+	--go_opt=Mprotobuf/xray.proto=./gen \
 	--go-grpc_out=services/xray \
-	--go-grpc_opt=Mprotobuf/handler.proto=./handler \
-	protobuf/handler.proto
+	--go-grpc_opt=Mprotobuf/xray.proto=./gen \
+	protobuf/xray.proto
 
-generate-py:
+generate-xray-py:
 	python -m grpc_tools.protoc -Ixray/handler/handler=protobuf/handler.proto \
 	--python_out=services/assistant/ \
 	--grpc_python_out=services/assistant/ \

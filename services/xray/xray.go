@@ -1,25 +1,25 @@
-package handler
+package main
 
 import (
 	"bytes"
-	context "context"
+	"context"
 	"errors"
 	"fmt"
 	"io"
 	"log"
 
+	"github.com/infanasotku/netku/services/xray/gen"
 	"github.com/xtls/xray-core/common/uuid"
-	core "github.com/xtls/xray-core/core"
+	"github.com/xtls/xray-core/core"
 )
 
 type Server struct {
+	gen.UnimplementedXrayServiceServer
 	xrayServer core.Server
 	xrayConfig *core.Config
 }
 
-type GetConfig func() string
-
-func (s *Server) RestartXray(context.Context, *Null) (*RestartResponse, error) {
+func (s *Server) RestartXray(context.Context, *gen.Null) (*gen.RestartResponse, error) {
 	if s.xrayServer != nil {
 		s.xrayServer.Close()
 	}
@@ -43,7 +43,7 @@ func (s *Server) RestartXray(context.Context, *Null) (*RestartResponse, error) {
 		log.Fatal("Failed to run server: ", err)
 	}
 
-	return &RestartResponse{Uuid: convertedId}, nil
+	return &gen.RestartResponse{Uuid: convertedId}, nil
 }
 
 // Loads and saves xray config to server.
@@ -57,5 +57,3 @@ func (s *Server) LoadConfig(configFile io.Reader) error {
 
 	return nil
 }
-
-func (Server) mustEmbedUnimplementedHandlerServiceServer() {}

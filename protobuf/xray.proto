@@ -1,5 +1,5 @@
 syntax = "proto3";
-package handler;
+package gen;
 
 message RestartResponse {
     string uuid = 1;
@@ -7,6 +7,6 @@ message RestartResponse {
 
 message Null {}
 
-service HandlerService {
+service XrayService {
     rpc RestartXray(Null) returns (RestartResponse) {}
 }
