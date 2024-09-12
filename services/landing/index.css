@@ -5,13 +5,11 @@ body,
   height: 100%;
   overscroll-behavior: none;
   font-family: var(--font-family-base);
-  color: var(--text-color);
   -webkit-font-smoothing: antialiased;
 }
 
 a {
   text-decoration: none;
-  color: var(--text-color);
   -webkit-font-smoothing: antialiased;
 }
 
@@ -19,14 +17,20 @@ a {
   --bg-main: #000000;
   --bg-block: #1b1b1f;
   --bg-alt: #161618;
-  --text-color: rgba(255, 255, 245, 0.86);
+
+  --text-color-1: rgba(255, 255, 245, 0.86);
+  --text-color-2: rgba(235, 235, 245, 0.6);
+
+  --highlight-color-1: #a8b1ff;
+
   --divider-color: #2e2e32;
 }
 :root {
   --bg-main: #f6f6f7;
   --bg-block: #ffffff;
   --bg-alt: #f6f6f7;
-  --text-color: rgba(60, 60, 67);
+  --text-color-1: rgba(60, 60, 67);
+  --text-color-2: rgba(60, 60, 67, 0.78);
   --divider-color: #e2e2e3;
   --font-family-base: "Inter", ui-sans-serif, system-ui, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
