@@ -6,8 +6,8 @@ generate-xray-go:
 	protobuf/xray.proto
 
 generate-xray-py:
-	python -m grpc_tools.protoc -Ixray/handler/handler=protobuf/handler.proto \
+	python -m grpc_tools.protoc -Ixray/gen/xray.proto=protobuf/xray.proto \
 	--python_out=services/assistant/ \
 	--grpc_python_out=services/assistant/ \
 	--pyi_out=services/assistant/ \
-	protobuf/handler.proto
+	protobuf/xray.proto

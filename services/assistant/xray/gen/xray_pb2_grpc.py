@@ -3,7 +3,7 @@
 
 import grpc
 
-from xray.handler import handler_pb2 as xray_dot_handler_dot_handler__pb2
+from xray.gen import xray_pb2 as xray_dot_gen_dot_xray__pb2
 
 GRPC_GENERATED_VERSION = "1.66.0"
 GRPC_VERSION = grpc.__version__
@@ -21,14 +21,14 @@ except ImportError:
 if _version_not_supported:
     raise RuntimeError(
         f"The grpc package installed is at version {GRPC_VERSION},"
-        + " but the generated code in xray/handler/handler_pb2_grpc.py depends on"
+        + " but the generated code in xray/gen/xray_pb2_grpc.py depends on"
         + f" grpcio>={GRPC_GENERATED_VERSION}."
         + f" Please upgrade your grpc module to grpcio>={GRPC_GENERATED_VERSION}"
         + f" or downgrade your generated code using grpcio-tools<={GRPC_VERSION}."
     )
 
 
-class HandlerServiceStub(object):
+class XrayServiceStub(object):
     """Missing associated documentation comment in .proto file."""
 
     def __init__(self, channel):
@@ -38,14 +38,14 @@ class HandlerServiceStub(object):
             channel: A grpc.Channel.
         """
         self.RestartXray = channel.unary_unary(
-            "/handler.HandlerService/RestartXray",
-            request_serializer=xray_dot_handler_dot_handler__pb2.Null.SerializeToString,
-            response_deserializer=xray_dot_handler_dot_handler__pb2.RestartResponse.FromString,
+            "/gen.XrayService/RestartXray",
+            request_serializer=xray_dot_gen_dot_xray__pb2.Null.SerializeToString,
+            response_deserializer=xray_dot_gen_dot_xray__pb2.RestartResponse.FromString,
             _registered_method=True,
         )
 
 
-class HandlerServiceServicer(object):
+class XrayServiceServicer(object):
     """Missing associated documentation comment in .proto file."""
 
     def RestartXray(self, request, context):
@@ -55,23 +55,23 @@ class HandlerServiceServicer(object):
         raise NotImplementedError("Method not implemented!")
 
 
-def add_HandlerServiceServicer_to_server(servicer, server):
+def add_XrayServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
         "RestartXray": grpc.unary_unary_rpc_method_handler(
             servicer.RestartXray,
-            request_deserializer=xray_dot_handler_dot_handler__pb2.Null.FromString,
-            response_serializer=xray_dot_handler_dot_handler__pb2.RestartResponse.SerializeToString,
+            request_deserializer=xray_dot_gen_dot_xray__pb2.Null.FromString,
+            response_serializer=xray_dot_gen_dot_xray__pb2.RestartResponse.SerializeToString,
         ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-        "handler.HandlerService", rpc_method_handlers
+        "gen.XrayService", rpc_method_handlers
     )
     server.add_generic_rpc_handlers((generic_handler,))
-    server.add_registered_method_handlers("handler.HandlerService", rpc_method_handlers)
+    server.add_registered_method_handlers("gen.XrayService", rpc_method_handlers)
 
 
 # This class is part of an EXPERIMENTAL API.
-class HandlerService(object):
+class XrayService(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
@@ -90,9 +90,9 @@ class HandlerService(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            "/handler.HandlerService/RestartXray",
-            xray_dot_handler_dot_handler__pb2.Null.SerializeToString,
-            xray_dot_handler_dot_handler__pb2.RestartResponse.FromString,
+            "/gen.XrayService/RestartXray",
+            xray_dot_gen_dot_xray__pb2.Null.SerializeToString,
+            xray_dot_gen_dot_xray__pb2.RestartResponse.FromString,
             options,
             channel_credentials,
             insecure,
