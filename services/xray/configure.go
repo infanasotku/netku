@@ -8,7 +8,6 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/infanasotku/netku/services/xray/handler"
 	godotenv "github.com/joho/godotenv"
 	_ "github.com/xtls/xray-core/main/distro/all"
 )
@@ -27,7 +26,7 @@ func ConfigureEnvs() {
 	}
 }
 
-func ConfigureServer(s *handler.Server) {
+func ConfigureServer(s *Server) {
 	config_path := path.Join(os.Getenv("XRAY_CONFIG_DIR"), "config.json")
 
 	configFileBytes, err := os.ReadFile(config_path)

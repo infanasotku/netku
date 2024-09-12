@@ -7,8 +7,8 @@ import grpc
 from settings import settings, logger
 from bot import tasks
 
-from xray.handler.h_pb2_grpc import HandlerServiceStub
-from xray.handler.handler_pb2 import RestartResponse, Null
+from xray.gen.xray_pb2_grpc import XrayServiceStub
+from xray.gen.xray_pb2 import RestartResponse, Null
 
 
 def create_lifespan() -> Callable[["Xray", FastAPI], AsyncGenerator]:
@@ -44,7 +44,7 @@ class Xray:
         """Sends grpc request to xray service for restart,
         obtains new uid."""
         with grpc.insecure_channel(f"{self._xray_host}:{self._xray_port}") as ch:
-            stub = HandlerServiceStub(ch)
+            stub = XrayServiceStub(ch)
             resp: RestartResponse = stub.RestartXray(Null())
 
             if not resp:
