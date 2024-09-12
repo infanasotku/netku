@@ -5,7 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install Python
+      - name: Setip Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
@@ -21,3 +21,21 @@ jobs:
         run: |
           ruff check .
           ruff format --check .
+
+  build-go:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        go-version: ["1.22.6"]
+
+    steps:
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          # Semantic version range syntax or exact version of Go
+          go-version: "1.22.6"
+      - name: Install dependencies
+        working-directory: ./services/xray
+        run: go mod download
+      - name: Run build
+        run: go build .
