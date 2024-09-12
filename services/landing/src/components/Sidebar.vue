@@ -61,7 +61,7 @@ const groups = ref([
 <style scoped>
 .sidebar {
   background-color: var(--bg-alt);
-  opacity: 1;
+  transition: 0.5s;
 
   padding-left: 32px;
   padding-right: 32px;
