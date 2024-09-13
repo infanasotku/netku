@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import Sidebar from "@/components/Sidebar.vue";
+import HeadBar from "@/components/HeadBar.vue";
 </script>
 <template>
   <div class="layout dark">
+    <HeadBar class="app-headbar"></HeadBar>
     <Sidebar class="app-sidebar"></Sidebar>
     <router-view> </router-view>
   </div>
@@ -19,5 +21,16 @@ import Sidebar from "@/components/Sidebar.vue";
   position: fixed;
   height: 100%;
   width: 272px;
+
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.app-headbar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 64px;
+  padding-left: 272px;
 }
 </style>

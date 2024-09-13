@@ -31,8 +31,6 @@ const props = defineProps({
 
   display: flex;
   flex-direction: column;
-
-  border-top: 1px solid var(--divider-color);
 }
 .group-header {
   color: var(--text-color-1) !important;

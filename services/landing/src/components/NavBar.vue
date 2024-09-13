@@ -31,4 +31,7 @@ const props = defineProps({
   justify-content: start;
   gap: 15px;
 }
+.nav-group:not(:first-child) {
+  border-top: 1px solid var(--divider-color);
+}
 </style>

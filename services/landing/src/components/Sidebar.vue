@@ -4,21 +4,21 @@ import { ref } from "vue";
 
 const groups = ref([
   {
-    header: "First",
+    header: "Author",
     list: [
       {
-        content: "First",
-        href: "/First",
+        content: "Briefly about me",
+        href: "/about",
         active: true,
       },
       {
-        content: "Second",
-        href: "/Second",
+        content: "Skills | Technologies",
+        href: "/skills",
         active: false,
       },
       {
-        content: "Third",
-        href: "/Third",
+        content: "Work experience",
+        href: "/experience",
         active: false,
       },
     ],
@@ -65,21 +65,31 @@ const groups = ref([
 
   padding-left: 32px;
   padding-right: 32px;
+
+  display: flex;
+  flex-direction: column;
 }
 
 .sb-navbar {
   padding: 0;
-  height: 100%;
 }
 
 /*#region Header */
 .sb-header {
   width: 100%;
   height: 64px;
+  position: sticky;
+  top: 0;
 
   display: flex;
   align-items: center;
   justify-content: start;
+  flex-grow: 0;
+  flex-shrink: 0;
+
+  z-index: 1;
+  background-color: inherit;
+  border-bottom: 1px solid var(--divider-color);
 }
 .sb-header a {
   display: flex;
