@@ -32,5 +32,6 @@ import HeadBar from "@/components/HeadBar.vue";
   width: 100%;
   height: 64px;
   padding-left: var(--sidebar-width);
+  padding-right: 30px;
 }
 </style>
