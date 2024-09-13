@@ -24,21 +24,21 @@ const groups = ref([
     ],
   },
   {
-    header: "Second",
+    header: "Observation",
     list: [
       {
-        content: "First",
-        href: "/First",
+        content: "Assistant",
+        href: "/assistant",
         active: false,
       },
       {
-        content: "Second",
-        href: "/Second",
+        content: "Xray",
+        href: "/xray",
         active: false,
       },
       {
-        content: "Third",
-        href: "/Third",
+        content: "Booking",
+        href: "/booking",
         active: false,
       },
     ],
