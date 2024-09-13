@@ -20,7 +20,7 @@ import HeadBar from "@/components/HeadBar.vue";
   left: 0;
   position: fixed;
   height: 100%;
-  width: 272px;
+  width: var(--sidebar-width);
 
   overflow-x: hidden;
   overflow-y: auto;
@@ -31,6 +31,6 @@ import HeadBar from "@/components/HeadBar.vue";
   top: 0;
   width: 100%;
   height: 64px;
-  padding-left: 272px;
+  padding-left: var(--sidebar-width);
 }
 </style>
