@@ -11,7 +11,6 @@ import ThemeSwitch from "@/components/ThemeSwitch.vue";
 <style scoped>
 .headbar {
   background-color: var(--bg-block);
-  transition: 0.5s;
 
   height: 64px;
   width: 100%;
@@ -20,5 +19,7 @@ import ThemeSwitch from "@/components/ThemeSwitch.vue";
   flex-direction: row;
   justify-content: end;
   align-items: center;
+
+  border-bottom: 1px solid var(--divider-color);
 }
 </style>

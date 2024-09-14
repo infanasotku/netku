@@ -45,12 +45,12 @@ const props = defineProps({
   color: var(--text-color-2);
   font-size: 14px;
   font-weight: 600;
-  transition: 0.5s;
 }
 .group li:not(:first-child):hover a,
 .group li:not(:first-child):hover {
   cursor: pointer;
   color: var(--highlight-color-1);
+  transition: color 0.25s;
 }
 .highlighted {
   color: var(--highlight-color-1) !important;
