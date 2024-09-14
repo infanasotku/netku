@@ -14,38 +14,34 @@ a {
 }
 
 .dark {
-  --bg-main: #000000;
   --bg-block: #1b1b1f;
   --neutral-inverse-color: #000000;
   --bg-alt: #161618;
-
   --text-color-1: rgba(255, 255, 245, 0.86);
   --text-color-2: rgba(235, 235, 245, 0.6);
-
   --highlight-color-1: #a8b1ff;
-
   --divider-color: #2e2e32;
   --input-border-color: #3c3f44;
   --input-switch-bg-color: rgba(101, 117, 133, 0.16);
   --input-border-hover-color: #a8b1ff;
 }
 :root {
-  --sidebar-width: 230px;
-
-  --bg-main: #f6f6f7;
   --bg-block: #ffffff;
   --neutral-inverse-color: #ffffff;
   --bg-alt: #f6f6f7;
   --text-color-1: rgba(60, 60, 67);
   --text-color-2: rgba(60, 60, 67, 0.78);
-  --divider-color: #e2e2e3;
-  --font-family-base: "Inter", ui-sans-serif, system-ui, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-
+  --highlight-color-1: #3451b2;
   --divider-color: #e2e2e3;
   --input-border-color: #c2c2c4;
   --input-switch-bg-color: rgba(142, 150, 170, 0.14);
   --input-border-hover-color: #3451b2;
+}
+
+:root {
+  --font-family-base: "Inter", ui-sans-serif, system-ui, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --sidebar-width: 230px;
 }
 
 .switch:hover {

@@ -11,7 +11,7 @@ import HeadBar from "@/components/HeadBar.vue";
 </template>
 <style scoped>
 .layout {
-  background-color: var(--bg-main);
+  background-color: var(--bg-block);
   width: 100%;
   height: 100%;
   display: flex;
