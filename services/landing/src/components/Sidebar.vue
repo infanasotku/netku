@@ -48,13 +48,13 @@ const groups = ref([
 
 <template>
   <aside class="sidebar">
-    <div class="sb-header">
+    <div class="header">
       <a href="/">
         <img style="width: 25px" src="/img/netku.svg" />
         <span>Netku</span>
       </a>
     </div>
-    <NavBar class="sb-navbar" :nav-groups="groups"></NavBar>
+    <NavBar class="navbar" :nav-groups="groups"></NavBar>
   </aside>
 </template>
 
@@ -69,12 +69,12 @@ const groups = ref([
   flex-direction: column;
 }
 
-.sb-navbar {
+.navbar {
   padding: 0;
 }
 
 /*#region Header */
-.sb-header {
+.header {
   width: 100%;
   height: 64px;
   position: sticky;
@@ -90,11 +90,11 @@ const groups = ref([
   background-color: inherit;
   border-bottom: 1px solid var(--divider-color);
 }
-.sb-header a {
+.header a {
   display: flex;
   gap: 10px;
 }
-.sb-header span {
+.header span {
   font-size: 16px;
   font-weight: 600;
   color: var(--text-color-1);

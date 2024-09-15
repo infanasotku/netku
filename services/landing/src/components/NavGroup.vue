@@ -12,7 +12,7 @@ const props = defineProps({
 </script>
 <template>
   <ul class="group">
-    <li class="group-header">{{ props.header }}</li>
+    <li class="header">{{ props.header }}</li>
     <li v-for="link in props.list">
       <a :class="{ highlighted: link.active }" :href="link.href">
         {{ link.content }}</a
@@ -32,7 +32,7 @@ const props = defineProps({
   display: flex;
   flex-direction: column;
 }
-.group-header {
+.header {
   color: var(--text-color-1) !important;
   font-size: 14px;
   font-weight: 600;

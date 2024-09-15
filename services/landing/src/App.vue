@@ -4,8 +4,8 @@ import HeadBar from "@/components/HeadBar.vue";
 </script>
 <template>
   <div class="layout">
-    <HeadBar class="app-headbar"></HeadBar>
-    <Sidebar class="app-sidebar"></Sidebar>
+    <HeadBar class="headbar"></HeadBar>
+    <Sidebar class="sidebar"></Sidebar>
     <router-view> </router-view>
   </div>
 </template>
@@ -16,7 +16,7 @@ import HeadBar from "@/components/HeadBar.vue";
   height: 100%;
   display: flex;
 }
-.app-sidebar {
+.sidebar {
   left: 0;
   position: fixed;
   height: 100%;
@@ -25,7 +25,7 @@ import HeadBar from "@/components/HeadBar.vue";
   overflow-x: hidden;
   overflow-y: auto;
 }
-.app-headbar {
+.headbar {
   position: fixed;
   left: 0;
   top: 0;

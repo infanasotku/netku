@@ -15,7 +15,7 @@ const props = defineProps({
 <template>
   <nav class="navbar">
     <NavGroup
-      class="nav-group"
+      class="group"
       v-for="group in props.navGroups"
       :header="group.header"
       :list="group.list"
@@ -31,7 +31,7 @@ const props = defineProps({
   justify-content: start;
   gap: 15px;
 }
-.nav-group:not(:first-child) {
+.group:not(:first-child) {
   border-top: 1px solid var(--divider-color);
 }
 </style>
