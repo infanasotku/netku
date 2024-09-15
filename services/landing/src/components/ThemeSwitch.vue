@@ -1,13 +1,32 @@
 <script setup lang="ts">
+import { VueCookies } from "vue-cookies";
+import { inject, onMounted } from "vue";
+
+const $cookies = inject<VueCookies>("$cookies")!;
+
+const setTheme = (dark: boolean) => {
+  const layout = document.getElementsByClassName("layout")[0];
+
+  if (dark) {
+    layout.classList.add("dark");
+  } else {
+    layout.classList.remove("dark");
+  }
+
+  $cookies.set("theme", dark ? "dark" : "light");
+};
+
 const onClick = () => {
   const layout = document.getElementsByClassName("layout")[0];
 
-  if (layout.classList.contains("dark")) {
-    layout.classList.remove("dark");
-  } else {
-    layout.classList.add("dark");
-  }
+  setTheme(!layout.classList.contains("dark"));
 };
+
+onMounted(() => {
+  const theme = $cookies.get("theme");
+
+  setTheme(theme && theme === "dark");
+});
 </script>
 
 <template>
