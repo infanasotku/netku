@@ -22,4 +22,8 @@ import ThemeSwitch from "@/components/ThemeSwitch.vue";
 
   border-bottom: 1px solid var(--divider-color);
 }
+
+.dark .headbar {
+  border-bottom: 1px solid #000000;
+}
 </style>
