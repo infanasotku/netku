@@ -1,8 +1,6 @@
 touch temp
-envsubst '${DOMAIN},${PORT}' \
- < /etc/nginx/conf.templates/default.conf \
+envsubst '${DOMAIN},${PORT},${XRAY_FALLBACK_PORT}' \
+ < /etc/nginx/conf.d/nginx.conf \
  > temp
-echo >> temp
-cat /etc/nginx/conf.d/infanasotku.conf >> temp
-cat temp > /etc/nginx/conf.d/infanasotku.conf
+cat temp > /etc/nginx/conf.d/nginx.conf
 rm temp
