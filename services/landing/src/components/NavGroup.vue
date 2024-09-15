@@ -10,6 +10,7 @@ const props = defineProps({
   },
 });
 </script>
+
 <template>
   <ul class="group">
     <li class="header">{{ props.header }}</li>
@@ -20,6 +21,7 @@ const props = defineProps({
     </li>
   </ul>
 </template>
+
 <style scoped>
 .group {
   list-style: none;

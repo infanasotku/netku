@@ -2,6 +2,7 @@
 import Sidebar from "@/components/Sidebar.vue";
 import HeadBar from "@/components/HeadBar.vue";
 </script>
+
 <template>
   <div class="layout">
     <HeadBar class="headbar"></HeadBar>
@@ -9,6 +10,7 @@ import HeadBar from "@/components/HeadBar.vue";
     <router-view> </router-view>
   </div>
 </template>
+
 <style scoped>
 .layout {
   background-color: var(--bg-block);
