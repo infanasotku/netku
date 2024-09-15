@@ -41,7 +41,7 @@ func ConfigureServer(s *Server) {
 
 	configFile = strings.Replace(configFile, "example.com", os.Getenv("XRAY_FALLBACK"), 1)        // Fallback
 	configFile = strings.Replace(configFile, "a_example.log", path.Join(logDir, "access.log"), 1) // Access log
-	configFile = strings.Replace(configFile, "e_example.log", path.Join(logDir, "access.log"), 1) // Error log
+	configFile = strings.Replace(configFile, "e_example.log", path.Join(logDir, "error.log"), 1)  // Error log
 	configFile = strings.Replace(configFile, "example.crt", os.Getenv("SSL_CERTFILE"), 1)         // Fallback
 	configFile = strings.Replace(configFile, "example.key", os.Getenv("SSL_KEYFILE"), 1)          // Fallback
 
