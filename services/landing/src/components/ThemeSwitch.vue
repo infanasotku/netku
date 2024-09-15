@@ -42,14 +42,15 @@ onMounted(() => {
 
 <style scoped>
 .switch {
-  border-radius: 11px;
   position: relative;
-  display: block;
+  display: flex;
+  flex-shrink: 0;
   width: 40px;
   height: 22px;
   height: 22px;
-  transition: 0.3s;
 
+  transition: 0.3s;
+  border-radius: 11px;
   border: 1px solid var(--input-border-color);
   background-color: var(--input-switch-bg-color);
 }
