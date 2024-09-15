@@ -3,7 +3,7 @@ import Sidebar from "@/components/Sidebar.vue";
 import HeadBar from "@/components/HeadBar.vue";
 </script>
 <template>
-  <div class="layout dark">
+  <div class="layout">
     <HeadBar class="app-headbar"></HeadBar>
     <Sidebar class="app-sidebar"></Sidebar>
     <router-view> </router-view>
