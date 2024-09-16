@@ -1,0 +1,38 @@
+{
+  "nav": [
+    {
+      "header": "Author",
+      "list": [
+        {
+          "content": "Briefly about me",
+          "href": "/about"
+        },
+        {
+          "content": "Skills | Technologies",
+          "href": "/skills"
+        },
+        {
+          "content": "Work experience",
+          "href": "/experience"
+        }
+      ]
+    },
+    {
+      "header": "Observation",
+      "list": [
+        {
+          "content": "Assistant",
+          "href": "/assistant"
+        },
+        {
+          "content": "Xray",
+          "href": "/xray"
+        },
+        {
+          "content": "Booking",
+          "href": "/booking"
+        }
+      ]
+    }
+  ]
+}

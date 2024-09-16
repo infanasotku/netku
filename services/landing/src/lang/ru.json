@@ -1,0 +1,38 @@
+{
+  "nav": [
+    {
+      "header": "Автор",
+      "list": [
+        {
+          "content": "Кратко обо мне",
+          "href": "/about"
+        },
+        {
+          "content": "Скиллы | Технологии",
+          "href": "/skills"
+        },
+        {
+          "content": "Опыт работы",
+          "href": "/experience"
+        }
+      ]
+    },
+    {
+      "header": "Наблюдение",
+      "list": [
+        {
+          "content": "Assistant",
+          "href": "/assistant"
+        },
+        {
+          "content": "Xray",
+          "href": "/xray"
+        },
+        {
+          "content": "Booking",
+          "href": "/booking"
+        }
+      ]
+    }
+  ]
+}

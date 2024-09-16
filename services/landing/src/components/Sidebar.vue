@@ -1,49 +1,33 @@
 <script setup lang="ts">
 import NavBar from "@/components/NavBar.vue";
-import { ref } from "vue";
+import { Navigation } from "@/lang/type";
+import { computed, onMounted, ref } from "vue";
+import { useI18n } from "vue-i18n";
 
-const groups = ref([
-  {
-    header: "Author",
-    list: [
-      {
-        content: "Briefly about me",
-        href: "/about",
-        active: true,
-      },
-      {
-        content: "Skills | Technologies",
-        href: "/skills",
-        active: false,
-      },
-      {
-        content: "Work experience",
-        href: "/experience",
-        active: false,
-      },
-    ],
-  },
-  {
-    header: "Observation",
-    list: [
-      {
-        content: "Assistant",
-        href: "/assistant",
-        active: false,
-      },
-      {
-        content: "Xray",
-        href: "/xray",
-        active: false,
-      },
-      {
-        content: "Booking",
-        href: "/booking",
-        active: false,
-      },
-    ],
-  },
-]);
+const { tm } = useI18n();
+
+const nav = ref(tm("nav") as Array<Navigation>);
+
+const currentHref = ref("");
+
+const groups = computed(() => {
+  return nav.value.map((val) => {
+    return {
+      header: val.header,
+      list: val.list.map((listVal) => {
+        return {
+          content: listVal.content,
+          href: listVal.href,
+          active: listVal.href === currentHref.value,
+        };
+      }),
+    };
+  });
+});
+
+onMounted(() => {
+  currentHref.value = groups.value[0].list[0].href;
+});
 </script>
 
 <template>
