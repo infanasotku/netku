@@ -3,27 +3,41 @@ import { VueCookies } from "vue-cookies";
 import { inject, onMounted } from "vue";
 
 const $cookies = inject<VueCookies>("$cookies")!;
+let html: Element;
 
 const setTheme = (dark: boolean) => {
-  const layout = document.getElementsByClassName("layout")[0];
+  const notransition = document.createElement("style");
+  notransition.appendChild(
+    document.createTextNode(
+      `* {
+       -webkit-transition: none !important;
+       -moz-transition: none !important;
+       -o-transition: none !important;
+       -ms-transition: none !important;
+       transition: none !important;
+    }`
+    )
+  );
+  document.head.appendChild(notransition);
 
   if (dark) {
-    layout.classList.add("dark");
+    html.classList.add("dark");
   } else {
-    layout.classList.remove("dark");
+    html.classList.remove("dark");
   }
+  window.window.getComputedStyle(notransition).opacity;
+  document.head.removeChild(notransition);
 
   $cookies.set("theme", dark ? "dark" : "light");
 };
 
 const onClick = () => {
-  const layout = document.getElementsByClassName("layout")[0];
-
-  setTheme(!layout.classList.contains("dark"));
+  setTheme(!html.classList.contains("dark"));
 };
 
 onMounted(() => {
   const theme = $cookies.get("theme");
+  html = document.documentElement;
 
   setTheme(theme && theme === "dark");
 });
