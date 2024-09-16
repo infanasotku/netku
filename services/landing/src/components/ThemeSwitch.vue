@@ -61,7 +61,6 @@ onMounted(() => {
   flex-shrink: 0;
   width: 40px;
   height: 22px;
-  height: 22px;
 
   transition: 0.3s;
   border-radius: 11px;
