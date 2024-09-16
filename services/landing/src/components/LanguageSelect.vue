@@ -1,15 +1,39 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import SelectMenu from "@/components/SelectMenu.vue";
+import { ref } from "vue";
+
+const menuVisible = ref(false);
+</script>
 
 <template>
-  <button class="select">
-    <span class="icon">
-      <span class="language select-icon"></span>
-      <span class="arrow select-icon"></span>
-    </span>
-  </button>
+  <div
+    class="wrapper"
+    @mouseenter="menuVisible = true"
+    @mouseleave="menuVisible = false"
+  >
+    <button class="select">
+      <span class="icon">
+        <span class="language select-icon"></span>
+        <span class="arrow select-icon"></span>
+      </span>
+    </button>
+    <Transition name="menu">
+      <div class="menu" v-if="menuVisible">
+        <SelectMenu></SelectMenu>
+      </div>
+    </Transition>
+  </div>
 </template>
 
 <style scoped>
+.wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+
+  height: 100%;
+}
+/*#region Button */
 .select {
   display: flex;
   align-items: center;
@@ -21,7 +45,7 @@
   background-image: none;
   transition: color 0.5s;
 }
-.select:hover {
+.wrapper:hover > .select {
   color: var(--text-color-2);
   transition: color 0.25s;
 }
@@ -46,4 +70,21 @@
   height: 14px;
   transform: rotate(90deg);
 }
+/*#endregion */
+/*#region Menu */
+.menu {
+  position: absolute;
+  right: -12px;
+  top: calc(100% / 2 + 20px);
+}
+.menu-enter-active,
+.menu-leave-active {
+  transition: opacity 0.25s ease;
+}
+
+.menu-enter-from,
+.menu-leave-to {
+  opacity: 0;
+}
+/*#endregion */
 </style>

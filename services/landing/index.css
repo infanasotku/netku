@@ -21,11 +21,13 @@ html.dark {
   --bg-block: #ffffff;
   --neutral-inverse-color: #ffffff;
   --bg-alt: #f6f6f7;
+  --menu-bg: #ffffff;
 }
 .dark {
   --bg-block: #1b1b1f;
   --neutral-inverse-color: #000000;
   --bg-alt: #161618;
+  --menu-bg: #202127;
 }
 
 :root {

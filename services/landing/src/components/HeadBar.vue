@@ -6,6 +6,7 @@ import LanguageSelect from "@/components/LanguageSelect.vue";
 
 <template>
   <header class="headbar">
+    <div class="divider"></div>
     <LanguageSelect></LanguageSelect>
     <div class="divider"></div>
     <ThemeSwitch></ThemeSwitch>
