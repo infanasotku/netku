@@ -14,18 +14,14 @@ const nav = computed(() => {
 const currentHref = ref("");
 
 const groups = computed(() => {
-	return nav.value.map((val) => {
-		return {
-			header: val.header,
-			list: val.list.map((listVal) => {
-				return {
-					content: listVal.content,
-					href: listVal.href,
-					active: listVal.href === currentHref.value,
-				};
-			}),
-		};
-	});
+	return nav.value.map((val) => ({
+		header: val.header,
+		list: val.list.map((listVal) => ({
+			content: listVal.content,
+			href: listVal.href,
+			active: listVal.href === currentHref.value,
+		})),
+	}));
 });
 
 onMounted(() => {
