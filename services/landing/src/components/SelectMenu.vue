@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { computed } from "vue";
+
 const props = defineProps({
 	list: {
 		type: Array<string>,
@@ -9,17 +11,19 @@ const current = defineModel("current", {
 	type: Number,
 	required: true,
 });
+const list = computed(() => {
+	return props.list
+		.map((val, index) => ({ text: val, index: index }))
+		.filter((el) => el.index !== current.value);
+});
 </script>
 
 <template>
 	<div class="wrapper">
 		<ul class="menu">
-			<li
-				:class="{ current: current === index }"
-				v-for="(record, index) in props.list"
-				@click="current = index"
-			>
-				<span class="text">{{ record }}</span>
+			<li class="current">{{ props.list[current] }}</li>
+			<li v-for="record in list" @click="current = record.index">
+				<span class="text">{{ record.text }}</span>
 			</li>
 		</ul>
 	</div>
@@ -78,16 +82,21 @@ const current = defineModel("current", {
 	display: flex;
 	align-items: center;
 
-	gap: 5px;
+	gap: 6px;
 }
 .menu li:not(.current) .text::after {
 	content: "";
 
-	width: 18px;
-	height: 18px;
+	width: 16px;
+	height: 16px;
 
+	transition: transform 0.25s;
 	color: var(--text-color-3);
 	background-color: currentColor;
-	mask: url("/img/triangle.svg") no-repeat;
+	mask: url("/img/arrow.svg") no-repeat;
+}
+.menu li:not(.current):hover .text::after {
+	transition: transform 0.25s;
+	transform: translateX(6px);
 }
 </style>
