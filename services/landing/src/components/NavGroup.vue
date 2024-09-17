@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+
 const props = defineProps({
 	header: {
 		type: String,
@@ -15,9 +19,13 @@ const props = defineProps({
 	<ul class="group">
 		<li class="header">{{ props.header }}</li>
 		<li v-for="link in props.list">
-			<a :class="{ highlighted: link.active }" :href="link.href">
-				{{ link.content }}</a
+			<a
+				:class="{ highlighted: link.active }"
+				:href="link.href"
+				@click.prevent="router.push(link.href)"
 			>
+				<span>{{ link.content }}</span>
+			</a>
 		</li>
 	</ul>
 </template>
@@ -38,18 +46,21 @@ const props = defineProps({
 	color: var(--text-color-1) !important;
 	font-size: 14px;
 	font-weight: 600;
-}
-.group li {
 	padding-top: 5px;
 	padding-bottom: 5px;
 }
-.group li a {
+.group a {
+	display: flex;
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+.group a {
 	color: var(--text-color-2);
 	font-size: 14px;
 	font-weight: 600;
+	transition: color 0.25s;
 }
-.group li:not(:first-child):hover a,
-.group li:not(:first-child):hover {
+.group a:hover {
 	cursor: pointer;
 	color: var(--highlight-color);
 	transition: color 0.25s;
