@@ -17,6 +17,7 @@ const current = defineModel("current", {
 			<li
 				:class="{ current: current === index }"
 				v-for="(record, index) in props.list"
+				@click="current = index"
 			>
 				{{ record }}
 			</li>
