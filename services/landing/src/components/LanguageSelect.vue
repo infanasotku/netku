@@ -5,7 +5,7 @@ import { useI18n } from "vue-i18n";
 
 const { locale } = useI18n();
 
-const menuVisible = ref(true);
+const menuVisible = ref(false);
 
 const languageCode: any = {
 	English: "en",
