@@ -5,7 +5,7 @@ import { useI18n } from "vue-i18n";
 
 const { locale } = useI18n();
 
-const menuVisible = ref(false);
+const menuVisible = ref(true);
 
 const languageCode: any = {
 	English: "en",
@@ -15,6 +15,7 @@ const menu = ref(["English", "Русский"]);
 const current = ref(0);
 
 watch(current, () => {
+	menuVisible.value = false;
 	locale.value = languageCode[menu.value[current.value]];
 });
 </script>

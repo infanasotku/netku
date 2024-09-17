@@ -19,7 +19,7 @@ const current = defineModel("current", {
 				v-for="(record, index) in props.list"
 				@click="current = index"
 			>
-				{{ record }}
+				<span class="text">{{ record }}</span>
 			</li>
 		</ul>
 	</div>
@@ -73,5 +73,21 @@ const current = defineModel("current", {
 }
 .current {
 	font-weight: 700;
+}
+.text {
+	display: flex;
+	align-items: center;
+
+	gap: 5px;
+}
+.menu li:not(.current) .text::after {
+	content: "";
+
+	width: 18px;
+	height: 18px;
+
+	color: var(--text-color-3);
+	background-color: currentColor;
+	mask: url("/img/triangle.svg") no-repeat;
 }
 </style>

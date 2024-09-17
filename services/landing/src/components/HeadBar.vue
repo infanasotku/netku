@@ -9,7 +9,7 @@ import LanguageSelect from "@/components/LanguageSelect.vue";
 		<div class="divider"></div>
 		<LanguageSelect></LanguageSelect>
 		<div class="divider"></div>
-		<ThemeSwitch></ThemeSwitch>
+		<ThemeSwitch class="swicth"></ThemeSwitch>
 		<div class="divider"></div>
 		<div class="social-icons">
 			<LinkIcon
@@ -53,5 +53,10 @@ import LanguageSelect from "@/components/LanguageSelect.vue";
 	height: 24px;
 	background-color: var(--divider-color);
 	margin: 0 8px;
+}
+
+.switch {
+	margin-left: 8px;
+	margin-right: 8px;
 }
 </style>

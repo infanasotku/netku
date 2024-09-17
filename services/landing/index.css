@@ -33,10 +33,12 @@ html.dark {
 :root {
   --text-color-1: rgba(60, 60, 67);
   --text-color-2: rgba(60, 60, 67, 0.78);
+  --text-color-3: rgba(60, 60, 67, 0.56);
 }
 .dark {
   --text-color-1: rgba(255, 255, 245, 0.86);
   --text-color-2: rgba(235, 235, 245, 0.6);
+  --text-color-3: rgba(235, 235, 245, 0.38);
 }
 
 :root {
