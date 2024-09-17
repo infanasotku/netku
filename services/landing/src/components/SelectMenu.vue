@@ -71,7 +71,7 @@ const list = computed(() => {
 	transition: background-color 0.25s, color 0.25s;
 }
 .menu li:not(.current):hover {
-	color: var(--highlight-color-1);
+	color: var(--highlight-color-lighter);
 	background-color: var(--input-switch-bg-color);
 	transition: background-color 0.25s, color 0.25s;
 }

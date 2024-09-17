@@ -42,18 +42,20 @@ html.dark {
 }
 
 :root {
-  --highlight-color-1: #3451b2;
+  --highlight-color: #3451b2;
+  --highlight-color-lighter: var(--highlight-color);
   --divider-color: #e2e2e3;
   --input-border-color: #c2c2c4;
   --input-switch-bg-color: rgba(142, 150, 170, 0.14);
-  --input-border-hover-color: #3451b2;
+  --input-border-hover-color: var(--highlight-color);
 }
 .dark {
-  --highlight-color-1: #a8b1ff;
+  --highlight-color: #a8b1ff;
+  --highlight-color-lighter: #9499ff;
   --divider-color: #2e2e32;
   --input-border-color: #3c3f44;
   --input-switch-bg-color: rgba(101, 117, 133, 0.16);
-  --input-border-hover-color: #a8b1ff;
+  --input-border-hover-color: var(--highlight-color);
 }
 
 :root {
