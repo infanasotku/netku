@@ -1,22 +1,30 @@
 <script setup lang="ts">
 import SelectMenu from "@/components/SelectMenu.vue";
-import { ref, watch } from "vue";
+import { ref, computed } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { locale } = useI18n();
 
 const menuVisible = ref(false);
 
-const languageCode: any = {
+const languageCode = {
 	English: "en",
 	Русский: "ru",
 };
-const menu = ref(["English", "Русский"]);
-const current = ref(0);
 
-watch(current, () => {
-	menuVisible.value = false;
-	locale.value = languageCode[menu.value[current.value]];
+const menu = Object.keys(languageCode);
+const current = computed({
+	get: () => {
+		const index = Object.values(languageCode).indexOf(locale.value);
+
+		return index !== -1 ? index : 0;
+	},
+	set: (index) => {
+		const newLang = Object.values(languageCode)[index];
+		locale.value = newLang;
+		localStorage.Lang = newLang;
+		menuVisible.value = false;
+	},
 });
 </script>
 
