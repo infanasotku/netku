@@ -62,6 +62,7 @@ html.dark {
   --font-family-base: "Inter", ui-sans-serif, system-ui, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --sidebar-width: 230px;
+  --headbar-height: 64px;
 }
 
 .switch:hover {
