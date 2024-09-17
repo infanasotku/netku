@@ -28,6 +28,7 @@ import HeadBar from "@/components/HeadBar.vue";
 
 	overflow-x: hidden;
 	overflow-y: auto;
+	z-index: 2;
 }
 .headbar {
 	position: fixed;
@@ -37,15 +38,18 @@ import HeadBar from "@/components/HeadBar.vue";
 	height: var(--headbar-height);
 	padding-left: var(--sidebar-width);
 	padding-right: 30px;
+	z-index: 1;
 }
 .content {
 	position: fixed;
 	right: 0;
 	bottom: 0;
 
-	padding: calc(48px + var(--headbar-height)) 32px 0
-		calc(32px + var(--sidebar-width));
+	padding: calc(48px + var(--headbar-height)) 64px 128px
+		calc(64px + var(--sidebar-width));
 	width: 100%;
 	height: 100%;
+
+	color: var(--text-color-1);
 }
 </style>

@@ -34,5 +34,14 @@
         }
       ]
     }
-  ]
+  ],
+  "content": {
+    "default": {
+      "header": "Page not found!",
+      "description": "This page not exist or in progress."
+    },
+    "aboutme": {
+      "header": "Hello world!"
+    }
+  }
 }

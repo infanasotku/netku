@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import NavBar from "@/components/NavBar.vue";
 import { Navigation } from "@/lang/type";
-import { computed, onMounted, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
+import { useRoute } from "vue-router";
 
 const { tm, locale } = useI18n();
+const route = useRoute();
 
 const nav = computed(() => {
 	locale;
@@ -24,8 +26,8 @@ const groups = computed(() => {
 	}));
 });
 
-onMounted(() => {
-	currentHref.value = groups.value[0].list[0].href;
+watch(route, () => {
+	currentHref.value = route.path;
 });
 </script>
 
