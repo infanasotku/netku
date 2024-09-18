@@ -85,7 +85,7 @@ services:
 
   landing:
     build:
-      context: frontend
+      context: services/landing
 
     volumes:
       - nginx-html:/app/dist
