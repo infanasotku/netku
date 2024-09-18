@@ -84,8 +84,12 @@ services:
       - .env
 
   landing:
+    container_name: netku-landing
     build:
       context: services/landing
+
+    networks:
+      - netku-net
 
     volumes:
       - nginx-html:/app/dist
