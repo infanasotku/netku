@@ -21,7 +21,7 @@ jobs:
           ruff check .
           ruff format --check .
 
-  build-go:
+  build-xray:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -35,3 +35,18 @@ jobs:
       - name: Run build
         working-directory: services/xray
         run: go build .
+
+  build-landing:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22.2.x"
+      - name: Install dependencies
+        working-directory: services/landing
+        run: npm install
+      - name: Run build
+        working-directory: services/landing
+        run: npm run build
