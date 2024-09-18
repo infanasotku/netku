@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import ContentBlock from "@/components/ContentBlock.vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
@@ -6,8 +7,11 @@ const { t } = useI18n();
 
 <template>
 	<main class="main">
-		<h1>{{ t("content.default.header") }}</h1>
-		<p>{{ t("content.default.description") }}</p>
+		<ContentBlock class="block" :title="t('content.default.header')">
+			<p>
+				{{ t("content.default.description") }}
+			</p>
+		</ContentBlock>
 	</main>
 </template>
 
@@ -16,5 +20,9 @@ const { t } = useI18n();
 	display: flex;
 	align-items: center;
 	flex-direction: column;
+	flex-shrink: 0;
+}
+.block {
+	max-width: 80%;
 }
 </style>

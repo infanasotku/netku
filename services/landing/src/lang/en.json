@@ -41,7 +41,9 @@
       "description": "This page not exist or in progress."
     },
     "aboutme": {
-      "header": "Hello world!"
+      "header": "Hello world!",
+      "description": "This site developed for my services status observation and self presentation. At the moment the site is under development and is publicly available for testing. If you found a bug you can contact {email}.",
+      "email": "with me"
     }
   }
 }
