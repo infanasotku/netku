@@ -36,6 +36,7 @@ html.dark {
   --text-color-1: rgba(60, 60, 67);
   --text-color-2: rgba(60, 60, 67, 0.78);
   --text-color-3: rgba(60, 60, 67, 0.56);
+  --link-color: var();
 }
 .dark {
   --text-color-1: rgba(255, 255, 245, 0.86);
@@ -46,6 +47,7 @@ html.dark {
 :root {
   --highlight-color: #3451b2;
   --highlight-color-lighter: var(--highlight-color);
+  --highlight-color-lightest: #3a5ccc;
   --divider-color: #e2e2e3;
   --input-border-color: #c2c2c4;
   --input-switch-bg-color: rgba(142, 150, 170, 0.14);
@@ -54,6 +56,7 @@ html.dark {
 .dark {
   --highlight-color: #a8b1ff;
   --highlight-color-lighter: #9499ff;
+  --highlight-color-lightest: #bcc0ff;
   --divider-color: #2e2e32;
   --input-border-color: #3c3f44;
   --input-switch-bg-color: rgba(101, 117, 133, 0.16);
@@ -72,6 +75,21 @@ html.dark {
   transition: 0.3s;
 }
 
-.content-p p {
+.block p {
   margin: 16px 0;
+}
+
+.block a {
+  color: var(--highlight-color-lighter);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color 0.25s, opacity 0.25s;
+}
+
+.block a:hover {
+  color: var(--highlight-color-lightest);
+}
+
+.block a:active {
+  color: var(--highlight-color-lightest);
 }
