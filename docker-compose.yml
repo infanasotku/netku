@@ -18,7 +18,7 @@ services:
       - .env
 
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
       interval: 2s
       timeout: 5s
       retries: 10
@@ -69,8 +69,10 @@ services:
         DOMAIN:
         XRAY_FALLBACK_PORT:
 
+
     volumes:
       - cert-dir:/etc/cert:ro
+      - nginx-html:/usr/share/nginx/html
 
     networks:
       - netku-net
@@ -81,6 +83,13 @@ services:
     env_file:
       - .env
 
+  landing:
+    build:
+      context: frontend
+
+    volumes:
+      - nginx-html:/app/dist
+
 volumes:
   cert-dir:
     external: true
@@ -88,6 +97,8 @@ volumes:
     external: true
   db-dir:
     external: true
+  nginx-html:
+
 
 networks:
   netku-net:
