@@ -65,6 +65,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      xray:
+        condition: service_healthy
 
   server:
     container_name: netku-server
