@@ -23,7 +23,7 @@ func main() {
 
 	server := Server{}
 	ConfigureServer(&server)
-	gen.RegisterXrayServiceServer(grpcServer, &server)
+	gen.RegisterXrayServer(grpcServer, &server)
 
 	if err := grpcServer.Serve(lis); err != nil {
 		log.Fatalf("Failed to serve gRPC server over port %s: %v", port, err)

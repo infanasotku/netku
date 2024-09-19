@@ -14,7 +14,7 @@ import (
 )
 
 type Server struct {
-	gen.UnimplementedXrayServiceServer
+	gen.UnimplementedXrayServer
 	xrayServer core.Server
 	xrayConfig *core.Config
 }

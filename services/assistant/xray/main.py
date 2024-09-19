@@ -7,7 +7,7 @@ import grpc
 from settings import settings, logger
 from bot import tasks
 
-from xray.gen.xray_pb2_grpc import XrayServiceStub
+from xray.gen.xray_pb2_grpc import XrayStub
 from xray.gen.xray_pb2 import RestartResponse, Null
 
 
@@ -44,7 +44,7 @@ class Xray:
         """Sends grpc request to xray service for restart,
         obtains new uid."""
         with grpc.insecure_channel(f"{self._xray_host}:{self._xray_port}") as ch:
-            stub = XrayServiceStub(ch)
+            stub = XrayStub(ch)
             resp: RestartResponse = stub.RestartXray(Null())
 
             if not resp:
