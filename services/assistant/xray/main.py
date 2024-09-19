@@ -9,12 +9,36 @@ from bot import tasks
 
 from xray.gen.xray_pb2_grpc import XrayStub
 from xray.gen.xray_pb2 import RestartResponse, Null
-
-import health
+from grpc_health.v1.health_pb2 import HealthCheckRequest, HealthCheckResponse
+from grpc_health.v1.health_pb2_grpc import HealthStub
 
 
 def create_lifespan() -> Callable[["Xray", FastAPI], AsyncGenerator]:
     return Xray().lifespan
+
+
+async def check_xray() -> bool:
+    """Checks health of xray service.
+    Returns:
+    `True` if service health, `False` otherwise.
+    """
+    async with grpc.aio.insecure_channel(
+        f"{settings.xray_host}:{settings.xray_port}"
+    ) as ch:
+        stub = HealthStub(ch)
+        try:
+            resp: HealthCheckResponse = await stub.Check(
+                HealthCheckRequest(service="xray")
+            )
+        except grpc.aio.AioRpcError as e:
+            if e.code() == grpc.StatusCode.UNAVAILABLE:
+                return False
+            logger.error(f"Failed to check xray health: {e}")
+            return False
+
+        return (
+            True if resp.status == HealthCheckResponse.ServingStatus.SERVING else False
+        )
 
 
 class Xray:
@@ -68,7 +92,7 @@ class Xray:
             if step > 0:
                 await asyncio.sleep(self._reconnection_delay)
                 logger.warning(f"Attempting to reconnect to xray {step}...")
-            if await health.check_xray():
+            if await check_xray():
                 logger.info("Connection with xray established.")
                 return True
 

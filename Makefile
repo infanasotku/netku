@@ -11,10 +11,3 @@ generate-xray-py:
 	--grpc_python_out=services/assistant/ \
 	--pyi_out=services/assistant/ \
 	protobuf/xray.proto
-
-generate-health-py:
-	python -m grpc_tools.protoc -Ihealth/gen=protobuf/ \
-	--python_out=services/assistant/ \
-	--grpc_python_out=services/assistant/ \
-	--pyi_out=services/assistant/ \
-	protobuf/health.proto
