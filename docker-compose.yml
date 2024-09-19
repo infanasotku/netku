@@ -18,7 +18,7 @@ services:
       - .env
 
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      test: [ "CMD-SHELL", "/app/xray --greet" ]
       interval: 2s
       timeout: 5s
       retries: 10
@@ -40,6 +40,12 @@ services:
 
     env_file:
       - .env
+
+    healthcheck:
+      test: [ "CMD-SHELL", "grep -q :$(printf '%04X' $$STUB_GRPC_PORT) /proc/net/tcp6" ]
+      interval: 2s
+      timeout: 5s
+      retries: 10
 
   assistant:
     container_name: netku-assistant
