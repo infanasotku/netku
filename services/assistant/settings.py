@@ -22,6 +22,12 @@ class Settings(BaseSettings):
     xray_restart_minutes: float = Field(validation_alias="XRAY_RESTART_MINUTES")
     xray_port: int = Field(validation_alias="XRAY_PORT", default=9000)
     xray_host: str = Field(validation_alias="XRAY_HOST", default="127.0.0.1")
+    xray_reconnection_retries: int = Field(
+        validation_alias="XRAY_RECONNECTION_RETRIES", default=5
+    )
+    xray_reconnection_delay: float = Field(
+        validation_alias="XRAY_RECONNECTION_DELAY", default=3
+    )
     # endregion
 
     # region Bot

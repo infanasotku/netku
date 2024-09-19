@@ -41,6 +41,12 @@ services:
     env_file:
       - .env
 
+    healthcheck:
+      test: [ "CMD-SHELL", "/app/xray --greet" ]
+      interval: 2s
+      timeout: 5s
+      retries: 10
+
   assistant:
     container_name: netku-assistant
     build:
@@ -58,6 +64,8 @@ services:
 
     depends_on:
       db:
+        condition: service_healthy
+      xray:
         condition: service_healthy
 
   server:

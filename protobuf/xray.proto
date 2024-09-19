@@ -7,6 +7,6 @@ message RestartResponse {
 
 message Null {}
 
-service XrayService {
+service Xray {
     rpc RestartXray(Null) returns (RestartResponse) {}
 }

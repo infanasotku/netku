@@ -28,7 +28,7 @@ if _version_not_supported:
     )
 
 
-class XrayServiceStub(object):
+class XrayStub(object):
     """Missing associated documentation comment in .proto file."""
 
     def __init__(self, channel):
@@ -38,14 +38,14 @@ class XrayServiceStub(object):
             channel: A grpc.Channel.
         """
         self.RestartXray = channel.unary_unary(
-            "/xray.XrayService/RestartXray",
+            "/xray.Xray/RestartXray",
             request_serializer=xray_dot_gen_dot_xray__pb2.Null.SerializeToString,
             response_deserializer=xray_dot_gen_dot_xray__pb2.RestartResponse.FromString,
             _registered_method=True,
         )
 
 
-class XrayServiceServicer(object):
+class XrayServicer(object):
     """Missing associated documentation comment in .proto file."""
 
     def RestartXray(self, request, context):
@@ -55,7 +55,7 @@ class XrayServiceServicer(object):
         raise NotImplementedError("Method not implemented!")
 
 
-def add_XrayServiceServicer_to_server(servicer, server):
+def add_XrayServicer_to_server(servicer, server):
     rpc_method_handlers = {
         "RestartXray": grpc.unary_unary_rpc_method_handler(
             servicer.RestartXray,
@@ -64,14 +64,14 @@ def add_XrayServiceServicer_to_server(servicer, server):
         ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-        "xray.XrayService", rpc_method_handlers
+        "xray.Xray", rpc_method_handlers
     )
     server.add_generic_rpc_handlers((generic_handler,))
-    server.add_registered_method_handlers("xray.XrayService", rpc_method_handlers)
+    server.add_registered_method_handlers("xray.Xray", rpc_method_handlers)
 
 
 # This class is part of an EXPERIMENTAL API.
-class XrayService(object):
+class Xray(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
@@ -90,7 +90,7 @@ class XrayService(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            "/xray.XrayService/RestartXray",
+            "/xray.Xray/RestartXray",
             xray_dot_gen_dot_xray__pb2.Null.SerializeToString,
             xray_dot_gen_dot_xray__pb2.RestartResponse.FromString,
             options,
