@@ -46,7 +46,7 @@ class Xray:
         self._restart_minutes = settings.xray_restart_minutes
         self._xray_port = settings.xray_port
         self._xray_host = settings.xray_host
-        self._reconnection_count = settings.xray_reconnection_count
+        self._reconnection_retries = settings.xray_reconnection_retries
         self._reconnection_delay = settings.xray_reconnection_delay
 
     async def lifespan(self, _: FastAPI) -> AsyncGenerator:
@@ -88,7 +88,7 @@ class Xray:
         Returns:
         `True` if service health `False` otherwise.
         """
-        for step in range(self._reconnection_count + 1):
+        for step in range(self._reconnection_retries + 1):
             if step > 0:
                 await asyncio.sleep(self._reconnection_delay)
                 logger.warning(f"Attempting to reconnect to xray {step}...")
