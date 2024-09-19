@@ -62,7 +62,7 @@ class Xray:
         with `self._reconnection_delay` delay.
 
         Returns:
-        `True` if check success `False` otherwise.
+        `True` if service health `False` otherwise.
         """
         for step in range(self._reconnection_count + 1):
             if step > 0:

@@ -7,6 +7,10 @@ from health.gen.health_pb2 import HealthCheckRequest, HealthCheckResponse
 
 
 async def check_xray() -> bool:
+    """Checks health of xray service.
+    Returns:
+    `True` if service health, `False` otherwise.
+    """
     async with grpc.aio.insecure_channel(
         f"{settings.xray_host}:{settings.xray_port}"
     ) as ch:
