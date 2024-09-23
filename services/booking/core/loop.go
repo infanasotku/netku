@@ -2,7 +2,6 @@ package core
 
 import (
 	"log/slog"
-	"sync"
 
 	"github.com/google/uuid"
 
@@ -19,7 +18,7 @@ type Loop struct {
 	page     *rod.Page
 	cancel   func()
 	quit     chan bool
-	mu       *sync.Mutex
+	done     chan bool
 }
 
 func createLoop(email string, password string, parentLogger *log.Logger) *Loop {
@@ -28,14 +27,15 @@ func createLoop(email string, password string, parentLogger *log.Logger) *Loop {
 
 	browser := rod.New().MustConnect()
 
-	loop := Loop{id: id, email: email, password: password, logger: logger, browser: browser, mu: &sync.Mutex{}}
+	loop := Loop{id: id, email: email, password: password, logger: logger, browser: browser}
 
 	return &loop
 }
 
 // Runs booking loop in new goroutine
 func (loop *Loop) run() {
-	loop.quit = make(chan bool)
+	loop.quit = make(chan bool, 1)
+	loop.done = make(chan bool, 1)
 	page := loop.browser.MustPage("https://lk.1clc.ru/").MustWaitStable()
 	loop.page, loop.cancel = page.WithCancel()
 	go loop.runConcurency()
@@ -43,30 +43,21 @@ func (loop *Loop) run() {
 
 // Stops loop
 func (loop *Loop) stop() {
-	defer loop.mu.Unlock()
-	loop.mu.Lock()
 	select {
 	case <-loop.quit:
 		// Loop already stopped
 		return
 	default:
 		loop.logger.Info("Loop stopping...")
-		loop.cancel()
 		loop.quit <- true
+		loop.cancel()
 	}
 }
 
 // Waits while loop stop
 func (loop *Loop) wait() {
-	for {
-		val, opened := <-loop.quit
-		if !opened {
-			return
-		}
-		loop.mu.Lock()
-		loop.quit <- val
-		loop.mu.Unlock()
-	}
+	defer close(loop.done)
+	<-loop.done
 }
 
 // Runs loop in concurency mod. Internal method.
@@ -79,6 +70,7 @@ func (loop *Loop) runConcurency() {
 		select {
 		case <-loop.quit:
 			loop.logger.Info("Loop stopped")
+			loop.done <- true
 			return
 		default:
 			loop.next()

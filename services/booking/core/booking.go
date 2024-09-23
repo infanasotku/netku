@@ -110,7 +110,7 @@ func waitBookingOver(page *rod.Page) error {
 	}
 
 	err := rod.Try(func() {
-		page.Timeout(time.Second).MustElementR(".device", "Отменить бронь")
+		page.Timeout(time.Second).MustElementR(".device1", "Отменить бронь")
 	})
 	if err != nil {
 		return errors.New("no booking machines")
