@@ -51,8 +51,8 @@ func (loop *Loop) stop() {
 		return
 	default:
 		loop.logger.Info("Loop stopping...")
-		loop.quit <- true
 		loop.cancel()
+		loop.quit <- true
 	}
 }
 
