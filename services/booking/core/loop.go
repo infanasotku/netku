@@ -69,6 +69,7 @@ func (loop *Loop) wait() {
 	}
 }
 
+// Runs loop in concurency mod. Internal method.
 func (loop *Loop) runConcurency() {
 	defer close(loop.quit)
 	loop.logger.Info("Loop started", "email", loop.email)
@@ -119,14 +120,23 @@ func (loop *Loop) next() {
 				return
 			}
 			loop.logger.Info("Booked successful", "remaining", time)
-			loop.stop()
 		case BOOKED:
 			loop.logger.Info("Waiting until booking over...")
-			waitBookingOver(loop.page)
+			err := waitBookingOver(loop.page)
+			if err != nil {
+				loop.logger.Error("Error occured while waiting booking over", "err", err)
+				loop.stop()
+				return
+			}
 
 		case WAIT_UNBOOKED:
 			loop.logger.Info("Waiting until unbooked...")
-			waitUnbooked(loop.page)
+			err := waitUnbooked(loop.page)
+			if err != nil {
+				loop.logger.Error("Error occured while waiting unbooked", "err", err)
+				loop.stop()
+				return
+			}
 		}
 	}
 
