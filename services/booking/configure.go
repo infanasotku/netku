@@ -33,5 +33,10 @@ func checkEnvs() error {
 		return errors.New("SSL_CERTFILE not specified")
 	}
 
+	_, ok = os.LookupEnv("BOOKING_PORT")
+	if !ok {
+		return errors.New("BOOKING_PORT not specified")
+	}
+
 	return nil
 }

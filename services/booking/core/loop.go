@@ -133,3 +133,13 @@ func (loop *Loop) next() {
 	}
 
 }
+
+// Returns true if loop stopped, false otherwise.
+func (loop *Loop) stopped() bool {
+	select {
+	case <-loop.quit:
+		return true
+	default:
+		return false
+	}
+}

@@ -16,8 +16,6 @@ import (
 )
 
 func main() {
-	core.TestRun()
-	return
 	ConfigureEnvs()
 
 	// Health check mode.
@@ -29,7 +27,7 @@ func main() {
 }
 
 func greet() int {
-	port := os.Getenv("XRAY_PORT")
+	port := os.Getenv("BOOKING_PORT")
 
 	conn, err := grpc.NewClient(fmt.Sprintf("localhost:%s", port), grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
@@ -47,7 +45,7 @@ func greet() int {
 }
 
 func serve() {
-	port := os.Getenv("XRAY_PORT")
+	port := os.Getenv("BOOKING_PORT")
 
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%s", port))
 	if err != nil {
@@ -59,8 +57,8 @@ func serve() {
 	healthcheck := health.NewServer()
 	healthgrpc.RegisterHealthServer(grpcServer, healthcheck)
 
-	server := core.Server{}
-	gen.RegisterBookingServer(grpcServer, &server)
+	server := core.CreateServer()
+	gen.RegisterBookingServer(grpcServer, server)
 	healthcheck.SetServingStatus("booking", healthgrpc.HealthCheckResponse_SERVING)
 
 	if err := grpcServer.Serve(lis); err != nil {

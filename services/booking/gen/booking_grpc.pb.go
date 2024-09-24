@@ -19,16 +19,16 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Booking_Book_FullMethodName   = "/booking.Booking/Book"
-	Booking_Unbook_FullMethodName = "/booking.Booking/Unbook"
+	Booking_RunBooking_FullMethodName  = "/booking.Booking/RunBooking"
+	Booking_StopBooking_FullMethodName = "/booking.Booking/StopBooking"
 )
 
 // BookingClient is the client API for Booking service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type BookingClient interface {
-	Book(ctx context.Context, in *BookingRequest, opts ...grpc.CallOption) (*Null, error)
-	Unbook(ctx context.Context, in *BookingRequest, opts ...grpc.CallOption) (*Null, error)
+	RunBooking(ctx context.Context, in *BookingRequest, opts ...grpc.CallOption) (*Null, error)
+	StopBooking(ctx context.Context, in *BookingRequest, opts ...grpc.CallOption) (*Null, error)
 }
 
 type bookingClient struct {
@@ -39,20 +39,20 @@ func NewBookingClient(cc grpc.ClientConnInterface) BookingClient {
 	return &bookingClient{cc}
 }
 
-func (c *bookingClient) Book(ctx context.Context, in *BookingRequest, opts ...grpc.CallOption) (*Null, error) {
+func (c *bookingClient) RunBooking(ctx context.Context, in *BookingRequest, opts ...grpc.CallOption) (*Null, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(Null)
-	err := c.cc.Invoke(ctx, Booking_Book_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Booking_RunBooking_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *bookingClient) Unbook(ctx context.Context, in *BookingRequest, opts ...grpc.CallOption) (*Null, error) {
+func (c *bookingClient) StopBooking(ctx context.Context, in *BookingRequest, opts ...grpc.CallOption) (*Null, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(Null)
-	err := c.cc.Invoke(ctx, Booking_Unbook_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Booking_StopBooking_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -63,8 +63,8 @@ func (c *bookingClient) Unbook(ctx context.Context, in *BookingRequest, opts ...
 // All implementations must embed UnimplementedBookingServer
 // for forward compatibility.
 type BookingServer interface {
-	Book(context.Context, *BookingRequest) (*Null, error)
-	Unbook(context.Context, *BookingRequest) (*Null, error)
+	RunBooking(context.Context, *BookingRequest) (*Null, error)
+	StopBooking(context.Context, *BookingRequest) (*Null, error)
 	mustEmbedUnimplementedBookingServer()
 }
 
@@ -75,11 +75,11 @@ type BookingServer interface {
 // pointer dereference when methods are called.
 type UnimplementedBookingServer struct{}
 
-func (UnimplementedBookingServer) Book(context.Context, *BookingRequest) (*Null, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Book not implemented")
+func (UnimplementedBookingServer) RunBooking(context.Context, *BookingRequest) (*Null, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RunBooking not implemented")
 }
-func (UnimplementedBookingServer) Unbook(context.Context, *BookingRequest) (*Null, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Unbook not implemented")
+func (UnimplementedBookingServer) StopBooking(context.Context, *BookingRequest) (*Null, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method StopBooking not implemented")
 }
 func (UnimplementedBookingServer) mustEmbedUnimplementedBookingServer() {}
 func (UnimplementedBookingServer) testEmbeddedByValue()                 {}
@@ -102,38 +102,38 @@ func RegisterBookingServer(s grpc.ServiceRegistrar, srv BookingServer) {
 	s.RegisterService(&Booking_ServiceDesc, srv)
 }
 
-func _Booking_Book_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Booking_RunBooking_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(BookingRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(BookingServer).Book(ctx, in)
+		return srv.(BookingServer).RunBooking(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Booking_Book_FullMethodName,
+		FullMethod: Booking_RunBooking_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(BookingServer).Book(ctx, req.(*BookingRequest))
+		return srv.(BookingServer).RunBooking(ctx, req.(*BookingRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Booking_Unbook_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Booking_StopBooking_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(BookingRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(BookingServer).Unbook(ctx, in)
+		return srv.(BookingServer).StopBooking(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Booking_Unbook_FullMethodName,
+		FullMethod: Booking_StopBooking_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(BookingServer).Unbook(ctx, req.(*BookingRequest))
+		return srv.(BookingServer).StopBooking(ctx, req.(*BookingRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -146,12 +146,12 @@ var Booking_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*BookingServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "Book",
-			Handler:    _Booking_Book_Handler,
+			MethodName: "RunBooking",
+			Handler:    _Booking_RunBooking_Handler,
 		},
 		{
-			MethodName: "Unbook",
-			Handler:    _Booking_Unbook_Handler,
+			MethodName: "StopBooking",
+			Handler:    _Booking_StopBooking_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
