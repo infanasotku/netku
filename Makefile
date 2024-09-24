@@ -18,3 +18,10 @@ booking-generate-go:
 	--go-grpc_out=services/booking/ \
 	--go-grpc_opt=Mprotobuf/booking.proto=./gen \
 	protobuf/booking.proto
+
+booking-generate-py:
+	python -m grpc_tools.protoc -Ibooking/gen=protobuf/ \
+	--python_out=services/assistant/ \
+	--grpc_python_out=services/assistant/ \
+	--pyi_out=services/assistant/ \
+	protobuf/booking.proto
