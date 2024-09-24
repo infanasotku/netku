@@ -20,9 +20,7 @@ func (s *Server) RunBooking(_ context.Context, r *gen.BookingRequest) (*gen.Null
 	if !ok {
 		loop = createLoop(r.Email, r.Password, s.logger)
 		s.loops[r.Email] = loop
-	}
-
-	if !loop.stopped() {
+	} else if !loop.stopped() {
 		return &gen.Null{}, errors.New("loop already ran")
 	}
 
