@@ -16,18 +16,18 @@ class Settings(BaseSettings):
     domain: str = Field(validation_alias="DOMAIN", default="127.0.0.1")
     ssl_keyfile: Optional[str] = Field(validation_alias="SSL_KEYFILE", default=None)
     ssl_certfile: Optional[str] = Field(validation_alias="SSL_CERTFILE", default=None)
+
+    reconnection_retries: int = Field(
+        validation_alias="RECONNECTION_RETRIES", default=5
+    )
+    reconnection_delay: float = Field(validation_alias="RECONNECTION_DELAY", default=3)
     # endregion
 
     # region Xray
     xray_restart_minutes: float = Field(validation_alias="XRAY_RESTART_MINUTES")
     xray_port: int = Field(validation_alias="XRAY_PORT", default=9000)
     xray_host: str = Field(validation_alias="XRAY_HOST", default="127.0.0.1")
-    xray_reconnection_retries: int = Field(
-        validation_alias="XRAY_RECONNECTION_RETRIES", default=5
-    )
-    xray_reconnection_delay: float = Field(
-        validation_alias="XRAY_RECONNECTION_DELAY", default=3
-    )
+
     # endregion
 
     # region Bot

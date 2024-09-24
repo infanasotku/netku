@@ -46,7 +46,9 @@ class Xray:
     async def _restart(self):
         """Sends grpc request to xray service for restart,
         obtains new uid."""
-        if not await self._check_health():
+        if not await health.wait_healthy(
+            "xray", f"{self._xray_host}:{self._xray_port}"
+        ):
             return
 
         async with grpc.aio.insecure_channel(
@@ -55,23 +57,3 @@ class Xray:
             stub = XrayStub(ch)
             resp: RestartResponse = await stub.RestartXray(Null())
             await tasks.send_proxy_id(resp.uuid)
-
-    async def _check_health(self) -> True:
-        """Checks xray service health `self._reconnection_count` times
-        with `self._reconnection_delay` delay.
-
-        Returns:
-        `True` if service health `False` otherwise.
-        """
-        for step in range(self._reconnection_retries + 1):
-            if step > 0:
-                await asyncio.sleep(self._reconnection_delay)
-                logger.warning(f"Attempting to reconnect to xray {step}...")
-            if await health.check_serivce(
-                "xray", f"{self._xray_host}:{self._xray_port}"
-            ):
-                logger.info("Connection with xray established.")
-                return True
-
-        logger.error("Attempts to connect to xray failed.")
-        return False
