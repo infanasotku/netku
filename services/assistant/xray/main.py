@@ -21,8 +21,6 @@ class Xray:
         self._restart_minutes = settings.xray_restart_minutes
         self._xray_port = settings.xray_port
         self._xray_host = settings.xray_host
-        self._reconnection_retries = settings.xray_reconnection_retries
-        self._reconnection_delay = settings.xray_reconnection_delay
 
     async def lifespan(self, _: FastAPI) -> AsyncGenerator:
         restart_task = asyncio.create_task(self._run_restart_task())
