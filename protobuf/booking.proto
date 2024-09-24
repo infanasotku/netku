@@ -9,6 +9,6 @@ message BookingRequest {
 message Null {}
 
 service Booking {
-    rpc Book(BookingRequest) returns (Null) {}
-    rpc Unbook(BookingRequest) returns (Null) {}
+    rpc RunBooking(BookingRequest) returns (Null) {}
+    rpc StopBooking(BookingRequest) returns (Null) {}
 }
