@@ -38,10 +38,10 @@ async def wait_healthy(name: str, addr: str) -> True:
     for step in range(settings.reconnection_retries + 1):
         if step > 0:
             await asyncio.sleep(settings.reconnection_delay)
-            logger.warning(f"Attempting to reconnect to xray {step}...")
+            logger.warning(f"Attempting to reconnect to {name} {step}...")
         if await check_service(name, addr):
-            logger.info("Connection with xray established.")
+            logger.info(f"Connection with {name} established.")
             return True
 
-    logger.error("Attempts to connect to xray failed.")
+    logger.error(f"Attempts to connect to {name} failed.")
     return False
