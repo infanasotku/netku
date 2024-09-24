@@ -1,6 +1,8 @@
 package core
 
 import (
+	"context"
+	"errors"
 	"log/slog"
 
 	"github.com/google/uuid"
@@ -73,7 +75,10 @@ func (loop *Loop) runConcurency() {
 			loop.done <- true
 			return
 		default:
-			loop.next()
+			err := rod.Try(loop.next)
+			if err != nil && !errors.Is(err, context.Canceled) {
+				loop.logger.Error("unhandled error occured", "err", err)
+			}
 		}
 	}
 }
