@@ -17,11 +17,6 @@ def create_lifespan() -> Callable[["Xray", FastAPI], AsyncGenerator]:
 
 
 class Xray:
-    def __init__(self):
-        self._restart_minutes = settings.xray_restart_minutes
-        self._xray_port = settings.xray_port
-        self._xray_host = settings.xray_host
-
     async def lifespan(self, _: FastAPI) -> AsyncGenerator:
         restart_task = asyncio.create_task(self._run_restart_task())
         yield
@@ -35,7 +30,7 @@ class Xray:
         Wrapped `self._restart` task.
         """
 
-        @repeat_every(seconds=self._restart_minutes * 60, logger=logger)
+        @repeat_every(seconds=settings.xray_restart_minutes * 60, logger=logger)
         async def restart():
             await self._restart()
 
@@ -45,12 +40,12 @@ class Xray:
         """Sends grpc request to xray service for restart,
         obtains new uid."""
         if not await health.wait_healthy(
-            "xray", f"{self._xray_host}:{self._xray_port}"
+            "xray", f"{settings.xray_host}:{settings.xray_port}"
         ):
             return
 
         async with grpc.aio.insecure_channel(
-            f"{self._xray_host}:{self._xray_port}"
+            f"{settings.xray_host}:{settings.xray_port}"
         ) as ch:
             stub = XrayStub(ch)
             resp: RestartResponse = await stub.RestartXray(Null())
