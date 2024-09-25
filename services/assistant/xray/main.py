@@ -1,5 +1,5 @@
 import asyncio
-from typing import Any, AsyncGenerator, Callable, Coroutine
+from typing import Any, AsyncGenerator, Coroutine
 from fastapi import FastAPI
 from fastapi_utils.tasks import repeat_every
 import grpc
@@ -12,11 +12,10 @@ from xray.gen.xray_pb2_grpc import XrayStub
 from xray.gen.xray_pb2 import RestartResponse, Null
 
 
-def create_lifespan() -> Callable[["Xray", FastAPI], AsyncGenerator]:
-    return Xray().lifespan
-
-
 class Xray:
+    def __init__(self):
+        self.uid: str = None
+
     async def lifespan(self, _: FastAPI) -> AsyncGenerator:
         restart_task = asyncio.create_task(self._run_restart_task())
         yield
