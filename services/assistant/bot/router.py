@@ -59,6 +59,10 @@ async def sign_up_for_proxy(message: Message):
         await message.answer(text.please_click_start)
         return
 
+    if user.proxy_subscription:
+        await message.answer("You already subscribeted to proxy!")
+        return
+
     utils.subscribe_user(user, "proxy")
     await message.answer("You subscribeted to proxy!")
 
