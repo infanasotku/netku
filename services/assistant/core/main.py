@@ -2,14 +2,13 @@ from contextlib import asynccontextmanager
 from typing import AsyncGenerator, Callable
 from fastapi import FastAPI
 
-from xray import xray
 import bot
 
 
 def create() -> FastAPI:
     """Creates core."""
     app = FastAPI(
-        lifespan=create_lifespan(bot.create_lifespan(), xray.lifespan),
+        lifespan=create_lifespan(bot.create_lifespan()),
         docs_url=None,
         redoc_url=None,
     )

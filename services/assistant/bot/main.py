@@ -1,11 +1,14 @@
+import asyncio
 from typing import Annotated, AsyncGenerator, Callable
 from fastapi import FastAPI, Header
 from aiogram.types import Update, WebhookInfo, BotCommand
 import aiogram.loggers as aloggers
 
 from settings import settings, logger
+
 from bot.bot import bot, dispatcher
 from bot.router import router
+import bot.tasks as tasks
 
 
 def create() -> FastAPI:
@@ -30,10 +33,17 @@ def create_lifespan() -> Callable[[FastAPI], AsyncGenerator]:
                 BotCommand(command="start", description="Registration"),
                 BotCommand(command="stop", description="Cancels all subscriptions"),
                 BotCommand(command="proxy", description="Subscribe to proxy"),
+                BotCommand(command="proxy_uid", description="Get proxy uid"),
             ]
         )
         logger.info("Webhook info: " + str(await _webhook_info()).split()[0])
+
+        logger.info("Starting bot tasks")
+        task_list: list[asyncio.Task] = [asyncio.create_task(tasks.restart_proxy())]
+        logger.info("Bot tasks started")
         yield
+        for task in task_list:
+            task.cancel()
 
     return _lifespan
 

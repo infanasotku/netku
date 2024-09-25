@@ -9,12 +9,14 @@ from aiogram.types import (
 )
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
+from aiogram.utils.markdown import hbold
 
 from bot.states import BaseState
 import bot.utils as utils
 import bot.text as text
 
 from settings import logger
+from xray import xray
 
 
 router = Router(name="main")
@@ -51,22 +53,6 @@ async def stop(message: Message):
     await message.answer("Subscriptions canceled!")
 
 
-@router.message(Command("proxy"))
-async def sign_up_for_proxy(message: Message):
-    user = utils.get_user(message)
-
-    if not user:
-        await message.answer(text.please_click_start)
-        return
-
-    if user.proxy_subscription:
-        await message.answer("You already subscribeted to proxy!")
-        return
-
-    utils.subscribe_user(user, "proxy")
-    await message.answer("You subscribeted to proxy!")
-
-
 @router.message(BaseState.registration)
 async def registrate(message: Message):
     if not message.contact:
@@ -85,6 +71,44 @@ async def registrate(message: Message):
         )
 
 
+# region Services
+
+
+@router.message(Command("proxy"))
+async def subscribe_for_proxy(message: Message):
+    user = utils.get_user(message)
+
+    if not user:
+        await message.answer(text.please_click_start)
+        return
+
+    if user.proxy_subscription:
+        await message.answer("You already subscribeted to proxy!")
+        return
+
+    utils.subscribe_user(user, "proxy")
+    await message.answer("You subscribeted to proxy!")
+
+
+@router.message(Command("proxy_uid"))
+async def get_proxy_uuid(message: Message):
+    user = utils.get_user(message)
+
+    if not user:
+        await message.answer(text.please_click_start)
+        return
+
+    if not user.proxy_subscription:
+        await message.answer("You didn't subscribe to proxy!")
+        return
+
+    return await message.answer(hbold(xray.uid))
+
+
+# endregion
+
+
+# region Common
 @router.message(BaseState.none)
 async def delete_extra(message: Message):
     await utils.try_delete_message(message)
@@ -100,3 +124,6 @@ async def error_handler(event: ErrorEvent):
     )
     await asyncio.sleep(3)
     await msg.delete()
+
+
+# endregion
