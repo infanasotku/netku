@@ -15,6 +15,9 @@ async def restart_proxy():
 
     uid = await xray.restart()
 
+    if not uid:
+        logger.info("Proxy subscription performed.")
+
     users = service.get_users()
 
     for user in users:
