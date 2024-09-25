@@ -9,3 +9,6 @@ def generate_proxy_task_message(proxy_id: str) -> str:
 New generated proxy id:
 {hbold(proxy_id)}
 """
+
+
+create_booking_account_text = "Add account"
