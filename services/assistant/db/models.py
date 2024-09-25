@@ -13,7 +13,7 @@ class User(Base):
     proxy_subscription: Mapped[bool] = mapped_column(default=False, nullable=False)
 
     booking_accounts: Mapped[list["BookingAccount"]] = relationship(
-        "BookingAccount", back_populates="owner"
+        "BookingAccount", cascade="all,delete", back_populates="owner"
     )
 
 
