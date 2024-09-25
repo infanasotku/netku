@@ -8,13 +8,13 @@ from settings import logger
 def find_user_by_telegram_id(id: int) -> Optional[UserSchema]:
     """Finds user by `UserSchema.telegram_id`.
     - Returns `UserSchema` if he exist in db, `None` otherwise."""
-    return orm.find_user(User.telegram_id, id)
+    return orm.get_user(User.telegram_id, id)
 
 
 def find_user_by_phone(phone: str) -> Optional[UserSchema]:
     """Finds user by `UserSchema.phone_number`.
     - Returns `UserSchema` if he exist in db, `None` otherwise."""
-    return orm.find_user(User.phone_number, phone)
+    return orm.get_user(User.phone_number, phone)
 
 
 def update_user(user: UserSchema):

@@ -15,3 +15,10 @@ class UserSchema(BaseSchema):
 
     # Subscriptions
     proxy_subscription: bool
+
+    booking_accounts: list["BookingAccountSchema"] = []
+
+
+class BookingAccountSchema(BaseSchema):
+    email: str
+    password: str
