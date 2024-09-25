@@ -31,6 +31,3 @@ class Booking:
         ) as ch:
             stub = BookingStub(ch)
             await stub.StopBooking(BookingRequest(email=email, password=password))
-
-
-booking = Booking()

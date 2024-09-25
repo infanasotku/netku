@@ -1,3 +1,3 @@
-from booking.main import booking
+from booking.main import Booking
 
-__all__ = ["booking"]
+booking = Booking()
