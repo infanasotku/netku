@@ -17,6 +17,7 @@ async def restart_proxy():
 
     if not uid:
         logger.info("Proxy subscription performed.")
+        return
 
     users = service.get_users()
 

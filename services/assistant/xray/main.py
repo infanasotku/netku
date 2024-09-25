@@ -1,3 +1,4 @@
+from typing import Optional
 import grpc
 
 from settings import settings
@@ -11,11 +12,11 @@ class Xray:
     def __init__(self):
         self.uid: str = None
 
-    async def restart(self) -> str:
+    async def restart(self) -> Optional[str]:
         """Sends grpc request to xray service for restart,
         obtains new uid.
         Returns:
-        New uid
+        New uid, if xray restarted, `None` otherwise.
         """
         if not await health.wait_healthy(
             "xray", f"{settings.xray_host}:{settings.xray_port}"
