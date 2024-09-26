@@ -1,4 +1,5 @@
 import asyncio
+import re
 from typing import Union
 from aiogram import Router, F
 from aiogram.types import (
@@ -196,6 +197,11 @@ async def submit_booking_account(callback: CallbackQuery, state: FSMContext):
     data = await state.get_data()
     email = data["email"]
     password = data["password"]
+
+    email_regex = r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b"
+
+    if not re.fullmatch(email_regex, email):
+        return await callback.answer("Not valid email")
 
     user = utils.get_user(callback.message)
 
