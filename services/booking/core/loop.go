@@ -107,6 +107,10 @@ func (loop *Loop) next() {
 		status := checkStatus(loop.page)
 
 		switch status {
+		case EMPTY:
+			loop.logger.Error("No washing machines attached")
+			loop.stop()
+			return
 		case UNBOOKED:
 			loop.logger.Info("Booking machine...")
 			time, err := book(loop.page)

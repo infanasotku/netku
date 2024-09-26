@@ -23,6 +23,7 @@ const (
 	BOOKED BookingStatus = iota
 	WAIT_UNBOOKED
 	UNBOOKED
+	EMPTY
 )
 
 // Checks page type.
@@ -43,6 +44,13 @@ func checkPage(page *rod.Page) PageType {
 // Browser must be at booking page.
 func checkStatus(page *rod.Page) BookingStatus {
 	err := rod.Try(func() {
+		page.Timeout(time.Second).MustElementR("h1", "Список прачечных пуст!")
+	})
+	if err == nil {
+		return EMPTY
+	}
+
+	err = rod.Try(func() {
 		page.Timeout(time.Second).MustElementR(".device", "Отменить бронь")
 	})
 	if err == nil {
@@ -68,10 +76,16 @@ func login(page *rod.Page, email string, password string) error {
 	page.MustElement("#Email").MustInput(email)
 	page.MustElement("#Password").MustInput(password).MustType(input.Enter)
 
+	err := rod.Try(func() {
+		page.Timeout(time.Second*2).MustElementR("li", "Неверный логин или пароль")
+	})
+	if err == nil {
+		return errors.New("bad credentials")
+	}
+
 	for {
 		url := page.MustInfo().URL
-		paLoaded := page.MustHas(".device")
-		if !strings.Contains(url, "Login") && paLoaded {
+		if !strings.Contains(url, "Login") {
 			break
 		}
 		time.Sleep(time.Second)
