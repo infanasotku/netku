@@ -53,8 +53,7 @@ async def stop(message: Message):
     user = utils.get_user(message)
 
     if not user:
-        await message.answer(text.please_click_start)
-        return
+        return await message.answer(text.please_click_start)
 
     utils.unsubscribe_user(user, "all")
     await message.answer("Subscriptions canceled!")
@@ -63,8 +62,7 @@ async def stop(message: Message):
 @router.message(BaseState.registration)
 async def registrate(message: Message):
     if not message.contact:
-        await utils.try_delete_message(message)
-        return
+        return await utils.try_delete_message(message)
 
     user = utils.registrate_user(message.contact)
     if user:
@@ -125,8 +123,7 @@ async def get_booking_menu(message: Union[Message, CallbackQuery]):
     user = utils.get_user(message)
 
     if not user:
-        await message.answer(text.please_click_start)
-        return
+        return await message.answer(text.please_click_start)
 
     await utils.try_edit_or_answer(
         message,
@@ -151,8 +148,7 @@ async def get_booking_accounts(callback: CallbackQuery):
     accounts = user.booking_accounts
 
     if len(accounts) == 0:
-        await callback.answer("You haven't accounts")
-        return
+        return await callback.answer("You haven't accounts")
 
     statuses = [booking.booked(acc.email) for acc in accounts]
 
@@ -204,8 +200,7 @@ async def submit_booking_account(callback: CallbackQuery, state: FSMContext):
     user = utils.get_user(callback.message)
 
     if email in (acc.email for acc in user.booking_accounts):
-        await callback.answer("Account with that email already exist")
-        return
+        return await callback.answer("Account with that email already exist")
 
     service.create_booking_account(user, email, password)
 
