@@ -3,7 +3,6 @@ package core
 import (
 	"context"
 	"errors"
-	"os"
 
 	"github.com/charmbracelet/log"
 	"github.com/go-rod/rod"
@@ -60,14 +59,7 @@ func (s *Server) Booked(_ context.Context, r *gen.BookingRequest) (*gen.BookingR
 //#endregion
 
 func CreateServer() *Server {
-	var url string
-
-	val, ok := os.LookupEnv("CHROMIUM_URL")
-	if ok {
-		url = val
-	} else {
-		url = launcher.New().Headless(true).NoSandbox(true).Set("--disable-gpu").MustLaunch()
-	}
+	url := launcher.New().Headless(true).NoSandbox(true).Set("--disable-gpu").MustLaunch()
 	browser := rod.New().ControlURL(url).MustConnect()
 
 	return &Server{loops: make(map[string]*Loop), logger: initLogger(), browser: browser}
