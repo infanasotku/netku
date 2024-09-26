@@ -38,8 +38,7 @@ func createLoop(email string, password string, parentLogger *log.Logger) *Loop {
 func (loop *Loop) run() {
 	loop.quit = make(chan bool, 1)
 	loop.done = make(chan bool, 1)
-	page := loop.browser.MustPage("https://lk.1clc.ru/").MustWaitStable()
-	loop.page, loop.cancel = page.WithCancel()
+	loop.cancel = func() {}
 	go loop.runConcurency()
 }
 
@@ -66,6 +65,8 @@ func (loop *Loop) wait() {
 func (loop *Loop) runConcurency() {
 	defer close(loop.quit)
 	loop.logger.Info("Loop started", "email", loop.email)
+	page := loop.browser.MustPage("https://lk.1clc.ru/").MustWaitStable()
+	loop.page, loop.cancel = page.WithCancel()
 
 	// Loop
 	for {
