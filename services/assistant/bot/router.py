@@ -87,12 +87,10 @@ async def subscribe_for_proxy(message: Message):
     user = utils.get_user(message)
 
     if not user:
-        await message.answer(text.please_click_start)
-        return
+        return await message.answer(text.please_click_start)
 
     if user.proxy_subscription:
-        await message.answer("You already subscribeted to proxy!")
-        return
+        return await message.answer("You already subscribeted to proxy!")
 
     utils.subscribe_user(user, "proxy")
     await message.answer("You subscribeted to proxy!")
@@ -103,12 +101,13 @@ async def get_proxy_uuid(message: Message):
     user = utils.get_user(message)
 
     if not user:
-        await message.answer(text.please_click_start)
-        return
+        return await message.answer(text.please_click_start)
 
     if not user.proxy_subscription:
-        await message.answer("You didn't subscribe to proxy!")
-        return
+        return await message.answer("You didn't subscribe to proxy!")
+
+    if not xray.uid:
+        return await message.answer(hbold("Proxy inactive"))
 
     return await message.answer(hbold(xray.uid))
 
