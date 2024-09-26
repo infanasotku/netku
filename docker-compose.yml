@@ -113,9 +113,6 @@ services:
     networks:
       - netku-net
 
-    ports:
-      - 443:443
-
     env_file:
       - .env
 
