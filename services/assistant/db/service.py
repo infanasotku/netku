@@ -32,3 +32,8 @@ def get_users() -> list[UserSchema]:
         logger.warning("User table is empty.")
 
     return users
+
+
+def create_booking_account(user: UserSchema, email: str, password: str):
+    if not orm.create_booking_account(user, email, password):
+        logger.warning("Booking account not created")

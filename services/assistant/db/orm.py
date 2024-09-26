@@ -26,21 +26,11 @@ def update_user(new_user: UserSchema) -> bool:
     with session.begin() as s:
         raw_user = s.query(User).filter(User.id == new_user.id).first()
         if not raw_user:
-            return
+            return False
 
         raw_user.phone_number = new_user.phone_number
         raw_user.telegram_id = new_user.telegram_id
         raw_user.proxy_subscription = new_user.proxy_subscription
-
-        raw_user.booking_accounts = []
-
-        for booking_account in new_user.booking_accounts:
-            raw_booking_accoount = (
-                s.query(BookingAccount)
-                .filter(BookingAccount.id == booking_account.id)
-                .first()
-            )
-            raw_user.booking_accounts.append(raw_booking_accoount)
 
     return True
 
@@ -51,3 +41,20 @@ def get_users() -> list[UserSchema]:
         raw_users = s.query(User).all()
 
         return [UserSchema.model_validate(raw_user) for raw_user in raw_users]
+
+
+def create_booking_account(user: UserSchema, email: str, password: str) -> bool:
+    """Creates new booking acccount for `user`
+    Returns:
+    `True` if account created successful, `False` otherwise.
+    """
+    with session.begin() as s:
+        raw_user = s.query(User).filter(User.id == user.id).first()
+        if not raw_user:
+            return False
+
+        booking_account = BookingAccount(email=email, password=password, owner=raw_user)
+
+        s.add(booking_account)
+
+    return True
