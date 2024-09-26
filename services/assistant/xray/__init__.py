@@ -1,3 +1,3 @@
-from xray.main import create_lifespan, check_xray
+from xray.main import Xray
 
-__all__ = ["create_lifespan", "check_xray"]
+xray = Xray()

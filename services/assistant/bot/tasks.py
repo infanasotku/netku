@@ -1,13 +1,23 @@
+from fastapi_utils.tasks import repeat_every
+
 from db import service
+from settings import logger, settings
+from xray import xray
 
 from bot.bot import bot
 import bot.text as text
-from settings import logger
 
 
-async def send_proxy_id(id: str):
-    """Sends new proxy `id` to all user subscripted to proxy."""
+@repeat_every(seconds=settings.xray_restart_minutes * 60, logger=logger)
+async def restart_proxy():
+    """Restarts proxy and sends `id` to all user subscripted to proxy."""
     logger.info("Proxy subscription performing.")
+
+    uid = await xray.restart()
+
+    if not uid:
+        logger.info("Proxy subscription performed.")
+        return
 
     users = service.get_users()
 
@@ -17,9 +27,9 @@ async def send_proxy_id(id: str):
 
         try:
             await bot.send_message(
-                user.telegram_id, text.generate_proxy_task_message(id)
+                user.telegram_id, text.generate_proxy_task_message(uid)
             )
         except Exception as e:
-            logger.warning(f"Error occured while sending proxy id: {e}.")
+            logger.warning(f"Error occured while sending proxy uid: {e}.")
 
     logger.info("Proxy subscription performed.")

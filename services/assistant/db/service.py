@@ -1,20 +1,20 @@
 from typing import Optional
 from db import orm
-from db.schemas import UserSchema
-from db.models import User
+from db.schemas import UserSchema, BookingAccountSchema
+from db.models import BookingAccount, User
 from settings import logger
 
 
-def find_user_by_telegram_id(id: int) -> Optional[UserSchema]:
-    """Finds user by `UserSchema.telegram_id`.
+def get_user_by_telegram_id(id: int) -> Optional[UserSchema]:
+    """Returns user by `UserSchema.telegram_id`.
     - Returns `UserSchema` if he exist in db, `None` otherwise."""
-    return orm.find_user(User.telegram_id, id)
+    return orm.get_schema(UserSchema, User, User.telegram_id, id)
 
 
-def find_user_by_phone(phone: str) -> Optional[UserSchema]:
-    """Finds user by `UserSchema.phone_number`.
+def get_user_by_phone(phone: str) -> Optional[UserSchema]:
+    """Returns user by `UserSchema.phone_number`.
     - Returns `UserSchema` if he exist in db, `None` otherwise."""
-    return orm.find_user(User.phone_number, phone)
+    return orm.get_user(UserSchema, User, User.phone_number, phone)
 
 
 def update_user(user: UserSchema):
@@ -32,3 +32,13 @@ def get_users() -> list[UserSchema]:
         logger.warning("User table is empty.")
 
     return users
+
+
+def create_booking_account(user: UserSchema, email: str, password: str):
+    if not orm.create_booking_account(user, email, password):
+        logger.warning("Booking account not created")
+
+
+def get_booking_account_by_id(id: int) -> Optional[BookingAccountSchema]:
+    """Returns booking account by `id`."""
+    return orm.get_schema(BookingAccountSchema, BookingAccount, BookingAccount.id, id)

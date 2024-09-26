@@ -1,0 +1,17 @@
+syntax = "proto3";
+package booking;
+
+message BookingRequest {
+    string email = 1;
+    string password = 2;
+}
+
+message BookingResponse {
+    bool booked = 1;
+}
+
+service Booking {
+    rpc RunBooking(BookingRequest) returns (BookingResponse) {}
+    rpc StopBooking(BookingRequest) returns (BookingResponse) {}
+    rpc Booked(BookingRequest) returns (BookingResponse) {}
+}

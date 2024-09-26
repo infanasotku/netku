@@ -6,7 +6,7 @@ class BaseSchema(BaseModel):
     class Config:
         from_attributes = True
 
-    id: Optional[int]
+    id: Optional[int] = -1
 
 
 class UserSchema(BaseSchema):
@@ -15,3 +15,10 @@ class UserSchema(BaseSchema):
 
     # Subscriptions
     proxy_subscription: bool
+
+    booking_accounts: list["BookingAccountSchema"] = []
+
+
+class BookingAccountSchema(BaseSchema):
+    email: str
+    password: str

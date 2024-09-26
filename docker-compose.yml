@@ -102,6 +102,26 @@ services:
     volumes:
       - nginx-html:/app/dist
 
+  booking:
+    container_name: netku-booking
+    build:
+      context: services/booking
+
+    volumes:
+      - booking-browser-dir:/root/.cache/rod/browser
+
+    networks:
+      - netku-net
+
+    env_file:
+      - .env
+
+    healthcheck:
+      test: [ "CMD-SHELL", "/app/booking --greet" ]
+      interval: 2s
+      timeout: 5s
+      retries: 10
+
 volumes:
   cert-dir:
     external: true
@@ -110,6 +130,7 @@ volumes:
   db-dir:
     external: true
   nginx-html:
+  booking-browser-dir:
 
 
 networks:

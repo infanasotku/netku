@@ -1,8 +1,16 @@
-from typing import Any, Optional
-from aiogram.types import Message, Contact
+from typing import Any, Callable, Coroutine, Optional
+from collections import Counter
+from aiogram.types import Message, Contact, InlineKeyboardButton
+from aiogram.fsm.state import State
+from aiogram.fsm.context import FSMContext
+from aiogram.utils.markdown import hbold
 
 from db.schemas import UserSchema
 from db import service
+from booking import booking
+
+import bot.kb as kb
+from bot.states import BaseState
 
 
 async def try_delete_message(message: Message) -> bool:
@@ -48,11 +56,45 @@ async def try_edit_or_answer(message: Message, text: str, reply_markup: Any = No
     return True
 
 
+async def fill_field(
+    message: Message,
+    state: FSMContext,
+    fieldname: str,
+    back_button: InlineKeyboardButton,
+    fill_state: State,
+):
+    await state.set_state(fill_state)
+    await state.update_data(msg=message)
+    text = back_button.text
+    back_button.text = "Back"
+    await try_edit_or_answer(
+        message,
+        hbold(f"Input {fieldname}:"),
+        kb.create_inline_keyboard([back_button]),
+    )
+    back_button.text = text
+
+
+async def apply_field(
+    message: Message,
+    state: FSMContext,
+    fieldname: str,
+    menu_text: str,
+    menu_generator: Callable[[FSMContext], Coroutine],
+):
+    await state.set_state(BaseState.none)
+    data = await state.get_data()
+    await state.update_data({fieldname: message.text})
+    msg: Message = data["msg"]
+    await try_delete_message(message)
+    await try_edit_or_answer(msg, menu_text, await menu_generator(state))
+
+
 def get_user(message: Message) -> Optional[UserSchema]:
     """Finds user by `message.chat.id`
     - Returns `UserSchema` if user exist,
     `None` otherwise."""
-    return service.find_user_by_telegram_id(message.chat.id)
+    return service.get_user_by_telegram_id(message.chat.id)
 
 
 def registrate_user(contact: Contact) -> Optional[UserSchema]:
@@ -60,7 +102,7 @@ def registrate_user(contact: Contact) -> Optional[UserSchema]:
     - Returns `UserSchema` if user registrated successful
     (User registrated successful if he founded by his `contact.phone_number` in db
     ), `None` otherwise."""
-    user = service.find_user_by_phone(contact.phone_number)
+    user = service.get_user_by_phone(contact.phone_number)
     if not user:
         return
 
@@ -87,3 +129,13 @@ def unsubscribe_user(user: UserSchema, subscription: str):
             user.proxy_subscription = False
 
     service.update_user(user)
+
+
+async def get_booking_machine_count(message: Message) -> int:
+    user = get_user(message)
+    return Counter(
+        [
+            await booking.booked(account.email, account.password)
+            for account in user.booking_accounts
+        ]
+    )[True]

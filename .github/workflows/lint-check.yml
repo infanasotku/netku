@@ -36,6 +36,21 @@ jobs:
         working-directory: services/xray
         run: go build .
 
+  build-booking:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.22.6"
+      - name: Install dependencies
+        working-directory: services/booking
+        run: go mod download
+      - name: Run build
+        working-directory: services/booking
+        run: go build .
+
   build-landing:
     runs-on: ubuntu-latest
     steps:
