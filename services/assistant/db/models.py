@@ -21,7 +21,7 @@ class BookingAccount(Base):
     __tablename__ = "booking_accounts"
 
     email: Mapped[str] = mapped_column(unique=True, nullable=False)
-    password: Mapped[str] = mapped_column(unique=True, nullable=False)
+    password: Mapped[str] = mapped_column(unique=False, nullable=False)
 
     owner_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
     owner: Mapped["User"] = relationship("User", back_populates="booking_accounts")
