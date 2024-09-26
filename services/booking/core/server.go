@@ -6,6 +6,7 @@ import (
 
 	"github.com/charmbracelet/log"
 	"github.com/go-rod/rod"
+	"github.com/go-rod/rod/lib/launcher"
 	"github.com/infanasotku/netku/services/booking/gen"
 )
 
@@ -58,7 +59,10 @@ func (s *Server) Booked(_ context.Context, r *gen.BookingRequest) (*gen.BookingR
 //#endregion
 
 func CreateServer() *Server {
-	return &Server{loops: make(map[string]*Loop), logger: initLogger(), browser: rod.New().MustConnect()}
+	url := launcher.New().Headless(true).NoSandbox(true).Set("--disable-gpu").MustLaunch()
+	browser := rod.New().ControlURL(url).MustConnect()
+
+	return &Server{loops: make(map[string]*Loop), logger: initLogger(), browser: browser}
 }
 
 func CloseServer(s *Server) {
