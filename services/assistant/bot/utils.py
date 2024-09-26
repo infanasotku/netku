@@ -131,8 +131,11 @@ def unsubscribe_user(user: UserSchema, subscription: str):
     service.update_user(user)
 
 
-def get_booking_machine_count(message: Message) -> int:
+async def get_booking_machine_count(message: Message) -> int:
     user = get_user(message)
     return Counter(
-        [booking.booked(account.email) for account in user.booking_accounts]
+        [
+            await booking.booked(account.email, account.password)
+            for account in user.booking_accounts
+        ]
     )[True]

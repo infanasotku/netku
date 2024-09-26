@@ -127,7 +127,7 @@ async def get_booking_menu(message: Union[Message, CallbackQuery]):
 
     await utils.try_edit_or_answer(
         message,
-        f"Now booked: {utils.get_booking_machine_count(message)}",
+        f"Now booked: {await utils.get_booking_machine_count(message)}",
         kb.booking_menu,
     )
 
@@ -150,7 +150,7 @@ async def get_booking_accounts(callback: CallbackQuery):
     if len(accounts) == 0:
         return await callback.answer("You haven't accounts")
 
-    statuses = [booking.booked(acc.email) for acc in accounts]
+    statuses = [await booking.booked(acc.email, acc.password) for acc in accounts]
 
     keyboard = kb.create_inline_keyboard(
         *(

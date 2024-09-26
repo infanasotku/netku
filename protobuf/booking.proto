@@ -6,9 +6,12 @@ message BookingRequest {
     string password = 2;
 }
 
-message Null {}
+message BookingResponse {
+    bool booked = 1;
+}
 
 service Booking {
-    rpc RunBooking(BookingRequest) returns (Null) {}
-    rpc StopBooking(BookingRequest) returns (Null) {}
+    rpc RunBooking(BookingRequest) returns (BookingResponse) {}
+    rpc StopBooking(BookingRequest) returns (BookingResponse) {}
+    rpc Booked(BookingRequest) returns (BookingResponse) {}
 }

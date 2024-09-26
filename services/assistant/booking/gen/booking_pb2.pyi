@@ -12,6 +12,8 @@ class BookingRequest(_message.Message):
     password: str
     def __init__(self, email: _Optional[str] = ..., password: _Optional[str] = ...) -> None: ...
 
-class Null(_message.Message):
-    __slots__ = ()
-    def __init__(self) -> None: ...
+class BookingResponse(_message.Message):
+    __slots__ = ("booked",)
+    BOOKED_FIELD_NUMBER: _ClassVar[int]
+    booked: bool
+    def __init__(self, booked: bool = ...) -> None: ...

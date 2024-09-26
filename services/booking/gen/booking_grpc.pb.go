@@ -21,14 +21,16 @@ const _ = grpc.SupportPackageIsVersion9
 const (
 	Booking_RunBooking_FullMethodName  = "/booking.Booking/RunBooking"
 	Booking_StopBooking_FullMethodName = "/booking.Booking/StopBooking"
+	Booking_Booked_FullMethodName      = "/booking.Booking/Booked"
 )
 
 // BookingClient is the client API for Booking service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type BookingClient interface {
-	RunBooking(ctx context.Context, in *BookingRequest, opts ...grpc.CallOption) (*Null, error)
-	StopBooking(ctx context.Context, in *BookingRequest, opts ...grpc.CallOption) (*Null, error)
+	RunBooking(ctx context.Context, in *BookingRequest, opts ...grpc.CallOption) (*BookingResponse, error)
+	StopBooking(ctx context.Context, in *BookingRequest, opts ...grpc.CallOption) (*BookingResponse, error)
+	Booked(ctx context.Context, in *BookingRequest, opts ...grpc.CallOption) (*BookingResponse, error)
 }
 
 type bookingClient struct {
@@ -39,9 +41,9 @@ func NewBookingClient(cc grpc.ClientConnInterface) BookingClient {
 	return &bookingClient{cc}
 }
 
-func (c *bookingClient) RunBooking(ctx context.Context, in *BookingRequest, opts ...grpc.CallOption) (*Null, error) {
+func (c *bookingClient) RunBooking(ctx context.Context, in *BookingRequest, opts ...grpc.CallOption) (*BookingResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(Null)
+	out := new(BookingResponse)
 	err := c.cc.Invoke(ctx, Booking_RunBooking_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -49,10 +51,20 @@ func (c *bookingClient) RunBooking(ctx context.Context, in *BookingRequest, opts
 	return out, nil
 }
 
-func (c *bookingClient) StopBooking(ctx context.Context, in *BookingRequest, opts ...grpc.CallOption) (*Null, error) {
+func (c *bookingClient) StopBooking(ctx context.Context, in *BookingRequest, opts ...grpc.CallOption) (*BookingResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(Null)
+	out := new(BookingResponse)
 	err := c.cc.Invoke(ctx, Booking_StopBooking_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *bookingClient) Booked(ctx context.Context, in *BookingRequest, opts ...grpc.CallOption) (*BookingResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(BookingResponse)
+	err := c.cc.Invoke(ctx, Booking_Booked_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -63,8 +75,9 @@ func (c *bookingClient) StopBooking(ctx context.Context, in *BookingRequest, opt
 // All implementations must embed UnimplementedBookingServer
 // for forward compatibility.
 type BookingServer interface {
-	RunBooking(context.Context, *BookingRequest) (*Null, error)
-	StopBooking(context.Context, *BookingRequest) (*Null, error)
+	RunBooking(context.Context, *BookingRequest) (*BookingResponse, error)
+	StopBooking(context.Context, *BookingRequest) (*BookingResponse, error)
+	Booked(context.Context, *BookingRequest) (*BookingResponse, error)
 	mustEmbedUnimplementedBookingServer()
 }
 
@@ -75,11 +88,14 @@ type BookingServer interface {
 // pointer dereference when methods are called.
 type UnimplementedBookingServer struct{}
 
-func (UnimplementedBookingServer) RunBooking(context.Context, *BookingRequest) (*Null, error) {
+func (UnimplementedBookingServer) RunBooking(context.Context, *BookingRequest) (*BookingResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RunBooking not implemented")
 }
-func (UnimplementedBookingServer) StopBooking(context.Context, *BookingRequest) (*Null, error) {
+func (UnimplementedBookingServer) StopBooking(context.Context, *BookingRequest) (*BookingResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method StopBooking not implemented")
+}
+func (UnimplementedBookingServer) Booked(context.Context, *BookingRequest) (*BookingResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Booked not implemented")
 }
 func (UnimplementedBookingServer) mustEmbedUnimplementedBookingServer() {}
 func (UnimplementedBookingServer) testEmbeddedByValue()                 {}
@@ -138,6 +154,24 @@ func _Booking_StopBooking_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Booking_Booked_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BookingRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BookingServer).Booked(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Booking_Booked_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BookingServer).Booked(ctx, req.(*BookingRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Booking_ServiceDesc is the grpc.ServiceDesc for Booking service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -152,6 +186,10 @@ var Booking_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "StopBooking",
 			Handler:    _Booking_StopBooking_Handler,
+		},
+		{
+			MethodName: "Booked",
+			Handler:    _Booking_Booked_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

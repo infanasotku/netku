@@ -17,34 +17,42 @@ type Server struct {
 }
 
 // #region GRPC implementation
-func (s *Server) RunBooking(_ context.Context, r *gen.BookingRequest) (*gen.Null, error) {
+func (s *Server) RunBooking(_ context.Context, r *gen.BookingRequest) (*gen.BookingResponse, error) {
 	loop, ok := s.loops[r.Email]
 	if !ok {
 		loop = createLoop(r.Email, r.Password, s.logger, s.browser)
 		s.loops[r.Email] = loop
 	} else if !loop.stopped() {
-		return &gen.Null{}, errors.New("loop already ran")
+		return &gen.BookingResponse{Booked: true}, errors.New("loop already ran")
 	}
 
 	loop.run()
 
-	return &gen.Null{}, nil
+	return &gen.BookingResponse{Booked: true}, nil
 }
 
-func (s *Server) StopBooking(_ context.Context, r *gen.BookingRequest) (*gen.Null, error) {
+func (s *Server) StopBooking(_ context.Context, r *gen.BookingRequest) (*gen.BookingResponse, error) {
 	loop, ok := s.loops[r.Email]
 	if !ok {
-		return &gen.Null{}, errors.New("loop not exist")
+		return &gen.BookingResponse{Booked: false}, errors.New("loop not exist")
 	}
 
 	if loop.stopped() {
-		return &gen.Null{}, errors.New("loop already stopped")
+		return &gen.BookingResponse{Booked: false}, errors.New("loop already stopped")
 	}
 
 	loop.stop()
 	loop.wait()
 
-	return &gen.Null{}, nil
+	return &gen.BookingResponse{Booked: false}, nil
+}
+
+func (s *Server) Booked(_ context.Context, r *gen.BookingRequest) (*gen.BookingResponse, error) {
+	loop, ok := s.loops[r.Email]
+	if !ok || loop.stopped() {
+		return &gen.BookingResponse{Booked: false}, nil
+	}
+	return &gen.BookingResponse{Booked: true}, nil
 }
 
 //#endregion
