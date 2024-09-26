@@ -93,11 +93,11 @@ func waitUnbooked(page *rod.Page) error {
 	})
 	if err == nil {
 		return errors.New("machine already booked")
-
 	}
 	//#endregion
-
-	page.MustElementR(".device", "Забронировать")
+	_ = rod.Try(func() {
+		page.Timeout(time.Minute*5).MustElementR(".device", "Забронировать")
+	})
 	return nil
 }
 
@@ -117,7 +117,9 @@ func waitBookingOver(page *rod.Page) error {
 	}
 	//#endregion
 
-	page.MustElementR(".device", "Забронировать")
+	_ = rod.Try(func() {
+		page.Timeout(time.Minute*5).MustElementR(".device", "Забронировать")
+	})
 	return nil
 }
 

@@ -134,6 +134,12 @@ func (loop *Loop) next() {
 				return
 			}
 		}
+
+		newStatus := checkStatus(loop.page)
+		if newStatus == status {
+			loop.page.MustReload().MustWaitStable()
+			loop.logger.Info("Page reloaded")
+		}
 	}
 
 }
