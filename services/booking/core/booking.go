@@ -90,6 +90,7 @@ func login(page *rod.Page, email string, password string) error {
 		}
 		time.Sleep(time.Second)
 	}
+	page.MustWaitStable()
 
 	return nil
 }
