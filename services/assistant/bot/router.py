@@ -7,6 +7,7 @@ from aiogram.types import (
     KeyboardButton,
     ReplyKeyboardMarkup,
     ReplyKeyboardRemove,
+    InlineKeyboardButton,
     ErrorEvent,
 )
 from aiogram.filters import Command
@@ -17,9 +18,12 @@ from bot.states import BaseState, BookingAccountAdding
 import bot.utils as utils
 import bot.text as text
 import bot.kb as kb
+from bot.schemas import BookingCallbackData, BookingAction
 
 from settings import logger
 from xray import xray
+from db import service
+from booking import booking
 
 
 router = Router(name="main")
@@ -141,13 +145,75 @@ async def get_booking_account_creating_menu(callback: CallbackQuery, state: FSMC
     )
 
 
+@router.callback_query(F.data == "get_booking_accounts")
+async def get_booking_accounts(callback: CallbackQuery):
+    user = utils.get_user(callback.message)
+
+    accounts = user.booking_accounts
+
+    if len(accounts) == 0:
+        await callback.answer("You haven't accounts")
+        return
+
+    statuses = [booking.booked(acc.email) for acc in accounts]
+
+    keyboard = kb.create_inline_keyboard(
+        *(
+            [
+                InlineKeyboardButton(text=account.email, callback_data="stub"),
+                InlineKeyboardButton(
+                    text="Run" if not status else "Stop",
+                    callback_data=BookingCallbackData(
+                        user_id=user.id,
+                        account_id=account.id,
+                        action=BookingAction.run if not status else BookingAction.stop,
+                    ).pack(),
+                ),
+            ]
+            for account, status in zip(accounts, statuses)
+        ),
+        [kb.booking_menu_back_button],
+        [kb.hide_keyboard_button],
+    )
+
+    await utils.try_edit_or_answer(callback.message, hbold("Your accounts:"), keyboard)
+
+
+@router.callback_query(BookingCallbackData.filter(F.action == BookingAction.stop))
+async def stop_booking(callback: CallbackQuery, callback_data: BookingCallbackData):
+    account = service.get_booking_account_by_id(callback_data.account_id)
+    await booking.stop_booking(account.email, account.password)
+    await utils.try_delete_message(callback.message)
+    await get_booking_accounts(callback)
+
+
+@router.callback_query(BookingCallbackData.filter(F.action == BookingAction.run))
+async def run_booking(callback: CallbackQuery, callback_data: BookingCallbackData):
+    account = service.get_booking_account_by_id(callback_data.account_id)
+    await booking.run_booking(account.email, account.password)
+    await utils.try_delete_message(callback.message)
+    await get_booking_accounts(callback)
+
+
 # Fill
 @router.callback_query(F.data == "submit_booking_account")
 async def submit_booking_account(callback: CallbackQuery, state: FSMContext):
     data = await state.get_data()
     email = data["email"]
     password = data["password"]
-    # TODO: Email validation
+
+    user = utils.get_user(callback.message)
+
+    if email in (acc.email for acc in user.booking_accounts):
+        await callback.answer("Account with that email already exist")
+        return
+
+    service.create_booking_account(user, email, password)
+
+    await state.clear()
+    await state.set_state(BaseState.none)
+    await utils.try_delete_message(callback.message)
+    await get_booking_accounts(callback)
 
 
 @router.callback_query(F.data == "fill_booking_email")

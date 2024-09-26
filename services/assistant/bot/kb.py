@@ -26,6 +26,9 @@ booking_menu = InlineKeyboardMarkup(
         [hide_keyboard_button],
     ]
 )
+booking_menu_back_button = InlineKeyboardButton(
+    text="Back", callback_data="get_booking_menu"
+)
 
 
 async def generate_booking_account_creating_menu(state: FSMContext):
@@ -58,10 +61,7 @@ async def generate_booking_account_creating_menu(state: FSMContext):
             )
         ],
         [
-            InlineKeyboardButton(
-                text="Back",
-                callback_data="get_booking_menu",
-            ),
+            booking_menu_back_button,
         ],
         [hide_keyboard_button],
     )
@@ -70,11 +70,6 @@ async def generate_booking_account_creating_menu(state: FSMContext):
 booking_account_creating_menu = create_inline_keyboard(
     [booking_accounts_getting_button],
     [booking_account_creating_button],
-    [
-        InlineKeyboardButton(
-            text="Back",
-            callback_data="get_booking_menu",
-        ),
-    ],
+    [booking_menu_back_button],
     [hide_keyboard_button],
 )

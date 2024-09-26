@@ -1,4 +1,5 @@
 from typing import Any, Callable, Coroutine, Optional
+from collections import Counter
 from aiogram.types import Message, Contact, InlineKeyboardButton
 from aiogram.fsm.state import State
 from aiogram.fsm.context import FSMContext
@@ -6,6 +7,7 @@ from aiogram.utils.markdown import hbold
 
 from db.schemas import UserSchema
 from db import service
+from booking import booking
 
 import bot.kb as kb
 from bot.states import BaseState
@@ -92,7 +94,7 @@ def get_user(message: Message) -> Optional[UserSchema]:
     """Finds user by `message.chat.id`
     - Returns `UserSchema` if user exist,
     `None` otherwise."""
-    return service.find_user_by_telegram_id(message.chat.id)
+    return service.get_user_by_telegram_id(message.chat.id)
 
 
 def registrate_user(contact: Contact) -> Optional[UserSchema]:
@@ -100,7 +102,7 @@ def registrate_user(contact: Contact) -> Optional[UserSchema]:
     - Returns `UserSchema` if user registrated successful
     (User registrated successful if he founded by his `contact.phone_number` in db
     ), `None` otherwise."""
-    user = service.find_user_by_phone(contact.phone_number)
+    user = service.get_user_by_phone(contact.phone_number)
     if not user:
         return
 
@@ -130,4 +132,7 @@ def unsubscribe_user(user: UserSchema, subscription: str):
 
 
 def get_booking_machine_count(message: Message) -> int:
-    return 0
+    user = get_user(message)
+    return Counter(
+        [booking.booked(account.email) for account in user.booking_accounts]
+    )[True]
