@@ -117,7 +117,8 @@ async def get_proxy_uuid(message: Message):
 # region Booking
 @router.callback_query(F.data == "get_booking_menu")
 @router.message(Command("machine_booking"))
-async def get_booking_menu(message: Union[Message, CallbackQuery]):
+async def get_booking_menu(message: Union[Message, CallbackQuery], state: FSMContext):
+    await state.set_state(BaseState.none)
     if isinstance(message, CallbackQuery):
         message = message.message
 
@@ -135,6 +136,7 @@ async def get_booking_menu(message: Union[Message, CallbackQuery]):
 
 @router.callback_query(F.data == "create_booking_account_menu")
 async def get_booking_account_creating_menu(callback: CallbackQuery, state: FSMContext):
+    await state.set_state(BaseState.none)
     await utils.try_edit_or_answer(
         callback.message,
         text.create_booking_account_text,
