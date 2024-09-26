@@ -58,6 +58,7 @@ func serve() {
 	healthgrpc.RegisterHealthServer(grpcServer, healthcheck)
 
 	server := core.CreateServer()
+	defer core.CloseServer(server)
 	gen.RegisterBookingServer(grpcServer, server)
 	healthcheck.SetServingStatus("booking", healthgrpc.HealthCheckResponse_SERVING)
 

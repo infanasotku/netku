@@ -23,11 +23,9 @@ type Loop struct {
 	done     chan bool
 }
 
-func createLoop(email string, password string, parentLogger *log.Logger) *Loop {
+func createLoop(email string, password string, parentLogger *log.Logger, browser *rod.Browser) *Loop {
 	id := uuid.New().String()
 	logger := createSubLogger(id, parentLogger)
-
-	browser := rod.New().MustConnect()
 
 	loop := Loop{id: id, email: email, password: password, logger: logger, browser: browser}
 
@@ -65,7 +63,7 @@ func (loop *Loop) wait() {
 func (loop *Loop) runConcurency() {
 	defer close(loop.quit)
 	loop.logger.Info("Loop started", "email", loop.email)
-	page := loop.browser.MustPage("https://lk.1clc.ru/").MustWaitStable()
+	page := loop.browser.MustIncognito().MustPage("https://lk.1clc.ru/").MustWaitStable()
 	loop.page, loop.cancel = page.WithCancel()
 
 	// Loop
