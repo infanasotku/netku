@@ -74,22 +74,3 @@ html.dark {
   border-color: var(--input-border-hover-color) !important;
   transition: 0.3s;
 }
-
-.block p {
-  margin: 16px 0;
-}
-
-.block a {
-  color: var(--highlight-color-lighter);
-  text-decoration: underline;
-  text-underline-offset: 2px;
-  transition: color 0.25s, opacity 0.25s;
-}
-
-.block a:hover {
-  color: var(--highlight-color-lightest);
-}
-
-.block a:active {
-  color: var(--highlight-color-lightest);
-}
