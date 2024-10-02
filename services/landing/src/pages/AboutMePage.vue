@@ -26,7 +26,4 @@ const { t } = useI18n();
 	flex-direction: column;
 	flex-shrink: 0;
 }
-.block {
-	max-width: 80%;
-}
 </style>
