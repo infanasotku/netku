@@ -23,6 +23,7 @@ const props = defineProps({
 	font-size: 16px;
 	line-height: 24px;
 	font-weight: 400;
+	max-width: 80%;
 }
 
 .content-block h1 {
