@@ -8,14 +8,14 @@ const props = defineProps({
 </script>
 
 <template>
-	<div class="block">
+	<div class="content-block">
 		<h1>{{ props.title }}</h1>
 		<slot></slot>
 	</div>
 </template>
 
 <style>
-.block {
+.content-block {
 	display: flex;
 	flex-direction: column;
 	justify-content: start;
@@ -25,29 +25,29 @@ const props = defineProps({
 	font-weight: 400;
 }
 
-.block h1 {
+.content-block h1 {
 	line-height: 40px;
 	font-size: 32px;
 	font-weight: 600;
 	margin: 0;
 }
 
-.block p {
+.content-block p {
 	margin: 16px 0;
 }
 
-.block a {
+.content-block a {
 	color: var(--highlight-color-lighter);
 	text-decoration: underline;
 	text-underline-offset: 2px;
 	transition: color 0.25s, opacity 0.25s;
 }
 
-.block a:hover {
+.content-block a:hover {
 	color: var(--highlight-color-lightest);
 }
 
-.block a:active {
+.content-block a:active {
 	color: var(--highlight-color-lightest);
 }
 </style>
