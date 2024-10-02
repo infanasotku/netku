@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import Sidebar from "@/components/Sidebar.vue";
 import HeadBar from "@/components/HeadBar.vue";
+import LoadingPage from "./pages/LoadingPage.vue";
 </script>
 
 <template>
@@ -8,7 +9,16 @@ import HeadBar from "@/components/HeadBar.vue";
 		<HeadBar class="headbar"></HeadBar>
 		<Sidebar class="sidebar"></Sidebar>
 		<div class="content">
-			<router-view> </router-view>
+			<RouterView v-slot="{ Component }">
+				<Suspense timeout="0">
+					<template #default>
+						<component :is="Component" v-if="Component" />
+					</template>
+					<template #fallback>
+						<LoadingPage></LoadingPage>
+					</template>
+				</Suspense>
+			</RouterView>
 		</div>
 	</div>
 </template>
