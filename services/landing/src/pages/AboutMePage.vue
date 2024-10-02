@@ -7,7 +7,7 @@ const { t } = useI18n();
 
 <template>
 	<main class="main">
-		<ContentBlock class="block" :title="t('content.aboutme.header')">
+		<ContentBlock :title="t('content.aboutme.header')">
 			<i18n-t keypath="content.aboutme.description" tag="p">
 				<template v-slot:email>
 					<a target="_blank" href="https://t.me/infanasotku">{{

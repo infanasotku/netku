@@ -4,7 +4,7 @@ import ContentBlock from "@/components/ContentBlock.vue";
 
 <template>
 	<main class="main">
-		<ContentBlock class="block" title="Loading">
+		<ContentBlock title="Loading">
 			<p>Loading...</p>
 		</ContentBlock>
 	</main>
