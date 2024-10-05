@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import Sidebar from "@/components/Sidebar.vue";
 import HeadBar from "@/components/HeadBar.vue";
+import LoadingPage from "./pages/LoadingPage.vue";
 </script>
 
 <template>
@@ -8,7 +9,16 @@ import HeadBar from "@/components/HeadBar.vue";
 		<HeadBar class="headbar"></HeadBar>
 		<Sidebar class="sidebar"></Sidebar>
 		<div class="content">
-			<router-view> </router-view>
+			<RouterView v-slot="{ Component }">
+				<Suspense timeout="0">
+					<template #default>
+						<component :is="Component" v-if="Component" />
+					</template>
+					<template #fallback>
+						<LoadingPage></LoadingPage>
+					</template>
+				</Suspense>
+			</RouterView>
 		</div>
 	</div>
 </template>
@@ -17,7 +27,7 @@ import HeadBar from "@/components/HeadBar.vue";
 .layout {
 	background-color: var(--bg-block);
 	width: 100%;
-	height: 100%;
+	min-height: 100vh;
 	display: flex;
 }
 .sidebar {
@@ -41,15 +51,22 @@ import HeadBar from "@/components/HeadBar.vue";
 	z-index: 1;
 }
 .content {
-	position: fixed;
-	right: 0;
-	bottom: 0;
+	display: flex;
+
+	height: 100%;
+	width: 100%;
 
 	padding: calc(48px + var(--headbar-height)) 64px 128px
 		calc(64px + var(--sidebar-width));
-	width: 100%;
-	height: 100%;
-
 	color: var(--text-color-1);
+}
+main {
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	flex-shrink: 0;
+
+	height: fit-content;
+	width: 100%;
 }
 </style>

@@ -6,8 +6,8 @@ const { t } = useI18n();
 </script>
 
 <template>
-	<main class="main">
-		<ContentBlock class="block" :title="t('content.default.header')">
+	<main>
+		<ContentBlock :title="t('content.default.header')">
 			<p>
 				{{ t("content.default.description") }}
 			</p>
@@ -15,14 +15,4 @@ const { t } = useI18n();
 	</main>
 </template>
 
-<style scoped>
-.main {
-	display: flex;
-	align-items: center;
-	flex-direction: column;
-	flex-shrink: 0;
-}
-.block {
-	max-width: 80%;
-}
-</style>
+<style scoped></style>

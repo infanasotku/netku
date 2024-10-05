@@ -6,8 +6,8 @@ const { t } = useI18n();
 </script>
 
 <template>
-	<main class="main">
-		<ContentBlock class="block" :title="t('content.aboutme.header')">
+	<main>
+		<ContentBlock :title="t('content.aboutme.header')">
 			<i18n-t keypath="content.aboutme.description" tag="p">
 				<template v-slot:email>
 					<a target="_blank" href="https://t.me/infanasotku">{{
@@ -19,14 +19,4 @@ const { t } = useI18n();
 	</main>
 </template>
 
-<style scoped>
-.main {
-	display: flex;
-	align-items: center;
-	flex-direction: column;
-	flex-shrink: 0;
-}
-.block {
-	max-width: 80%;
-}
-</style>
+<style scoped></style>

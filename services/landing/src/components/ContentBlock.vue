@@ -8,27 +8,60 @@ const props = defineProps({
 </script>
 
 <template>
-	<div class="block">
+	<div class="content-block">
 		<h1>{{ props.title }}</h1>
 		<slot></slot>
 	</div>
 </template>
 
-<style scoped>
-.block {
+<style>
+.content-block {
 	display: flex;
 	flex-direction: column;
 	justify-content: start;
 
+	max-width: 80%;
+
 	font-size: 16px;
 	line-height: 24px;
 	font-weight: 400;
+
+	padding-bottom: 48px;
+	border-bottom: 1px solid var(--divider-color);
 }
 
-h1 {
+.content-block:not(:first-child) {
+	margin-top: 24px;
+}
+
+.content-block h1 {
 	line-height: 40px;
 	font-size: 32px;
 	font-weight: 600;
 	margin: 0;
+}
+
+.content-block p {
+	margin-top: 16px;
+	margin-bottom: 0;
+}
+
+.content-block p:not(:last-child) {
+	margin-bottom: 16px;
+}
+
+.content-block a {
+	color: var(--highlight-color-lighter);
+	text-decoration: underline;
+	text-underline-offset: 2px;
+	transition: color 0.25s, opacity 0.25s;
+}
+
+.content-block a:hover {
+	color: var(--highlight-color-lightest);
+}
+
+.content-block a:active {
+	color: var(--highlight-color-lightest);
 }
 </style>
