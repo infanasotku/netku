@@ -12,7 +12,9 @@ import LoadingPage from "./pages/LoadingPage.vue";
 			<RouterView v-slot="{ Component }">
 				<Suspense timeout="0">
 					<template #default>
-						<component :is="Component" v-if="Component" />
+						<Transition name="fade">
+							<component :is="Component" v-if="Component" />
+						</Transition>
 					</template>
 					<template #fallback>
 						<LoadingPage></LoadingPage>

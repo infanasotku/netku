@@ -44,7 +44,7 @@
 .line {
 	height: 16px;
 	width: 100%;
-	margin: 4px 0;
+	margin: 6px 0;
 }
 
 .skeleton {
