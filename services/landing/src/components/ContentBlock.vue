@@ -23,7 +23,7 @@ const props = defineProps({
 	max-width: 80%;
 
 	font-size: 16px;
-	line-height: 24px;
+	line-height: 28px;
 	font-weight: 400;
 
 	padding-bottom: 48px;
