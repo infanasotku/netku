@@ -69,13 +69,13 @@ html.dark {
 }
 
 :root {
-  --skeleton-color-1: rgba(182, 182, 193, 0.7);
-  --skeleton-color-2: rgba(182, 182, 193, 0.3);
+  --skeleton-color-2: rgba(182, 182, 193, 0.7);
+  --skeleton-color-1: rgba(182, 182, 193, 0.3);
 }
 
 .dark {
-  --skeleton-color-1: rgba(56, 56, 64, 0.8);
-  --skeleton-color-2: rgba(56, 56, 64, 0.4);
+  --skeleton-color-2: rgba(56, 56, 64, 1);
+  --skeleton-color-1: rgba(56, 56, 64, 0.4);
 }
 
 :root {
