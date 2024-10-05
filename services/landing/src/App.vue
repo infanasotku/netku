@@ -29,6 +29,8 @@ import LoadingPage from "./pages/LoadingPage.vue";
 	width: 100%;
 	height: 100%;
 	display: flex;
+
+	overflow-y: auto;
 }
 .sidebar {
 	left: 0;
@@ -51,15 +53,24 @@ import LoadingPage from "./pages/LoadingPage.vue";
 	z-index: 1;
 }
 .content {
-	position: fixed;
-	right: 0;
-	bottom: 0;
+	display: flex;
+	flex-grow: 0;
+	flex-shrink: 0;
+
+	height: fit-content;
+	width: 100%;
 
 	padding: calc(48px + var(--headbar-height)) 64px 128px
 		calc(64px + var(--sidebar-width));
-	width: 100%;
-	height: 100%;
-
 	color: var(--text-color-1);
+}
+main {
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	flex-shrink: 0;
+
+	height: fit-content;
+	width: 100%;
 }
 </style>

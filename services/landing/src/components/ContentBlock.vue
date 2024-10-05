@@ -20,10 +20,18 @@ const props = defineProps({
 	flex-direction: column;
 	justify-content: start;
 
+	max-width: 80%;
+
 	font-size: 16px;
 	line-height: 24px;
 	font-weight: 400;
-	max-width: 80%;
+
+	padding-bottom: 48px;
+	border-bottom: 1px solid var(--divider-color);
+}
+
+.content-block:not(:first-child) {
+	margin-top: 24px;
 }
 
 .content-block h1 {
@@ -34,7 +42,12 @@ const props = defineProps({
 }
 
 .content-block p {
-	margin: 16px 0;
+	margin-top: 16px;
+	margin-bottom: 0;
+}
+
+.content-block p:not(:last-child) {
+	margin-bottom: 16px;
 }
 
 .content-block a {
