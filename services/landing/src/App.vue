@@ -27,10 +27,8 @@ import LoadingPage from "./pages/LoadingPage.vue";
 .layout {
 	background-color: var(--bg-block);
 	width: 100%;
-	height: 100%;
+	min-height: 100vh;
 	display: flex;
-
-	overflow-y: auto;
 }
 .sidebar {
 	left: 0;
@@ -54,10 +52,8 @@ import LoadingPage from "./pages/LoadingPage.vue";
 }
 .content {
 	display: flex;
-	flex-grow: 0;
-	flex-shrink: 0;
 
-	height: fit-content;
+	height: 100%;
 	width: 100%;
 
 	padding: calc(48px + var(--headbar-height)) 64px 128px

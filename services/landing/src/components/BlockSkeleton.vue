@@ -2,10 +2,10 @@
 
 <template>
 	<div class="wrapper">
-		<div class="block" v-for="_ in 5">
+		<div class="block" v-for="_ in 2">
 			<div class="title skeleton"></div>
 			<div class="lines">
-				<div class="line skeleton" v-for="_ in 4"></div>
+				<div class="line skeleton" v-for="_ in 6"></div>
 			</div>
 		</div>
 	</div>
@@ -17,7 +17,7 @@
 	flex-direction: column;
 	justify-content: start;
 
-	width: 400px;
+	width: 80%;
 }
 .block {
 	display: flex;
