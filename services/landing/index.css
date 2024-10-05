@@ -64,6 +64,16 @@ html.dark {
 }
 
 :root {
+  --skeleton-color-2: rgba(235, 235, 245, 0.6);
+  --skeleton-color-3: rgba(235, 235, 245, 0.38);
+}
+
+.dark {
+  --skeleton-color-2: rgba(60, 60, 67, 0.78);
+  --skeleton-color-3: rgba(60, 60, 67, 0.56);
+}
+
+:root {
   --font-family-base: "Inter", ui-sans-serif, system-ui, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --sidebar-width: 230px;
