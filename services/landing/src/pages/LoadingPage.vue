@@ -1,20 +1,11 @@
 <script setup lang="ts">
-import ContentBlock from "@/components/ContentBlock.vue";
+import BlockSkeleton from "@/components/BlockSkeleton.vue";
 </script>
 
 <template>
-	<main class="main">
-		<ContentBlock title="Loading">
-			<p>Loading...</p>
-		</ContentBlock>
+	<main>
+		<BlockSkeleton> </BlockSkeleton>
 	</main>
 </template>
 
-<style scoped>
-.main {
-	display: flex;
-	align-items: center;
-	flex-direction: column;
-	flex-shrink: 0;
-}
-</style>
+<style scoped></style>
