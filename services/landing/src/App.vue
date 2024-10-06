@@ -10,16 +10,16 @@ import LoadingPage from "./pages/LoadingPage.vue";
 		<Sidebar class="sidebar"></Sidebar>
 		<div class="content">
 			<RouterView v-slot="{ Component }">
-				<Suspense timeout="0">
-					<template #default>
-						<Transition name="fade">
+				<Transition name="fade">
+					<Suspense timeout="0">
+						<template #default>
 							<component :is="Component" v-if="Component" />
-						</Transition>
-					</template>
-					<template #fallback>
-						<LoadingPage></LoadingPage>
-					</template>
-				</Suspense>
+						</template>
+						<template #fallback>
+							<LoadingPage></LoadingPage>
+						</template>
+					</Suspense>
+				</Transition>
 			</RouterView>
 		</div>
 	</div>
@@ -55,7 +55,6 @@ import LoadingPage from "./pages/LoadingPage.vue";
 .content {
 	display: flex;
 
-	height: 100%;
 	width: 100%;
 
 	padding: calc(48px + var(--headbar-height)) 64px 128px
@@ -68,7 +67,7 @@ main {
 	flex-direction: column;
 	flex-shrink: 0;
 
-	height: fit-content;
+	min-height: fit-content;
 	width: 100%;
 }
 </style>
