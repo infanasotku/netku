@@ -1,11 +1,20 @@
 <script setup lang="ts">
-import BlockSkeleton from "@/components/BlockSkeleton.vue";
+import LoadingLogo from "@/components/LoadingLogo.vue";
 </script>
 
 <template>
 	<main>
-		<BlockSkeleton> </BlockSkeleton>
+		<LoadingLogo class="logo"></LoadingLogo>
 	</main>
 </template>
 
-<style scoped></style>
+<style scoped>
+main {
+	justify-content: center;
+}
+
+.logo {
+	width: 100px;
+	height: 100px;
+}
+</style>

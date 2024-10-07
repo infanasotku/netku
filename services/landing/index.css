@@ -88,6 +88,13 @@ html.dark {
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --sidebar-width: 230px;
   --headbar-height: 64px;
+
+  --shine-gradient: linear-gradient(
+    90deg,
+    var(--text-color-3) 45%,
+    var(--text-color-2) 50%,
+    var(--text-color-3) 55%
+  );
 }
 
 .switch:hover {
