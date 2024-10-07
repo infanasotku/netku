@@ -29,6 +29,8 @@ html.dark {
   --input-border-hover-color: var(--highlight-color);
   --code-bg: var(--gray-soft);
   --code-color: var(--highlight-color);
+  --code-note-color: var(--yellow);
+  --code-note-bg: var(--yellow-soft);
 }
 
 :root {
@@ -48,7 +50,6 @@ html.dark {
   --text-color-1: rgba(60, 60, 67);
   --text-color-2: rgba(60, 60, 67, 0.78);
   --text-color-3: rgba(60, 60, 67, 0.56);
-  --link-color: var();
 }
 .dark {
   --text-color-1: rgba(255, 255, 245, 0.86);
@@ -58,9 +59,13 @@ html.dark {
 
 :root {
   --gray-soft: rgba(142, 150, 170, 0.14);
+  --yellow: #915930;
+  --yellow-soft: rgba(234, 179, 8, 0.14);
 }
 .dark {
   --gray-soft: rgba(101, 117, 133, 0.16);
+  --yellow: #f9b44e;
+  --yellow-soft: rgba(234, 179, 8, 0.16);
 }
 
 :root {

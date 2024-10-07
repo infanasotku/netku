@@ -31,7 +31,23 @@ const localt = (key: string) => t("content.aboutme." + key);
 					localt("nginx")
 				}}</a>
 				<code>{{ localt("ci") }}</code>
+				<code>{{ localt("code") }}</code>
 			</i18n-t>
+			<div class="custom note">
+				<p class="title">
+					<code>{{ localt("note.title") }}</code>
+				</p>
+				<i18n-t keypath="content.aboutme.note.body" tag="p">
+					<code>{{ localt("note.observation") }}</code>
+					<code>{{ localt("note.presentation") }}</code>
+					<code>{{ localt("note.development") }}</code>
+					<code>{{ localt("note.test") }}</code>
+					<code>{{ localt("note.bug") }}</code>
+					<a target="_blank" href="https://t.me/infanasotku">{{
+						localt("note.email")
+					}}</a>
+				</i18n-t>
+			</div>
 		</ContentBlock>
 	</main>
 </template>

@@ -75,4 +75,34 @@ const props = defineProps({
 .content-block :not(pre, h1, h2, h3, h4, h5, h6) > code {
 	color: var(--code-color);
 }
+
+.content-block .custom {
+	margin: 16px 0;
+	border: 1px solid transparent;
+	border-radius: 8px;
+	padding: 16px 16px 8px;
+	line-height: 24px;
+	font-size: 14px;
+}
+
+.content-block .custom p {
+	margin: 8px 0;
+}
+
+.content-block .custom p:first-child {
+	margin: 0;
+}
+
+.content-block .custom .title {
+	font-weight: 600;
+}
+
+.content-block .note {
+	background-color: var(--code-note-bg);
+}
+
+.content-block .note code {
+	color: var(--code-note-color);
+	background-color: var(--code-note-bg);
+}
 </style>
