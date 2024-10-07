@@ -41,9 +41,20 @@
       "description": "This page not exist or in progress."
     },
     "aboutme": {
-      "header": "Hello world!",
-      "description": "This site developed for my services status observation and self presentation. At the moment the site is under development and is publicly available for testing. If you found a bug you can contact {email}.",
-      "email": "with me"
+      "title": "About me",
+      "fullstack": "fullstack",
+      "fastapi": "FastAPI",
+      "python": "Python",
+      "go": "Golang",
+      "vue": "Vue.js",
+      "spa": "SPA",
+      "docker": "Docker Compose",
+      "postgres": "PostgreSQL",
+      "tcp": "TCP/IP",
+      "nginx": "Nginx",
+      "ci": "CI/CD",
+      "description": "I am a {0} developer with over 2 years of experience. I specialize in developing server applications using {1}, {2} and {3}. On the frontend, I use {4} to create {5}. I have experience working with microservice architecture, {6} and {7}. I know the {8} stack and understand the network structure. I use {9} for reverse proxying and actively implement {10} in projects for automation. In one of the projects, I manage a team of 2 people, distribute tasks and control the quality of the code.",
+      "note": ""
     }
   }
 }
