@@ -25,6 +25,15 @@ html.dark {
 }
 
 :root {
+  --input-switch-bg-color: var(--gray-soft);
+  --input-border-hover-color: var(--highlight-color);
+  --code-bg: var(--gray-soft);
+  --code-color: var(--highlight-color);
+  --code-note-color: var(--yellow);
+  --code-note-bg: var(--yellow-soft);
+}
+
+:root {
   --bg-block: #ffffff;
   --neutral-inverse-color: #ffffff;
   --bg-alt: #f6f6f7;
@@ -41,7 +50,6 @@ html.dark {
   --text-color-1: rgba(60, 60, 67);
   --text-color-2: rgba(60, 60, 67, 0.78);
   --text-color-3: rgba(60, 60, 67, 0.56);
-  --link-color: var();
 }
 .dark {
   --text-color-1: rgba(255, 255, 245, 0.86);
@@ -50,13 +58,22 @@ html.dark {
 }
 
 :root {
+  --gray-soft: rgba(142, 150, 170, 0.14);
+  --yellow: #915930;
+  --yellow-soft: rgba(234, 179, 8, 0.14);
+}
+.dark {
+  --gray-soft: rgba(101, 117, 133, 0.16);
+  --yellow: #f9b44e;
+  --yellow-soft: rgba(234, 179, 8, 0.16);
+}
+
+:root {
   --highlight-color: #3451b2;
   --highlight-color-lighter: var(--highlight-color);
   --highlight-color-lightest: #3a5ccc;
   --divider-color: #e2e2e3;
   --input-border-color: #c2c2c4;
-  --input-switch-bg-color: rgba(142, 150, 170, 0.14);
-  --input-border-hover-color: var(--highlight-color);
 }
 .dark {
   --highlight-color: #a8b1ff;
@@ -64,8 +81,6 @@ html.dark {
   --highlight-color-lightest: #bcc0ff;
   --divider-color: #2e2e32;
   --input-border-color: #3c3f44;
-  --input-switch-bg-color: rgba(101, 117, 133, 0.16);
-  --input-border-hover-color: var(--highlight-color);
 }
 
 :root {
