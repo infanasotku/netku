@@ -25,6 +25,13 @@ html.dark {
 }
 
 :root {
+  --input-switch-bg-color: var(--gray-soft);
+  --input-border-hover-color: var(--highlight-color);
+  --code-bg: var(--gray-soft);
+  --code-color: var(--highlight-color);
+}
+
+:root {
   --bg-block: #ffffff;
   --neutral-inverse-color: #ffffff;
   --bg-alt: #f6f6f7;
@@ -50,13 +57,18 @@ html.dark {
 }
 
 :root {
+  --gray-soft: rgba(142, 150, 170, 0.14);
+}
+.dark {
+  --gray-soft: rgba(101, 117, 133, 0.16);
+}
+
+:root {
   --highlight-color: #3451b2;
   --highlight-color-lighter: var(--highlight-color);
   --highlight-color-lightest: #3a5ccc;
   --divider-color: #e2e2e3;
   --input-border-color: #c2c2c4;
-  --input-switch-bg-color: rgba(142, 150, 170, 0.14);
-  --input-border-hover-color: var(--highlight-color);
 }
 .dark {
   --highlight-color: #a8b1ff;
@@ -64,18 +76,6 @@ html.dark {
   --highlight-color-lightest: #bcc0ff;
   --divider-color: #2e2e32;
   --input-border-color: #3c3f44;
-  --input-switch-bg-color: rgba(101, 117, 133, 0.16);
-  --input-border-hover-color: var(--highlight-color);
-}
-
-:root {
-  --skeleton-color-2: rgba(182, 182, 193, 0.7);
-  --skeleton-color-1: rgba(182, 182, 193, 0.3);
-}
-
-.dark {
-  --skeleton-color-2: rgba(56, 56, 64, 1);
-  --skeleton-color-1: rgba(56, 56, 64, 0.4);
 }
 
 :root {
