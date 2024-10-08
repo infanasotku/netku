@@ -12,6 +12,7 @@ const { t } = useI18n();
 				{{ t("content.default.description") }}
 			</p>
 		</ContentBlock>
+		<slot></slot>
 	</main>
 </template>
 
