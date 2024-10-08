@@ -3,12 +3,21 @@ import Sidebar from "@/components/Sidebar.vue";
 import HeadBar from "@/components/HeadBar.vue";
 import LoadingPage from "./pages/LoadingPage.vue";
 import PageLink from "@/components/PageLink.vue";
+import { Ref, ref } from "vue";
+import { NavLink } from "@/types";
+
+const nextLink: Ref<NavLink | undefined> = ref(undefined);
+const prevLink: Ref<NavLink | undefined> = ref(undefined);
 </script>
 
 <template>
 	<div class="layout">
 		<HeadBar class="headbar"></HeadBar>
-		<Sidebar class="sidebar"></Sidebar>
+		<Sidebar
+			class="sidebar"
+			v-model:next-link="nextLink"
+			v-model:prev-link="prevLink"
+		></Sidebar>
 		<div class="content">
 			<RouterView v-slot="{ Component }">
 				<Transition name="fade">
@@ -17,11 +26,8 @@ import PageLink from "@/components/PageLink.vue";
 							<component class="page" :is="Component" v-if="Component">
 								<PageLink
 									class="page-link"
-									:next-link="{
-										href: '/skills',
-										content: 'Skills',
-										active: true,
-									}"
+									:next-link="nextLink"
+									:prev-link="prevLink"
 								></PageLink>
 							</component>
 						</template>

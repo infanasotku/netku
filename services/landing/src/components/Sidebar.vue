@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import NavBar from "@/components/NavBar.vue";
 import { Navigation } from "@/lang/type";
-import { computed, ref, watch } from "vue";
+import { computed, PropType, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
-import { NavData } from "@/types";
+import { NavData, NavLink } from "@/types";
 
 const { tm, locale } = useI18n();
 const route = useRoute();
@@ -17,7 +17,7 @@ const nav = computed(() => {
 const currentHref = ref("");
 
 const groups = computed((): Array<NavData> => {
-	return nav.value.map((val) => ({
+	const result = nav.value.map((val) => ({
 		header: val.header,
 		list: val.list.map((listVal) => ({
 			content: listVal.content,
@@ -25,6 +25,25 @@ const groups = computed((): Array<NavData> => {
 			active: listVal.href === currentHref.value,
 		})),
 	}));
+
+	const links: Array<NavLink> = [];
+	result.forEach((val) => {
+		links.push(...val.list);
+	});
+	const currentIndex = links.findIndex((val) => val.active);
+
+	prevLink.value = currentIndex - 1 >= 0 ? links[currentIndex - 1] : undefined;
+	nextLink.value =
+		currentIndex + 1 < links.length ? links[currentIndex + 1] : undefined;
+
+	return result;
+});
+
+const nextLink = defineModel("nextLink", {
+	type: Object as PropType<NavLink>,
+});
+const prevLink = defineModel("prevLink", {
+	type: Object as PropType<NavLink>,
 });
 
 watch(route, () => {
