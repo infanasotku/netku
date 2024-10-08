@@ -77,6 +77,7 @@ const props = defineProps({
 }
 
 .content-block .custom {
+	width: 100%;
 	margin: 16px 0;
 	border: 1px solid transparent;
 	border-radius: 8px;
