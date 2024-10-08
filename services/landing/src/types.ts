@@ -1,7 +1,7 @@
 export interface NavLink {
 	content: string;
 	href: string;
-	active: boolean;
+	active?: boolean;
 }
 
 export interface NavData {

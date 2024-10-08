@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { NavLink } from "@/types";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
@@ -9,7 +10,7 @@ const props = defineProps({
 		required: true,
 	},
 	list: {
-		type: Array<{ active: boolean; content: string; href: string }>,
+		type: Array<NavLink>,
 		required: true,
 	},
 });
