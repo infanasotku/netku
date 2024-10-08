@@ -47,6 +47,10 @@ services:
       timeout: 5s
       retries: 10
 
+    depends_on:
+      server:
+        condition: service_started
+
   assistant:
     container_name: netku-assistant
     build:
