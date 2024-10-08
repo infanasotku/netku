@@ -2,6 +2,7 @@
 import Sidebar from "@/components/Sidebar.vue";
 import HeadBar from "@/components/HeadBar.vue";
 import LoadingPage from "./pages/LoadingPage.vue";
+import PageLink from "@/components/PageLink.vue";
 </script>
 
 <template>
@@ -13,7 +14,16 @@ import LoadingPage from "./pages/LoadingPage.vue";
 				<Transition name="fade">
 					<Suspense timeout="0">
 						<template #default>
-							<component :is="Component" v-if="Component" />
+							<component class="page" :is="Component" v-if="Component">
+								<PageLink
+									class="page-link"
+									:next-link="{
+										href: '/skills',
+										content: 'Skills',
+										active: true,
+									}"
+								></PageLink>
+							</component>
 						</template>
 						<template #fallback>
 							<LoadingPage></LoadingPage>
@@ -61,13 +71,7 @@ import LoadingPage from "./pages/LoadingPage.vue";
 		calc(64px + var(--sidebar-width));
 	color: var(--text-color-1);
 }
-main {
-	display: flex;
-	align-items: center;
-	flex-direction: column;
-	flex-shrink: 0;
-
-	min-height: fit-content;
-	width: 100%;
+.page-link {
+	width: 80%;
 }
 </style>

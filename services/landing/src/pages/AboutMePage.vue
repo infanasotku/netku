@@ -9,7 +9,7 @@ const localt = (key: string) => t("content.aboutme." + key);
 <template>
 	<main>
 		<ContentBlock :title="localt('title')">
-			<i18n-t keypath="content.aboutme.description" tag="p">
+			<i18n-t scope="global" keypath="content.aboutme.description" tag="p">
 				<code>{{ localt("fullstack") }}</code>
 				<a href="https://fastapi.tiangolo.com/" target="_blank">{{
 					localt("fastapi")
@@ -32,12 +32,12 @@ const localt = (key: string) => t("content.aboutme." + key);
 				}}</a>
 				<code>{{ localt("ci") }}</code>
 				<code>{{ localt("code") }}</code>
-			</i18n-t>
+			</i18n-t scope="global">
 			<div class="custom note">
 				<p class="title">
 					<code>{{ localt("note.title") }}</code>
 				</p>
-				<i18n-t keypath="content.aboutme.note.body" tag="p">
+				<i18n-t scope="global" keypath="content.aboutme.note.body" tag="p">
 					<code>{{ localt("note.observation") }}</code>
 					<code>{{ localt("note.presentation") }}</code>
 					<code>{{ localt("note.development") }}</code>
@@ -49,6 +49,7 @@ const localt = (key: string) => t("content.aboutme." + key);
 				</i18n-t>
 			</div>
 		</ContentBlock>
+		<slot></slot>
 	</main>
 </template>
 
