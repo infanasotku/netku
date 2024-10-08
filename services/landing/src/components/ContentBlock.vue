@@ -18,7 +18,7 @@ const props = defineProps({
 .content-block {
 	display: flex;
 	flex-direction: column;
-	align-items: center;
+	align-items: flex-start;
 
 	width: 80%;
 
