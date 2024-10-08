@@ -4,6 +4,7 @@ import { Navigation } from "@/lang/type";
 import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
+import { NavData } from "@/types";
 
 const { tm, locale } = useI18n();
 const route = useRoute();
@@ -15,7 +16,7 @@ const nav = computed(() => {
 
 const currentHref = ref("");
 
-const groups = computed(() => {
+const groups = computed((): Array<NavData> => {
 	return nav.value.map((val) => ({
 		header: val.header,
 		list: val.list.map((listVal) => ({
