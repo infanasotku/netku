@@ -65,6 +65,10 @@
         "bug": "bug",
         "body": "This site developed for {0} and {1}. At the moment the site is {2} and is publicly available for {3}. If you found a {4} you can contact {5}."
       }
+    },
+    "skills": {
+      "title": "My skills",
+      "description": ""
     }
   }
 }
