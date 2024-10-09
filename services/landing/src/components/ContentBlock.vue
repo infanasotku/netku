@@ -105,5 +105,6 @@ const props = defineProps({
 .content-block .note code {
 	color: var(--code-note-color);
 	background-color: var(--code-note-bg);
+	white-space: nowrap;
 }
 </style>
