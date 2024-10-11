@@ -29,5 +29,5 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -p ${{ secrets.SSH_PORT }} ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
 
-      - name: Restart service
-        run: ssh -p ${{ secrets.SSH_PORT }} root@${{ secrets.SERVER_IP }} 'cd /root && touch deploy.txt'
+      - name: Restart landing
+        run: ssh -p ${{ secrets.SSH_PORT }} root@${{ secrets.SERVER_IP }} 'cd /root/netku && git pull && cd .. && ./restart_landing.sh'
