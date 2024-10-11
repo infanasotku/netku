@@ -1,0 +1,33 @@
+name: Build, test and deploy landing
+
+on: push
+jobs:
+  build-landing:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22.2.x"
+      - name: Install dependencies
+        working-directory: services/landing
+        run: npm install
+      - name: Run build
+        working-directory: services/landing
+        run: npm run build
+
+  deploy-landing:
+    needs: build-landing
+    runs-on: ubuntu-latest
+    environment: deploying
+    steps:
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -p ${{ secrets.SSH_PORT }} ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
+
+      - name: Restart service
+        run: ssh -p ${{ secrets.SSH_PORT }} root@${{ secrets.SERVER_IP }} 'cd /root && touch deploy.txt'
