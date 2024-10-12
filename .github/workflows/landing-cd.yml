@@ -1,0 +1,26 @@
+# Deploys only on closed pull request to master with label **landing**.
+name: Deploy landing
+
+on:
+  pull_request:
+    branches:
+      - master
+    types: [closed]
+
+jobs:
+  deploy-landing:
+    if: |
+      contains( github.event.pull_request.labels.*.name, 'landing') && 
+      github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    environment: deploying
+    steps:
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -p ${{ secrets.SSH_PORT }} ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
+
+      - name: Restart landing
+        run: ssh -p ${{ secrets.SSH_PORT }} root@${{ secrets.SERVER_IP }} 'cd /root/netku && git pull && cd .. && ./restart_landing.sh'
