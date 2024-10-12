@@ -1,24 +1,17 @@
-name: Build, test and deploy landing
+# Deploys only on closed pull request to master with label **landing**.
+name: Deploy landing
 
-on: push
+on:
+  pull_request:
+    branches:
+      - master
+    types: [closed]
+
 jobs:
-  build-landing:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Setup node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "22.2.x"
-      - name: Install dependencies
-        working-directory: services/landing
-        run: npm install
-      - name: Run build
-        working-directory: services/landing
-        run: npm run build
-
   deploy-landing:
-    needs: build-landing
+    if: |
+      contains( github.event.pull_request.labels.*.name, 'landing') && 
+      github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     environment: deploying
     steps:
