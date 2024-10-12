@@ -1,4 +1,4 @@
-name: assistant-cd
+name: assistant-ci
 on:
   pull_request:
     branches:
