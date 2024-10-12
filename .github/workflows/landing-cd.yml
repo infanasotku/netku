@@ -8,7 +8,7 @@ on:
     types: [closed]
 
 jobs:
-  deploy-landing:
+  deploy:
     if: |
       contains( github.event.pull_request.labels.*.name, 'landing') && 
       github.event.pull_request.merged == true
