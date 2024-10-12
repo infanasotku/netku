@@ -1,4 +1,4 @@
-name: go-services-cd
+name: go-services-ci
 on:
   pull_request:
     branches:
