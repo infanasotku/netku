@@ -3,9 +3,9 @@ name: Common utils for actions
 on:
   workflow_call:
     outputs:
-      pr_data:
-        description: "Pull request data"
-        value: ${{ jobs.pr-data.outputs.pr_data }}
+      pr_labels:
+        description: "Pull request labels"
+        value: ${{ jobs.pr-data.outputs.pr_labels }}
 
 jobs:
   pr-data:
@@ -16,7 +16,7 @@ jobs:
       pull-requests: read
 
     outputs:
-      pr_data: ${{ fromJson(steps.get_pr_data.outputs.result).number }}
+      pr_labels: ${{ fromJson(steps.get_pr_data.outputs.result).labels.*.name }}
 
     steps:
       - uses: actions/github-script@v7

@@ -21,7 +21,7 @@ jobs:
 
     steps:
       - name: echo data
-        run: echo '${{ fromJson(needs.data.outputs.pr_data) }}'
+        run: echo '${{ fromJson(needs.data.outputs.pr_labels) }}'
 
       # - name: Set up SSH
       #   run: |
