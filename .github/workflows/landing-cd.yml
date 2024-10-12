@@ -1,6 +1,5 @@
 # Deploys only on closed pull request to master with label **landing**.
-name: Deploy landing
-
+name: landing-cd
 on:
   pull_request:
     branches:
@@ -8,7 +7,8 @@ on:
     types: [closed]
 
 jobs:
-  deploy-landing:
+  deploy:
+    name: Deploy landing
     if: |
       contains( github.event.pull_request.labels.*.name, 'landing') && 
       github.event.pull_request.merged == true
