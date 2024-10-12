@@ -9,6 +9,7 @@ on:
 
 jobs:
   deploy:
+    name: Deploy landing
     if: |
       contains( github.event.pull_request.labels.*.name, 'landing') && 
       github.event.pull_request.merged == true
