@@ -1,5 +1,3 @@
-name: Build and test assistant
-
 on:
   pull_request:
     branches:
