@@ -108,17 +108,17 @@ const props = defineProps({
 	white-space: nowrap;
 }
 
-ul {
+.content-block ul {
 	list-style: disc;
 	margin: 0;
 	padding-left: 1.25rem;
 }
 
-ul li p {
+.content-block ul li p {
 	margin-top: 0 !important;
 }
 
-ul li + li {
+.content-block ul li + li {
 	margin-top: 8px;
 }
 </style>

@@ -9,7 +9,7 @@ on:
 
 jobs:
   pr-data:
-    name: common
+    name: Load PR data
     runs-on: ubuntu-latest
     permissions:
       contents: read
