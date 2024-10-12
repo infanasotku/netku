@@ -1,4 +1,5 @@
 # Deploys only on closed pull request to master with label **landing**.
+name: landing-cd
 on:
   pull_request:
     branches:
