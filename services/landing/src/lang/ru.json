@@ -35,6 +35,12 @@
       ]
     }
   ],
+  "common": {
+    "desc": {
+      "next": "Следующая страница",
+      "prev": "Предыдущая страница"
+    }
+  },
   "content": {
     "default": {
       "header": "Страница не найдена!",
@@ -67,8 +73,26 @@
       }
     },
     "skills": {
-      "title": "Мои скиллы",
-      "description": ""
+      "python": {
+        "title": "Python",
+        "python": "Python",
+        "backend": "бэкенд-систем",
+        "description": "Использую {0} для разработки высоконагруженных {1}.",
+        "skills": [
+          {
+            "name": "FastAPI | Starlette"
+          },
+          {
+            "name": "Pydantic"
+          },
+          {
+            "name": "SQLAlchemy | Alembic"
+          },
+          {
+            "name": "Aiogram"
+          }
+        ]
+      }
     }
   }
 }

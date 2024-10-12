@@ -107,4 +107,18 @@ const props = defineProps({
 	background-color: var(--code-note-bg);
 	white-space: nowrap;
 }
+
+ul {
+	list-style: disc;
+	margin: 0;
+	padding-left: 1.25rem;
+}
+
+ul li p {
+	margin-top: 0 !important;
+}
+
+ul li + li {
+	margin-top: 8px;
+}
 </style>

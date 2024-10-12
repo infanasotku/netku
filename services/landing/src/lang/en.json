@@ -35,6 +35,12 @@
       ]
     }
   ],
+  "common": {
+    "desc": {
+      "next": "Next page",
+      "prev": "Previous page"
+    }
+  },
   "content": {
     "default": {
       "header": "Page not found!",
@@ -67,8 +73,26 @@
       }
     },
     "skills": {
-      "title": "My skills",
-      "description": ""
+      "python": {
+        "title": "Python",
+        "python": "Python",
+        "backend": "backend systems",
+        "description": "I use {0} to develop high-load {1}.",
+        "skills": [
+          {
+            "name": "FastAPI | Starlette"
+          },
+          {
+            "name": "Pydantic"
+          },
+          {
+            "name": "SQLAlchemy | Alembic"
+          },
+          {
+            "name": "Aiogram"
+          }
+        ]
+      }
     }
   }
 }
