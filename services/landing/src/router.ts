@@ -7,6 +7,11 @@ const routes = [
 		component: async () => await import("@/pages/AboutMePage.vue"),
 	},
 	{
+		name: "skills",
+		path: "/skills",
+		component: async () => await import("@/pages/SkillsPage.vue"),
+	},
+	{
 		name: "not-found",
 		path: "/:pathMatch(.*)*",
 		component: async () => await import("@/pages/DefaultPage.vue"),

@@ -2,8 +2,11 @@
 import { PropType } from "vue";
 import { type NavLink } from "@/types";
 import { useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
 
 const router = useRouter();
+
+const { t } = useI18n();
 
 const props = defineProps({
 	nextLink: {
@@ -20,11 +23,11 @@ const props = defineProps({
 		<div class="wrapper">
 			<a
 				v-if="props.prevLink !== undefined"
-				class="link pref"
+				class="link prev"
 				:href="props.prevLink.href"
 				@click.prevent="router.push(props.prevLink.href)"
 			>
-				<span class="desc">Previous page</span>
+				<span class="desc">{{ t("common.desc.prev") }}</span>
 				<span class="title">{{ props.prevLink.content }}</span>
 			</a>
 		</div>
@@ -35,7 +38,7 @@ const props = defineProps({
 				:href="props.nextLink.href"
 				@click.prevent="router.push(props.nextLink.href)"
 			>
-				<span class="desc">Next page</span>
+				<span class="desc">{{ t("common.desc.next") }}</span>
 				<span class="title">{{ props.nextLink.content }}</span>
 			</a>
 		</div>
@@ -80,7 +83,7 @@ nav {
 	align-items: flex-end;
 }
 
-.pref {
+.prev {
 	align-items: flex-start;
 }
 
