@@ -1,0 +1,28 @@
+name: Build and test golang services
+
+on:
+  pull_request:
+    branches:
+      - master
+    types: [synchronize, opened]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        services: ["xray", "booking"] # Services
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.22.6"
+      - name: Install dependencies
+        working-directory: services/${{ matrix.services }}
+        run: go mod download
+      - name: Run build
+        working-directory: services/${{ matrix.services }}
+        run: go build .
