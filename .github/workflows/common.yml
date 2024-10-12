@@ -16,7 +16,7 @@ jobs:
       pull-requests: read
 
     outputs:
-      pr_data: ${{ steps.get_pr_data.outputs.result }}
+      pr_data: ${{ fromJson(steps.get_pr_data.outputs.result).number }}
 
     steps:
       - uses: actions/github-script@v7
