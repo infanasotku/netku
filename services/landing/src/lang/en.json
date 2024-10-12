@@ -39,6 +39,10 @@
     "desc": {
       "next": "Next page",
       "prev": "Previous page"
+    },
+    "todo": {
+      "title": "TODO",
+      "description": "To be continued..."
     }
   },
   "content": {
@@ -92,6 +96,9 @@
             "name": "Aiogram"
           }
         ]
+      },
+      "typescript": {
+        "title": "Typescript"
       }
     }
   }

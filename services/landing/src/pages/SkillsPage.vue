@@ -27,6 +27,14 @@ const localt = (key: string) => t("content.skills." + key);
 				</li>
 			</ul>
 		</ContentBlock>
+		<ContentBlock :title="localt('typescript.title')">
+			<div class="custom note">
+				<p class="title">
+					<code>{{ t("common.todo.title") }}</code>
+				</p>
+				<p>{{ t("common.todo.description") }}</p>
+			</div>
+		</ContentBlock>
 		<slot></slot>
 	</main>
 </template>
