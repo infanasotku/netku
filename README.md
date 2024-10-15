@@ -21,17 +21,23 @@
 - `DOMAIN`: Domain name
 - `SSL_CERTFILE`: Path to ssl cert file.
 - `SSL_KEYFILE`: Path to ssl key file.
+- `RECONNECTION_RETRIES`: Count of retries to reconnect to services.
+- `RECONNECTION_DELAY`: Delay in seconds between reconnection retries.
 
 ##### Xray
 
 - `XRAY_RESTART_MINUTES`: Minutes between restarting xray.
 - `XRAY_PORT`: Port for communicated with xray service.
 - `XRAY_HOST`: Adress for communicated with xray service.
-- `XRAY_RECONNECTION_RETRIES`: Count of retries to reconnect to xray.
-- `XRAY_RECONNECTION_DELAY`: Delay in seconds between reconnection retries.
+
 - `BOT_TOKEN`: Bot token from bot father.
 - `TELEGRAM_TOKEN`: Telegram secret.
 - `BOT_WEBHOOK_URL`: Webhook url for telegram.
+
+#### Booking
+
+- `BOOKING_PORT`: Port for communicated with booking service.
+- `BOOKING_HOST`: Adress for communicated with xray service.
 
 ##### DB
 
@@ -41,12 +47,24 @@
 - `POSTGRES_PORT`: DB port.
 - `POSTGRES_DB_NAME`: DB name.
 
+##### BOT
+
+- `BOT_TOKEN`: Bot token.
+- `TELEGRAM_TOKEN`: Telegram secret.
+- `BOT_WEBHOOK_URL`: Full link to bot webhook endpoint.
+
 ### Xray envs:
 
 - `XRAY_PORT`: PORT for serving.
 - `XRAY_FALLBACK`: Address for fallback (with port if need).
 - `XRAY_CONFIG_DIR`: Folder where xray take config.
 - `XRAY_LOG_DIR`: Folder where xray put logs.
+- `SSL_CERTFILE`: Path to ssl cert file.
+- `SSL_KEYFILE`: Path to ssl key file.
+
+### Booking envs:
+
+- `BOOKING_PORT`: PORT for serving.
 - `SSL_CERTFILE`: Path to ssl cert file.
 - `SSL_KEYFILE`: Path to ssl key file.
 
