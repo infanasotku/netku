@@ -28,6 +28,23 @@ const localt = (key: string) => t("content.skills." + key);
 			</ul>
 		</ContentBlock>
 		<ContentBlock :title="localt('typescript.title')">
+			<i18n-t
+				scope="global"
+				keypath="content.skills.typescript.description"
+				tag="p"
+			>
+				<code>{{ localt("typescript.spa") }}</code>
+				<a href="https://vuejs.org/" target="_blank">{{
+					localt("typescript.vue")
+				}}</a>
+			</i18n-t>
+			<ul>
+				<li
+					v-for="skill in (tm('content.skills.typescript.skills') as Array<{name: string}>)"
+				>
+					<p>{{ skill.name }}</p>
+				</li>
+			</ul>
 			<div class="custom note">
 				<p class="title">
 					<code>{{ t("common.todo.title") }}</code>

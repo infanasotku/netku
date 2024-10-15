@@ -90,7 +90,7 @@
             "name": "Pydantic"
           },
           {
-            "name": "SQLAlchemy | Alembic"
+            "name": "SQLAlchemy | Alembic | PostgreSQL"
           },
           {
             "name": "Aiogram"
@@ -98,7 +98,24 @@
         ]
       },
       "typescript": {
-        "title": "Typescript"
+        "title": "Typescript",
+        "spa": "SPA",
+        "vue": "Vue.js",
+        "description": "I am developing {0} based on {1}.",
+        "skills": [
+          {
+            "name": "Vue.js | Vue Router"
+          },
+          {
+            "name": "Pinia"
+          },
+          {
+            "name": "Vite"
+          },
+          {
+            "name": "HTML | CSS"
+          }
+        ]
       }
     }
   }
