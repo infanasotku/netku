@@ -7,8 +7,8 @@ from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
 
 from database.database import Base
-from database.models import User
-from database.schemas import BaseSchema, UserSchema
+from database.models import BookingAccount, User
+from database.schemas import UserSchema
 
 
 class AbstractRepository(ABC):
@@ -21,30 +21,37 @@ class AbstractRepository(ABC):
     @abstractmethod
     async def find_first(
         self,
-        schema: Type[BaseSchema],
         model: Type[Base],
         column: Any,
         value: Any,
-    ) -> Optional[BaseSchema]:
+    ) -> Optional[Base]:
         """Finds `model` row by `column == value`.
-        - Returns row as `schema_type` if it exist in db, `None` otherwise."""
+        - Returns row as `model` if it exist in DB, `None` otherwise."""
         pass
 
     @abstractmethod
     async def get_all(
         self,
-        schema: Type[BaseSchema],
         model: Type[Base],
-    ) -> list[BaseSchema]:
+    ) -> list[Base]:
         """Gets all `model` rows.
-        - Returns rows as `list[schema_type]`."""
+        - Returns rows as `list[model]`."""
         pass
 
     @abstractmethod
-    async def update_user(self, new_user: UserSchema) -> bool:
-        """Updates user.
-        - Note: Row in DB must be update manually with `session.flush()` or `session.close` etc.
+    async def update_user(self, user: UserSchema) -> bool:
+        """Updates `user`.
         - Returns `True` if user updated, `False` otherwise."""
+        pass
+
+    @abstractmethod
+    async def create_booking_account(
+        self, user: UserSchema, email: str, password: str
+    ) -> bool:
+        """Creates new booking acccount for `user`
+        Returns:
+        `True` if account created successful, `False` otherwise.
+        """
         pass
 
 
@@ -54,29 +61,41 @@ class Repository(AbstractRepository):
 
     async def find_first(
         self,
-        schema: Type[BaseSchema],
         model: Type[Base],
         column: Any,
         value: Any,
-    ) -> Optional[BaseSchema]:
+    ) -> Optional[Base]:
         s = select(model).filter(column == value).options(*selectinload_all(model))
-        raw = (await self.session.execute(s)).scalar().first()
-        return schema.model_validate(raw) if raw is not None else None
+        raw = (await self.session.execute(s)).scalars().first()
+        return raw
 
-    async def get_all(self, schema: BaseSchema, model: Base) -> list[BaseSchema]:
+    async def get_all(self, model: Base) -> list[Base]:
         s = select(User).options(*selectinload_all(model))
         raw_users = (await self.session.execute(s)).scalars().all()
-        return [schema.model_validate(raw_user) for raw_user in raw_users]
+        return list(raw_users)
 
-    async def update_user(self, new_user: UserSchema) -> bool:
-        s = select(User).filter(User.id == new_user.id).options(*selectinload_all(User))
-        raw_user = (await self.session.execute(s)).scalars().first()
-        if not raw_user:
+    async def update_user(self, user: UserSchema) -> bool:
+        raw_user = await self.find_first(User, User.id, user.id)
+        if raw_user is None:
             return False
 
-        raw_user.phone_number = new_user.phone_number
-        raw_user.telegram_id = new_user.telegram_id
-        raw_user.proxy_subscription = new_user.proxy_subscription
+        raw_user.phone_number = user.phone_number
+        raw_user.telegram_id = user.telegram_id
+        raw_user.proxy_subscription = user.proxy_subscription
+
+        return True
+
+    async def create_booking_account(
+        self, user: UserSchema, email: str, password: str
+    ) -> bool:
+        raw_user = await self.find_first(User, User.id, user.id)
+        if raw_user is None:
+            return False
+
+        booking_account = BookingAccount(email=email, password=password, owner=raw_user)
+
+        await self.session.add(booking_account)
+
         return True
 
 
