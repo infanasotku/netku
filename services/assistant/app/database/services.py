@@ -17,6 +17,11 @@ class ServiceFactory:
         async with self.get_db() as session:
             yield UserService(Repository(session))
 
+    @asynccontextmanager
+    async def booking_service_factory(self) -> AsyncGenerator["BookingService", None]:
+        async with self.get_db() as session:
+            yield BookingService(Repository(session))
+
 
 class AbstractService:
     def __init__(self, repository: AbstractRepository):
@@ -44,7 +49,7 @@ class UserService(AbstractService):
         """Returns all user in db."""
         return [
             UserSchema.model_validate(user)
-            for user in await self.repository.get_all(UserSchema, User)
+            for user in await self.repository.get_all(User)
         ]
 
     async def update_user(self, user: UserSchema) -> bool:
