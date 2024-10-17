@@ -8,7 +8,7 @@ from sqlalchemy.orm import selectinload
 
 from database.database import Base
 from database.models import User
-from database.schemas import BaseSchema
+from database.schemas import BaseSchema, UserSchema
 
 
 class AbstractRepository(ABC):
@@ -40,6 +40,13 @@ class AbstractRepository(ABC):
         - Returns rows as `list[schema_type]`."""
         pass
 
+    @abstractmethod
+    async def update_user(self, new_user: UserSchema) -> bool:
+        """Updates user.
+        - Note: Row in DB must be update manually with `session.flush()` or `session.close` etc.
+        - Returns `True` if user updated, `False` otherwise."""
+        pass
+
 
 class Repository(AbstractRepository):
     def __init__(self, session: AsyncSession):
@@ -52,14 +59,25 @@ class Repository(AbstractRepository):
         column: Any,
         value: Any,
     ) -> Optional[BaseSchema]:
-        q = select(model).filter(column == value).options(*selectinload_all(model))
-        raw = (await self.session.execute(q)).first()
+        s = select(model).filter(column == value).options(*selectinload_all(model))
+        raw = (await self.session.execute(s)).scalar().first()
         return schema.model_validate(raw) if raw is not None else None
 
     async def get_all(self, schema: BaseSchema, model: Base) -> list[BaseSchema]:
-        q = select(User).options(*selectinload_all(model))
-        raw_users = (await self.session.execute(q)).scalars().all()
+        s = select(User).options(*selectinload_all(model))
+        raw_users = (await self.session.execute(s)).scalars().all()
         return [schema.model_validate(raw_user) for raw_user in raw_users]
+
+    async def update_user(self, new_user: UserSchema) -> bool:
+        s = select(User).filter(User.id == new_user.id).options(*selectinload_all(User))
+        raw_user = (await self.session.execute(s)).scalars().first()
+        if not raw_user:
+            return False
+
+        raw_user.phone_number = new_user.phone_number
+        raw_user.telegram_id = new_user.telegram_id
+        raw_user.proxy_subscription = new_user.proxy_subscription
+        return True
 
 
 def selectinload_all(model: Type[Base]):

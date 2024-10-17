@@ -23,10 +23,24 @@ class UserService:
         self.repository = repository
 
     async def get_user_by_telegram_id(self, id: int) -> Optional[UserSchema]:
-        """Returns user by `UserSchema.telegram_id`.
-        - Returns `UserSchema` if it exist in db, `None` otherwise."""
+        """Gets user by `UserSchema.telegram_id`.
+        - Returns user as `UserSchema` if it exist in db, `None` otherwise."""
         return await self.repository.find_first(UserSchema, User, User.telegram_id, id)
+
+    async def get_user_by_phone(self, phone: str) -> Optional[UserSchema]:
+        """Gets user by `UserSchema.phone_number`.
+        - Returns user as `UserSchema` if it exist in db, `None` otherwise."""
+        return await self.repository.find_first(
+            UserSchema, User, User.phone_number, phone
+        )
 
     async def get_users(self) -> list[UserSchema]:
         """Returns all user in db."""
         return await self.repository.get_all(UserSchema, User)
+
+    async def update_user(self, user: UserSchema) -> bool:
+        """Updates user.
+        - Note: Row in DB must be update manually with `session.flush()` or `session.close` etc.
+        - Returns `True` if user updated, `False` otherwise."""
+
+        return await self.repository.update_user(user)
