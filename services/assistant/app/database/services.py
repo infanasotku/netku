@@ -1,3 +1,4 @@
+from abc import ABC
 from contextlib import asynccontextmanager
 from typing import AsyncGenerator, Callable, Optional
 
@@ -23,7 +24,7 @@ class ServiceFactory:
             yield BookingService(Repository(session))
 
 
-class AbstractService:
+class AbstractService(ABC):
     def __init__(self, repository: AbstractRepository):
         self.repository = repository
 
