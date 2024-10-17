@@ -29,7 +29,8 @@ def run():
     bot_factory = BotFactory(
         bot_settings=BotSettings(**settings.model_dump()),
         bot_service_factories=BotServiceFactories(
-            user_service_factory=service_factories.user_service_factory
+            user_service_factory=service_factories.user_service_factory,
+            booking_service_factory=service_factories.booking_service_factory,
         ),
         logger=logger,
     )
