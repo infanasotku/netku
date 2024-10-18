@@ -10,7 +10,7 @@ import aiogram.loggers as aloggers
 from pydantic import BaseModel
 
 from app import AbstractAppFactory
-from database.services import BookingService, UserService
+from services import BookingService, UserService
 
 from bot.router import use_bot_routes
 from bot import tasks

@@ -3,9 +3,9 @@ from typing import AsyncContextManager, Callable
 from fastapi_utils.tasks import repeat_every
 from aiogram import Bot
 
-from database.services import UserService
+from services import UserService
 
-# import bot.text as text
+import bot.text as text
 
 
 def restart_proxy_factory(

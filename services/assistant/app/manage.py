@@ -8,7 +8,8 @@ sys.path.append((pathlib.Path(__file__).parent.parent).resolve().as_posix())
 from settings import settings, logger
 from app import AppFactory
 from bot import BotFactory, BotServiceFactories, BotSettings
-from database import get_db_factory, ServiceFactory
+from database import get_db_factory
+from services import ServiceFactory
 
 
 def run():
