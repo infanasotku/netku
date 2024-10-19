@@ -10,6 +10,8 @@ from grpc_health.v1.health_pb2 import HealthCheckRequest, HealthCheckResponse
 from grpc_health.v1.health_pb2_grpc import HealthStub
 
 from infra.grpc.grpc_client import GRPCClient, ChannelFactory
+from infra.grpc.booking_client import BookingClient
+from infra.grpc.xray_client import XrayClient
 
 
 class ClientFactory(ABC):
@@ -112,3 +114,13 @@ class ClientFactory(ABC):
     def _init_client(self, channel_factory: ChannelFactory) -> GRPCClient:
         """Additional innits grpc client with needed params."""
         pass
+
+
+class XrayClientFactory(ClientFactory):
+    def _init_client(self, channel_factory: ChannelFactory) -> XrayClient:
+        return XrayClient(channel_factory)
+
+
+class BookingClientFactory(ClientFactory):
+    def _init_client(self, channel_factory: ChannelFactory) -> BookingClient:
+        return BookingClient(channel_factory)
