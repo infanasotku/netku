@@ -1,5 +1,5 @@
 from contextlib import asynccontextmanager
-from typing import Annotated
+from typing import Annotated, AsyncContextManager, Callable
 
 from sqlalchemy.orm import mapped_column, Mapped
 from sqlalchemy.orm import DeclarativeBase
@@ -13,7 +13,9 @@ class Base(DeclarativeBase):
     id: Mapped[intpk]
 
 
-def get_db_factory(async_session: async_sessionmaker[AsyncSession]):
+def get_db_factory(
+    async_session: async_sessionmaker[AsyncSession],
+) -> Callable[[], AsyncContextManager[AsyncSession]]:
     @asynccontextmanager
     async def get_db():
         async with async_session.begin() as session:
