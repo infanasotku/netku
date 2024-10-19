@@ -17,7 +17,7 @@ class BookingService:
     async def get_booking_account_by_id(
         self, id: int
     ) -> Optional[BookingAccountSchema]:
-        """Returns booking account by `id`."""
+        """:return: Booking account by `id`."""
         account = await self.repository.find_first(
             BookingAccount, BookingAccount.id, id
         )

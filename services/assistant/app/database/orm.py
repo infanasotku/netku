@@ -26,7 +26,8 @@ class AbstractRepository(ABC):
         value: Any,
     ) -> Optional[Base]:
         """Finds `model` row by `column == value`.
-        - Returns row as `model` if it exist in DB, `None` otherwise."""
+
+        :return: Row as `model` if it exist in DB, `None` otherwise."""
         pass
 
     @abstractmethod
@@ -35,13 +36,15 @@ class AbstractRepository(ABC):
         model: Type[Base],
     ) -> list[Base]:
         """Gets all `model` rows.
-        - Returns rows as `list[model]`."""
+
+        :return: Rows as `list[model]`."""
         pass
 
     @abstractmethod
     async def update_user(self, user: UserSchema) -> bool:
         """Updates `user`.
-        - Returns `True` if user updated, `False` otherwise."""
+
+        :return: `True` if user updated, `False` otherwise."""
         pass
 
     @abstractmethod
@@ -49,8 +52,8 @@ class AbstractRepository(ABC):
         self, user: UserSchema, email: str, password: str
     ) -> bool:
         """Creates new booking acccount for `user`
-        Returns:
-        `True` if account created successful, `False` otherwise.
+
+        :return: `True` if account created successful, `False` otherwise.
         """
         pass
 
