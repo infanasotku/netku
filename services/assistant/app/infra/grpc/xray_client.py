@@ -19,5 +19,4 @@ class XrayClient(GRPCClient):
 
         stub = XrayStub(ch)
         resp: RestartResponse = await stub.RestartXray(Null())
-        self.uid = resp.uuid
         return resp.uuid
