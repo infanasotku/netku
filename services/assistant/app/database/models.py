@@ -1,6 +1,6 @@
 from datetime import datetime
 from uuid import UUID
-from db.database import Base
+from database.database import Base
 from sqlalchemy import BigInteger, ForeignKey
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 
