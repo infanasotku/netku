@@ -71,6 +71,7 @@ class ClientFactory(ABC):
         """
         channel: Channel = None
 
+        # Cached version of `self._create_channel`
         async def create_channel() -> Optional[Channel]:
             nonlocal channel
             if channel is not None:
