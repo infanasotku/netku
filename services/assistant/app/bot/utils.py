@@ -5,9 +5,8 @@ from aiogram.fsm.state import State
 from aiogram.fsm.context import FSMContext
 from aiogram.utils.markdown import hbold
 
-from db.schemas import UserSchema
-from db import service
-from booking import booking
+from database.schemas import UserSchema
+from services import UserService, BookingService
 
 import bot.kb as kb
 from bot.states import BaseState
@@ -90,37 +89,43 @@ async def apply_field(
     await try_edit_or_answer(msg, menu_text, await menu_generator(state))
 
 
-def get_user(message: Message) -> Optional[UserSchema]:
+async def get_user(message: Message, user_service: UserService) -> Optional[UserSchema]:
     """Finds user by `message.chat.id`
     - Returns `UserSchema` if user exist,
     `None` otherwise."""
-    return service.get_user_by_telegram_id(message.chat.id)
+    return await user_service.get_user_by_telegram_id(message.chat.id)
 
 
-def registrate_user(contact: Contact) -> Optional[UserSchema]:
+async def registrate_user(
+    contact: Contact, user_service: UserService
+) -> Optional[UserSchema]:
     """Registrates user by `contact.user_id` and `contact.phone_number`
     - Returns `UserSchema` if user registrated successful
     (User registrated successful if he founded by his `contact.phone_number` in db
     ), `None` otherwise."""
-    user = service.get_user_by_phone(contact.phone_number)
+    user = await user_service.get_user_by_phone(contact.phone_number)
     if not user:
         return
 
     user.telegram_id = contact.user_id
-    service.update_user(user)
+    await user_service.update_user(user)
     return user
 
 
-def subscribe_user(user: UserSchema, subscription: str):
+async def subscribe_user(
+    user: UserSchema, subscription: str, user_service: UserService
+):
     """Subscribes user to `subscription`."""
     match subscription:
         case "proxy":
             user.proxy_subscription = True
 
-    service.update_user(user)
+    await user_service.update_user(user)
 
 
-def unsubscribe_user(user: UserSchema, subscription: str):
+async def unsubscribe_user(
+    user: UserSchema, subscription: str, user_service: UserService
+):
     """Unsubscribes user from `subscription`."""
     match subscription:
         case "proxy":
@@ -128,14 +133,19 @@ def unsubscribe_user(user: UserSchema, subscription: str):
         case "all":
             user.proxy_subscription = False
 
-    service.update_user(user)
+    await user_service.update_user(user)
 
 
-async def get_booking_machine_count(message: Message) -> int:
-    user = get_user(message)
+async def get_booking_machine_count(
+    message: Message, user_service: UserService, booking_service: BookingService
+) -> int:
+    user = await get_user(message, user_service)
+    if user is None:
+        return 0
+
     return Counter(
         [
-            await booking.booked(account.email, account.password)
+            await booking_service.booked(account.email, account.password)
             for account in user.booking_accounts
         ]
     )[True]

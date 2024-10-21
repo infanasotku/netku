@@ -53,7 +53,7 @@ class Settings(BaseSettings):
     @property
     def psql_dsn(self) -> str:
         return (
-            f"postgresql+psycopg://{self.psql_user}:{self.psql_pass}"
+            f"postgresql+asyncpg://{self.psql_user}:{self.psql_pass}"
             + f"@{self.psql_host}:{self.psql_port}/{self.psql_db_name}"
         )
 
