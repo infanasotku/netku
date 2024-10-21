@@ -30,3 +30,15 @@ class BookingService:
             if account is not None
             else None
         )
+
+    async def booked(self, email: str, password: str) -> bool:
+        """:return: `True` if mashine booked, `False` otherwise."""
+        return await self.booking_client.booked(email, password)
+
+    async def run_booking(self, email: str, password: str) -> None:
+        """Runs booking for given `email` and `password`."""
+        await self.booking_client.run_booking(email, password)
+
+    async def stop_booking(self, email: str, password: str) -> None:
+        """Stops booking for given `email` and `password`."""
+        await self.booking_client.stop_booking(email, password)
