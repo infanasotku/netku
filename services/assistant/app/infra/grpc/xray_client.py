@@ -13,7 +13,7 @@ class XrayClient(GRPCClient):
 
         :return: New uid, if xray restarted, `None` otherwise.
         """
-        ch = await self.channel_factory()
+        ch = await self.get_channel()
         if ch is None:
             return
 

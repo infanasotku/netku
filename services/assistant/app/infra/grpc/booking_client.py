@@ -6,7 +6,7 @@ from infra.grpc.grpc_client import GRPCClient
 
 class BookingClient(GRPCClient):
     async def run_booking(self, email: str, password: str):
-        ch = await self.channel_factory()
+        ch = await self.get_channel()
         if ch is None:
             return
 
@@ -14,7 +14,7 @@ class BookingClient(GRPCClient):
         await stub.RunBooking(BookingRequest(email=email, password=password))
 
     async def stop_booking(self, email: str, password: str):
-        ch = await self.channel_factory()
+        ch = await self.get_channel()
         if ch is None:
             return
 
@@ -22,7 +22,7 @@ class BookingClient(GRPCClient):
         await stub.StopBooking(BookingRequest(email=email, password=password))
 
     async def booked(self, email: str, password: str) -> bool:
-        ch = await self.channel_factory()
+        ch = await self.get_channel()
         if ch is None:
             return
 

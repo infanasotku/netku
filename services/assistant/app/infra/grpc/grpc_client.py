@@ -5,5 +5,5 @@ ChannelFactory: TypeAlias = Callable[[], Awaitable[Optional[Channel]]]
 
 
 class GRPCClient:
-    def __init__(self, channel_factory: ChannelFactory) -> None:
-        self.channel_factory = channel_factory
+    def __init__(self, get_channel: ChannelFactory) -> None:
+        self.get_channel = get_channel
