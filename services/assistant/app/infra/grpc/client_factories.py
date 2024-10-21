@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-import asyncio
 from contextlib import asynccontextmanager
 from typing import AsyncGenerator, Optional
 
@@ -9,7 +8,7 @@ from grpc.aio import insecure_channel, AioRpcError, Channel
 from grpc_health.v1.health_pb2 import HealthCheckRequest, HealthCheckResponse
 from grpc_health.v1.health_pb2_grpc import HealthStub
 
-from infra.grpc.grpc_client import GRPCClient, ChannelFactory
+from infra.grpc.grpc_client import GRPCClient, CreateChannel
 from infra.grpc.booking_client import BookingClient
 from infra.grpc.xray_client import XrayClient
 
@@ -50,77 +49,51 @@ class ClientFactory(ABC):
             True if resp.status == HealthCheckResponse.ServingStatus.SERVING else False
         )
 
-    async def _wait_healthy(self, channel: Channel) -> True:
-        """Checks service health `self.reconnection_retries` times
-        with `self.reconnection_delay` delay.
-
-        :return: `True` if service health `False` otherwise.
-        """
-        for step in range(self.reconnection_retries + 1):
-            if step > 0:
-                await asyncio.sleep(self.reconnection_delay)
-            if await self._check_health(channel):
-                return True
-
-        return False
-
-    async def _create_channel(self, check_immediate: bool = False) -> Optional[Channel]:
+    async def _create_channel(self) -> Optional[Channel]:
         """Creates grpc channel.
 
-        :param check_immediate: Specifies service health checking.
-            If `True` - service will check one time, otherwise
-            service will check `self.reconnection_retries` times.
-
         :return:
-            `Channel` if grpc service available and ready for requests.
+            `Channel` if grpc service healthy and ready for requests.
             `None` otherwise.
         """
         channel = insecure_channel(f"{self.client_addr}:{self.client_port}")
         # Checks grcp service health
-        if (
-            check_immediate and not await self._check_health(channel)
-        ) or not await self._wait_healthy(channel):
+        if not await self._check_health(channel):
             return
 
         return channel
 
     @asynccontextmanager
-    async def create(
-        self, check_immediate: bool = False
-    ) -> AsyncGenerator[GRPCClient, None]:
+    async def create(self) -> AsyncGenerator[GRPCClient, None]:
         """Creates corresponding instance of `GRPCClient`.
-
-        :param check_immediate: Specifies service health checking.
-            If `True` - service will check one time, otherwise
-            service will check `self.reconnection_retries` times.
 
         :return: Initiated grpc client.
         """
         channel: Channel = None
 
-        async def channel_factory() -> Optional[Channel]:
+        async def create_channel() -> Optional[Channel]:
             nonlocal channel
             if channel is not None:
                 return channel
-            channel = await self._create_channel(check_immediate)
+            channel = await self._create_channel()
             return channel
 
-        yield self._init_client(channel_factory)
+        yield self._init_client(create_channel)
 
         if channel is not None:
             await channel.close()
 
     @abstractmethod
-    def _init_client(self, channel_factory: ChannelFactory) -> GRPCClient:
-        """Additional innits grpc client with needed params."""
+    def _init_client(self, create_channel: CreateChannel) -> GRPCClient:
+        """Innits grpc client with needed params."""
         pass
 
 
 class XrayClientFactory(ClientFactory):
-    def _init_client(self, channel_factory: ChannelFactory) -> XrayClient:
-        return XrayClient(channel_factory)
+    def _init_client(self, create_channel: CreateChannel) -> XrayClient:
+        return XrayClient(create_channel)
 
 
 class BookingClientFactory(ClientFactory):
-    def _init_client(self, channel_factory: ChannelFactory) -> BookingClient:
-        return BookingClient(channel_factory)
+    def _init_client(self, create_channel: CreateChannel) -> BookingClient:
+        return BookingClient(create_channel)
