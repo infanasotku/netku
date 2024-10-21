@@ -31,6 +31,9 @@ class AppFactory(AbstractAppFactory):
             redoc_url=None,
         )
 
+        for sub_factory in self.sub_factories:
+            app.mount(sub_factory.route_path, sub_factory.create_app())
+
         return app
 
     def create_lifespan(self) -> Callable[[FastAPI], AsyncGenerator]:
