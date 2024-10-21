@@ -1,3 +1,3 @@
-from bot.bot import BotFactory, BotServiceFactories, BotSettings
+from bot.bot import BotFactory, BotServicesFactory, BotSettings
 
-__all__ = ["BotFactory", "BotServiceFactories", "BotSettings"]
+__all__ = ["BotFactory", "BotServicesFactory", "BotSettings"]

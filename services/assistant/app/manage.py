@@ -8,24 +8,37 @@ from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 sys.path.append((pathlib.Path(__file__).parent.parent).resolve().as_posix())
 from settings import settings, logger
 from app import AppFactory
-from bot import BotFactory, BotServiceFactories, BotSettings
+from bot import BotFactory, BotServicesFactory, BotSettings
 from database import get_db_factory
 from services import UserServiceFactory, BookingServiceFactory
+from infra.grpc.client_factories import BookingClientFactory
 
 
 def create_app() -> FastAPI:
     async_engine = create_async_engine(settings.psql_dsn)
     async_session = async_sessionmaker(async_engine)
+
+    # grpc client factories
+    bc_factory = BookingClientFactory(
+        client_addr=settings.booking_host,
+        client_port=settings.booking_port,
+        service_name="booking",
+        reconnection_delay=settings.reconnection_delay,
+        reconnection_retries=settings.reconnection_retries,
+    )
+
     get_db = get_db_factory(async_session)
+
+    # service factories
     us_factory = UserServiceFactory(get_db)
-    bs_factory = BookingServiceFactory(get_db)
+    bs_factory = BookingServiceFactory(get_db, bc_factory.create)
 
     # bot
     bot_factory = BotFactory(
         bot_settings=BotSettings(**settings.model_dump()),
-        bot_service_factories=BotServiceFactories(
-            user_service_factory=us_factory.create_user_service,
-            booking_service_factory=bs_factory.create_booking_service,
+        bot_services_factory=BotServicesFactory(
+            create_user_service=us_factory.create,
+            create_booking_service=bs_factory.create,
         ),
         logger=logger,
     )

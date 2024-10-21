@@ -12,7 +12,7 @@ def restart_proxy_factory(
     xray_restart_minutes: float,
     logger: Logger,
     bot: Bot,
-    user_service_factory: Callable[[], AsyncContextManager[UserService]],
+    create_user_service: Callable[[], AsyncContextManager[UserService]],
 ):
     """Creates restart proxy task."""
 
@@ -27,7 +27,7 @@ def restart_proxy_factory(
         #     logger.info("Proxy subscription performed.")
         #     return
 
-        async with user_service_factory() as service:
+        async with create_user_service() as service:
             users = await service.get_users()
 
         print(users)

@@ -1,13 +1,17 @@
 from typing import Optional
 
+
 from database.models import BookingAccount
 from database.orm import AbstractRepository
 from database.schemas import BookingAccountSchema, UserSchema
 
+from infra.grpc.booking_client import BookingClient
+
 
 class BookingService:
-    def __init__(self, repository: AbstractRepository):
+    def __init__(self, repository: AbstractRepository, booking_client: BookingClient):
         self.repository = repository
+        self.booking_client = booking_client
 
     async def create_booking_account(
         self, user: UserSchema, email: str, password: str

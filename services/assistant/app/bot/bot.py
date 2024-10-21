@@ -16,9 +16,9 @@ from bot.router import use_bot_routes
 from bot import tasks
 
 
-class BotServiceFactories(BaseModel):
-    user_service_factory: Callable[[], AsyncContextManager[UserService]]
-    booking_service_factory: Callable[[], AsyncContextManager[BookingService]]
+class BotServicesFactory(BaseModel):
+    create_user_service: Callable[[], AsyncContextManager[UserService]]
+    create_booking_service: Callable[[], AsyncContextManager[BookingService]]
 
 
 class BotSettings(BaseModel):
@@ -32,12 +32,12 @@ class BotFactory(AbstractAppFactory):
     def __init__(
         self,
         bot_settings: BotSettings,
-        bot_service_factories: BotServiceFactories,
+        bot_services_factory: BotServicesFactory,
         logger: Logger,
     ):
         self.settings = bot_settings
         self.logger = logger
-        self.service_factories = bot_service_factories
+        self.bot_service_factory = bot_services_factory
 
         self.dispatcher = Dispatcher()
         self.bot = Bot(
@@ -90,7 +90,7 @@ class BotFactory(AbstractAppFactory):
                 self.settings.xray_restart_minutes,
                 self.logger,
                 self.bot,
-                self.service_factories.user_service_factory,
+                self.bot_service_factory.create_user_service,
             )
             task_list: list[asyncio.Task] = [asyncio.create_task(restart_proxy())]
             self.logger.info("Bot tasks started")
