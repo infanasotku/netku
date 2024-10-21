@@ -7,6 +7,7 @@ from database.orm import Repository
 
 from infra.grpc.booking_client import BookingClient
 
+from infra.grpc.xray_client import XrayClient
 from services.booking_service import BookingService
 from services.user_service import UserService
 
@@ -37,3 +38,21 @@ class BookingServiceFactory:
             self.create_booking_client() as booking_client,
         ):
             yield BookingService(Repository(session), booking_client)
+
+
+class XrayServiceFactory:
+    def __init__(
+        self,
+        get_db: Callable[[], AsyncContextManager[AsyncSession]],
+        create_xray_client: Callable[[], AsyncContextManager[XrayClient]],
+    ):
+        self.get_db = get_db
+        self.create_xray_client = create_xray_client
+
+    @asynccontextmanager
+    async def create(self) -> AsyncGenerator[BookingService, None]:
+        async with (
+            self.get_db() as session,
+            self.create_xray_client() as xray_client,
+        ):
+            yield BookingService(Repository(session), xray_client)

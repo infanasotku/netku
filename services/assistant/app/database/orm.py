@@ -57,6 +57,16 @@ class AbstractRepository(ABC):
         """
         pass
 
+    @abstractmethod
+    async def update_xray_uid(self, uid: str) -> None:
+        """Saves xray uid in DB."""
+        pass
+
+    @abstractmethod
+    async def get_xray_uid(self) -> Optional[str]:
+        """Gets xray uid from DB."""
+        pass
+
 
 class Repository(AbstractRepository):
     def __init__(self, session: AsyncSession):
@@ -100,6 +110,12 @@ class Repository(AbstractRepository):
         await self.session.add(booking_account)
 
         return True
+
+    async def update_xray_uid(self, uid: str) -> None:
+        pass  # TODO:
+
+    async def get_xray_uid(self) -> Optional[str]:
+        pass  # TODO:
 
 
 def selectinload_all(model: Type[Base]):
