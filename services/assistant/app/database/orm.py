@@ -107,7 +107,7 @@ class Repository(AbstractRepository):
 
         booking_account = BookingAccount(email=email, password=password, owner=raw_user)
 
-        await self.session.add(booking_account)
+        self.session.add(booking_account)
 
         return True
 
