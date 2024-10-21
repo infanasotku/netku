@@ -119,7 +119,7 @@ class Repository(AbstractRepository):
             self.session.add(xray_record)
         else:
             xray_records[0].uid = xray_record.uid
-            xray_records[0].last_update = xray_record.uid
+            xray_records[0].last_update = xray_record.last_update
 
     async def get_xray_record(self) -> Optional[XrayRecord]:
         xray_records: list[XrayRecord] = await self.get_all(XrayRecord)
