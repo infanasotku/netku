@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from datetime import datetime
 from typing import Any, Optional, Type
 
 from sqlalchemy import inspect
@@ -7,16 +8,18 @@ from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
 
 from database.database import Base
-from database.models import BookingAccount, User
+from database.models import BookingAccount, User, XrayRecord
 from database.schemas import UserSchema
 
 
 class AbstractRepository(ABC):
     """Provides methods for communicating with database."""
 
-    @abstractmethod
     def __init__(self, session: AsyncSession):
-        pass
+        self.session = session
+
+    async def save_changes(self):
+        await self.session.flush()
 
     @abstractmethod
     async def find_first(
@@ -58,20 +61,17 @@ class AbstractRepository(ABC):
         pass
 
     @abstractmethod
-    async def update_xray_uid(self, uid: str) -> None:
+    async def update_xray_record(self, uid: str) -> None:
         """Saves xray uid in DB."""
         pass
 
     @abstractmethod
-    async def get_xray_uid(self) -> Optional[str]:
-        """Gets xray uid from DB."""
+    async def get_xray_record(self) -> Optional[XrayRecord]:
+        """Gets xray record from DB."""
         pass
 
 
 class Repository(AbstractRepository):
-    def __init__(self, session: AsyncSession):
-        self.session = session
-
     async def find_first(
         self,
         model: Type[Base],
@@ -83,9 +83,9 @@ class Repository(AbstractRepository):
         return raw
 
     async def get_all(self, model: Base) -> list[Base]:
-        s = select(User).options(*selectinload_all(model))
-        raw_users = (await self.session.execute(s)).scalars().all()
-        return list(raw_users)
+        s = select(model).options(*selectinload_all(model))
+        raw_models = (await self.session.execute(s)).scalars().all()
+        return list(raw_models)
 
     async def update_user(self, user: UserSchema) -> bool:
         raw_user = await self.find_first(User, User.id, user.id)
@@ -111,11 +111,21 @@ class Repository(AbstractRepository):
 
         return True
 
-    async def update_xray_uid(self, uid: str) -> None:
-        pass  # TODO:
+    async def update_xray_record(self, uid: str) -> None:
+        xray_record = XrayRecord(uid=uid, last_update=datetime.now())
+        xray_records: list[XrayRecord] = await self.get_all(XrayRecord)
 
-    async def get_xray_uid(self) -> Optional[str]:
-        pass  # TODO:
+        if len(xray_records) == 0:
+            self.session.add(xray_record)
+        else:
+            xray_records[0].uid = xray_record.uid
+            xray_records[0].last_update = xray_record.uid
+
+    async def get_xray_record(self) -> Optional[XrayRecord]:
+        xray_records: list[XrayRecord] = await self.get_all(XrayRecord)
+
+        if len(xray_records) > 0:
+            return xray_records[0]
 
 
 def selectinload_all(model: Type[Base]):

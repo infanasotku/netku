@@ -13,9 +13,12 @@ class XrayService:
         uid = await self.xray_client.restart()
 
         if uid is not None:
-            await self.repository.update_xray_uid(uid)
+            await self.repository.update_xray_record(uid)
 
         return uid
 
     async def get_current_uid(self) -> Optional[str]:
-        return await self.repository.get_xray_uid()
+        xray_record = await self.repository.get_xray_record()
+
+        if xray_record is not None:
+            return xray_record.uid
