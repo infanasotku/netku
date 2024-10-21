@@ -10,8 +10,8 @@ from settings import settings, logger
 from app import AppFactory
 from bot import BotFactory, BotServicesFactory, BotSettings
 from database import get_db_factory
-from services import UserServiceFactory, BookingServiceFactory
-from infra.grpc.client_factories import BookingClientFactory, XrayClientFactory
+from services import UserServiceFactory, BookingServiceFactory, XrayServiceFactory
+from infra.grpc import BookingClientFactory, XrayClientFactory
 
 
 def create_app() -> FastAPI:
@@ -39,6 +39,7 @@ def create_app() -> FastAPI:
     # service factories
     us_factory = UserServiceFactory(get_db)
     bs_factory = BookingServiceFactory(get_db, bc_factory.create)
+    xs_factory = XrayServiceFactory(get_db, xc_factory.create)
 
     # bot
     bot_factory = BotFactory(
@@ -46,7 +47,7 @@ def create_app() -> FastAPI:
         bot_services_factory=BotServicesFactory(
             create_user_service=us_factory.create,
             create_booking_service=bs_factory.create,
-            create_xray_client=xc_factory.create,
+            create_xray_service=xs_factory.create,
         ),
         logger=logger,
     )

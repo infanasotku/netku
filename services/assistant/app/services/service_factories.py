@@ -5,11 +5,11 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from database.orm import Repository
 
-from infra.grpc.booking_client import BookingClient
+from infra.grpc import BookingClient, XrayClient
 
-from infra.grpc.xray_client import XrayClient
 from services.booking_service import BookingService
 from services.user_service import UserService
+from services.xray_service import XrayService
 
 
 class UserServiceFactory:
@@ -50,9 +50,9 @@ class XrayServiceFactory:
         self.create_xray_client = create_xray_client
 
     @asynccontextmanager
-    async def create(self) -> AsyncGenerator[BookingService, None]:
+    async def create(self) -> AsyncGenerator[XrayService, None]:
         async with (
             self.get_db() as session,
             self.create_xray_client() as xray_client,
         ):
-            yield BookingService(Repository(session), xray_client)
+            yield XrayService(Repository(session), xray_client)

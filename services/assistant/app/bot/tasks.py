@@ -3,8 +3,7 @@ from typing import AsyncContextManager, Callable
 from fastapi_utils.tasks import repeat_every
 from aiogram import Bot
 
-from infra.grpc.xray_client import XrayClient
-from services import UserService
+from services import UserService, XrayService
 
 import bot.text as text
 
@@ -14,7 +13,7 @@ def restart_proxy_factory(
     logger: Logger,
     bot: Bot,
     create_user_service: Callable[[], AsyncContextManager[UserService]],
-    create_xray_client: Callable[[], AsyncContextManager[XrayClient]],
+    create_xray_service: Callable[[], AsyncContextManager[XrayService]],
 ):
     """Creates restart proxy task."""
 
@@ -23,8 +22,8 @@ def restart_proxy_factory(
         """Restarts proxy and sends `id` to all user subscripted to proxy."""
         logger.info("Proxy subscription performing.")
 
-        async with create_xray_client() as xray:
-            uid = await xray.restart()
+        async with create_xray_service() as xray:
+            uid = await xray.restart_xray()
 
         if not uid:
             logger.warning("Proxy subscription failed - xray didn't restarted.")
