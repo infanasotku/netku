@@ -10,6 +10,7 @@ import aiogram.loggers as aloggers
 from pydantic import BaseModel
 
 from app import AbstractAppFactory
+from infra.grpc.xray_client import XrayClient
 from services import BookingService, UserService
 
 from bot.router import use_bot_routes
@@ -19,6 +20,7 @@ from bot import tasks
 class BotServicesFactory(BaseModel):
     create_user_service: Callable[[], AsyncContextManager[UserService]]
     create_booking_service: Callable[[], AsyncContextManager[BookingService]]
+    create_xray_client: Callable[[], AsyncContextManager[XrayClient]]
 
 
 class BotSettings(BaseModel):
@@ -91,6 +93,7 @@ class BotFactory(AbstractAppFactory):
                 self.logger,
                 self.bot,
                 self.bot_service_factory.create_user_service,
+                self.bot_service_factory.create_xray_client,
             )
             task_list: list[asyncio.Task] = [asyncio.create_task(restart_proxy())]
             self.logger.info("Bot tasks started")

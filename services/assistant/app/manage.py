@@ -11,7 +11,7 @@ from app import AppFactory
 from bot import BotFactory, BotServicesFactory, BotSettings
 from database import get_db_factory
 from services import UserServiceFactory, BookingServiceFactory
-from infra.grpc.client_factories import BookingClientFactory
+from infra.grpc.client_factories import BookingClientFactory, XrayClientFactory
 
 
 def create_app() -> FastAPI:
@@ -23,6 +23,13 @@ def create_app() -> FastAPI:
         client_addr=settings.booking_host,
         client_port=settings.booking_port,
         service_name="booking",
+        reconnection_delay=settings.reconnection_delay,
+        reconnection_retries=settings.reconnection_retries,
+    )
+    xc_factory = XrayClientFactory(
+        client_addr=settings.xray_host,
+        client_port=settings.xray_port,
+        service_name="xray",
         reconnection_delay=settings.reconnection_delay,
         reconnection_retries=settings.reconnection_retries,
     )
@@ -39,6 +46,7 @@ def create_app() -> FastAPI:
         bot_services_factory=BotServicesFactory(
             create_user_service=us_factory.create,
             create_booking_service=bs_factory.create,
+            create_xray_client=xc_factory.create,
         ),
         logger=logger,
     )
