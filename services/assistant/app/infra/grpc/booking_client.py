@@ -1,5 +1,5 @@
-from booking.gen.booking_pb2_grpc import BookingStub
-from booking.gen.booking_pb2 import BookingRequest, BookingResponse
+from infra.grpc.gen.booking_pb2_grpc import BookingStub
+from infra.grpc.gen.booking_pb2 import BookingRequest, BookingResponse
 
 from infra.grpc.grpc_client import GRPCClient
 
