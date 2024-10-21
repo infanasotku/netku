@@ -12,7 +12,7 @@ from pydantic import BaseModel
 from app import AbstractAppFactory
 from services import BookingService, UserService, XrayService
 
-from bot.router import use_bot_routes
+from bot.router import MainRouter
 from bot import tasks
 
 
@@ -36,6 +36,7 @@ class BotFactory(AbstractAppFactory):
         bot_services_factory: BotServicesFactory,
         logger: Logger,
     ):
+        self.route_path = "/bot"
         self.settings = bot_settings
         self.logger = logger
         self.bot_service_factory = bot_services_factory
@@ -56,7 +57,13 @@ class BotFactory(AbstractAppFactory):
     def create_app(self) -> FastAPI:
         app = FastAPI(docs_url=None, redoc_url=None)
         app.add_api_route(path="/webhook", endpoint=self._webhook, methods=["POST"])
-        use_bot_routes(self.dispatcher)
+        main_router = MainRouter(
+            create_booking_service=self.bot_service_factory.create_booking_service,
+            create_user_service=self.bot_service_factory.create_user_service,
+            create_xray_service=self.bot_service_factory.create_xray_service,
+            logger=self.logger,
+        )
+        main_router.register_router(self.dispatcher)
 
         return app
 
@@ -108,7 +115,7 @@ class BotFactory(AbstractAppFactory):
         x_telegram_bot_api_secret_token: Annotated[str | None, Header()] = None,
     ):
         """Registers webhook endpoint for telegram bot"""
-        if x_telegram_bot_api_secret_token != self.telegram_token:
+        if x_telegram_bot_api_secret_token != self.settings.telegram_token:
             self.logger.error("Wrong secret token!")
             return {"status": "error", "message": "Wrong secret token !"}
         try:
