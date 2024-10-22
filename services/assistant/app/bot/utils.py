@@ -5,11 +5,11 @@ from aiogram.fsm.state import State
 from aiogram.fsm.context import FSMContext
 from aiogram.utils.markdown import hbold
 
-from database.schemas import UserSchema
-from services import UserService, BookingService
+from app.database.schemas import UserSchema
+from app.services import AbstractUserService, AbstractBookingService
 
-import bot.kb as kb
-from bot.states import BaseState
+import app.bot.kb as kb
+from app.bot.states import BaseState
 
 
 async def try_delete_message(message: Message) -> bool:
@@ -89,7 +89,9 @@ async def apply_field(
     await try_edit_or_answer(msg, menu_text, await menu_generator(state))
 
 
-async def get_user(message: Message, user_service: UserService) -> Optional[UserSchema]:
+async def get_user(
+    message: Message, user_service: AbstractUserService
+) -> Optional[UserSchema]:
     """Finds user by `message.chat.id`
     - Returns `UserSchema` if user exist,
     `None` otherwise."""
@@ -97,7 +99,7 @@ async def get_user(message: Message, user_service: UserService) -> Optional[User
 
 
 async def registrate_user(
-    contact: Contact, user_service: UserService
+    contact: Contact, user_service: AbstractUserService
 ) -> Optional[UserSchema]:
     """Registrates user by `contact.user_id` and `contact.phone_number`
     - Returns `UserSchema` if user registrated successful
@@ -113,7 +115,7 @@ async def registrate_user(
 
 
 async def subscribe_user(
-    user: UserSchema, subscription: str, user_service: UserService
+    user: UserSchema, subscription: str, user_service: AbstractUserService
 ):
     """Subscribes user to `subscription`."""
     match subscription:
@@ -124,7 +126,7 @@ async def subscribe_user(
 
 
 async def unsubscribe_user(
-    user: UserSchema, subscription: str, user_service: UserService
+    user: UserSchema, subscription: str, user_service: AbstractUserService
 ):
     """Unsubscribes user from `subscription`."""
     match subscription:
@@ -137,7 +139,9 @@ async def unsubscribe_user(
 
 
 async def get_booking_machine_count(
-    message: Message, user_service: UserService, booking_service: BookingService
+    message: Message,
+    user_service: AbstractUserService,
+    booking_service: AbstractBookingService,
 ) -> int:
     user = await get_user(message, user_service)
     if user is None:

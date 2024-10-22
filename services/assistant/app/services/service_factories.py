@@ -3,13 +3,13 @@ from typing import AsyncContextManager, AsyncGenerator, Callable
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from database.orm import Repository
+from app.database.orm import Repository
 
-from infra.grpc import BookingClient, XrayClient
+from app.infra.grpc import AbstractBookingClient, AbstractXrayClient
 
-from services.booking_service import BookingService
-from services.user_service import UserService
-from services.xray_service import XrayService
+from app.services.booking_service import BookingService
+from app.services.user_service import UserService
+from app.services.xray_service import XrayService
 
 
 class UserServiceFactory:
@@ -26,7 +26,7 @@ class BookingServiceFactory:
     def __init__(
         self,
         get_db: Callable[[], AsyncContextManager[AsyncSession]],
-        create_booking_client: Callable[[], AsyncContextManager[BookingClient]],
+        create_booking_client: Callable[[], AsyncContextManager[AbstractBookingClient]],
     ):
         self.get_db = get_db
         self.create_booking_client = create_booking_client
@@ -44,7 +44,7 @@ class XrayServiceFactory:
     def __init__(
         self,
         get_db: Callable[[], AsyncContextManager[AsyncSession]],
-        create_xray_client: Callable[[], AsyncContextManager[XrayClient]],
+        create_xray_client: Callable[[], AsyncContextManager[AbstractXrayClient]],
     ):
         self.get_db = get_db
         self.create_xray_client = create_xray_client

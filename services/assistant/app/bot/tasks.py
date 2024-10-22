@@ -3,17 +3,17 @@ from typing import AsyncContextManager, Callable
 from fastapi_utils.tasks import repeat_every
 from aiogram import Bot
 
-from services import UserService, XrayService
+from app.services import AbstractUserService, AbstractXrayService
 
-import bot.text as text
+import app.bot.text as text
 
 
 def restart_proxy_factory(
     xray_restart_minutes: float,
     logger: Logger,
     bot: Bot,
-    create_user_service: Callable[[], AsyncContextManager[UserService]],
-    create_xray_service: Callable[[], AsyncContextManager[XrayService]],
+    create_user_service: Callable[[], AsyncContextManager[AbstractUserService]],
+    create_xray_service: Callable[[], AsyncContextManager[AbstractXrayService]],
 ):
     """Creates restart proxy task."""
 

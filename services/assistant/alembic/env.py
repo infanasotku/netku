@@ -1,7 +1,5 @@
 import asyncio
 from logging.config import fileConfig
-import pathlib
-import sys
 
 from sqlalchemy import pool
 from sqlalchemy.engine import Connection
@@ -9,9 +7,8 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 
 from alembic import context
 
-sys.path.append((pathlib.Path(__file__).parent.parent / "app").resolve().as_posix())
-from database.database import Base
-from database.models import *  # noqa
+from app.database.database import Base
+from app.database.models import *  # noqa
 from settings import settings
 
 # this is the Alembic Config object, which provides
