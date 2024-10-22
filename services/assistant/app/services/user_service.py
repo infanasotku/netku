@@ -1,8 +1,8 @@
 from typing import Optional
 
-from database.models import User
-from database.orm import AbstractRepository
-from database.schemas import UserSchema
+from app.database.models import User
+from app.database.orm import AbstractRepository
+from app.database.schemas import UserSchema
 
 
 class UserService:

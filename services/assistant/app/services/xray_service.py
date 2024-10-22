@@ -1,7 +1,8 @@
 from typing import Optional
-from database.orm import AbstractRepository
 
-from infra.grpc.xray_client import XrayClient
+from app.database.orm import AbstractRepository
+
+from app.infra.grpc.xray_client import XrayClient
 
 
 class XrayService:

@@ -7,9 +7,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
 
-from database.database import Base
-from database.models import BookingAccount, User, XrayRecord
-from database.schemas import UserSchema
+from app.database.database import Base
+from app.database.models import BookingAccount, User, XrayRecord
+from app.database.schemas import UserSchema
 
 
 class AbstractRepository(ABC):

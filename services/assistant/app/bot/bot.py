@@ -9,11 +9,11 @@ from aiogram.types import Update, WebhookInfo, BotCommand
 import aiogram.loggers as aloggers
 from pydantic import BaseModel
 
-from app import AbstractAppFactory
-from services import BookingService, UserService, XrayService
+from app.app import AbstractAppFactory
+from app.services import BookingService, UserService, XrayService
 
-from bot.router import MainRouter
-from bot import tasks
+from app.bot.router import MainRouter
+from app.bot import tasks
 
 
 class BotServicesFactory(BaseModel):

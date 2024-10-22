@@ -6,10 +6,10 @@ xray-generate-go:
 	protobuf/xray.proto
 
 xray-generate-py:
-	python -m grpc_tools.protoc -Iinfra/grpc/gen=protobuf/ \
-	--python_out=services/assistant/app \
-	--grpc_python_out=services/assistant/app \
-	--pyi_out=services/assistant/app \
+	python -m grpc_tools.protoc -Iapp/infra/grpc/gen=protobuf/ \
+	--python_out=services/assistant \
+	--grpc_python_out=services/assistant \
+	--pyi_out=services/assistant \
 	protobuf/xray.proto
 
 booking-generate-go:
@@ -20,8 +20,8 @@ booking-generate-go:
 	protobuf/booking.proto
 
 booking-generate-py:
-	python -m grpc_tools.protoc -Iinfra/grpc/gen=protobuf/ \
-	--python_out=services/assistant/app \
-	--grpc_python_out=services/assistant/app \
-	--pyi_out=services/assistant/app \
+	python -m grpc_tools.protoc -Iapp/infra/grpc/gen=protobuf/ \
+	--python_out=services/assistant \
+	--grpc_python_out=services/assistant \
+	--pyi_out=services/assistant \
 	protobuf/booking.proto

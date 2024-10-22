@@ -1,11 +1,11 @@
 from typing import Optional
 
 
-from database.models import BookingAccount
-from database.orm import AbstractRepository
-from database.schemas import BookingAccountSchema, UserSchema
+from app.database.models import BookingAccount
+from app.database.orm import AbstractRepository
+from app.database.schemas import BookingAccountSchema, UserSchema
 
-from infra.grpc.booking_client import BookingClient
+from app.infra.grpc.booking_client import BookingClient
 
 
 class BookingService:

@@ -1,17 +1,14 @@
 import logging
-import pathlib
-import sys
 from fastapi import FastAPI
 import uvicorn
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 
-sys.path.append((pathlib.Path(__file__).parent.parent).resolve().as_posix())
 from settings import settings, logger
-from app import AppFactory
-from bot import BotFactory, BotServicesFactory, BotSettings
-from database import get_db_factory
-from services import UserServiceFactory, BookingServiceFactory, XrayServiceFactory
-from infra.grpc import BookingClientFactory, XrayClientFactory
+from app.app import AppFactory
+from app.bot import BotFactory, BotServicesFactory, BotSettings
+from app.database import get_db_factory
+from app.services import UserServiceFactory, BookingServiceFactory, XrayServiceFactory
+from app.infra.grpc import BookingClientFactory, XrayClientFactory
 
 
 def create_app() -> FastAPI:

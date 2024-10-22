@@ -5,11 +5,11 @@ from aiogram.fsm.state import State
 from aiogram.fsm.context import FSMContext
 from aiogram.utils.markdown import hbold
 
-from database.schemas import UserSchema
-from services import UserService, BookingService
+from app.database.schemas import UserSchema
+from app.services import UserService, BookingService
 
-import bot.kb as kb
-from bot.states import BaseState
+import app.bot.kb as kb
+from app.bot.states import BaseState
 
 
 async def try_delete_message(message: Message) -> bool:

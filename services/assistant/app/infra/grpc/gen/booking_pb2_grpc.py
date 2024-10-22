@@ -3,7 +3,9 @@
 
 import grpc
 
-from infra.grpc.gen import booking_pb2 as infra_dot_grpc_dot_gen_dot_booking__pb2
+from app.infra.grpc.gen import (
+    booking_pb2 as app_dot_infra_dot_grpc_dot_gen_dot_booking__pb2,
+)
 
 GRPC_GENERATED_VERSION = "1.67.0"
 GRPC_VERSION = grpc.__version__
@@ -21,7 +23,7 @@ except ImportError:
 if _version_not_supported:
     raise RuntimeError(
         f"The grpc package installed is at version {GRPC_VERSION},"
-        + " but the generated code in infra/grpc/gen/booking_pb2_grpc.py depends on"
+        + " but the generated code in app/infra/grpc/gen/booking_pb2_grpc.py depends on"
         + f" grpcio>={GRPC_GENERATED_VERSION}."
         + f" Please upgrade your grpc module to grpcio>={GRPC_GENERATED_VERSION}"
         + f" or downgrade your generated code using grpcio-tools<={GRPC_VERSION}."
@@ -39,20 +41,20 @@ class BookingStub(object):
         """
         self.RunBooking = channel.unary_unary(
             "/booking.Booking/RunBooking",
-            request_serializer=infra_dot_grpc_dot_gen_dot_booking__pb2.BookingRequest.SerializeToString,
-            response_deserializer=infra_dot_grpc_dot_gen_dot_booking__pb2.BookingResponse.FromString,
+            request_serializer=app_dot_infra_dot_grpc_dot_gen_dot_booking__pb2.BookingRequest.SerializeToString,
+            response_deserializer=app_dot_infra_dot_grpc_dot_gen_dot_booking__pb2.BookingResponse.FromString,
             _registered_method=True,
         )
         self.StopBooking = channel.unary_unary(
             "/booking.Booking/StopBooking",
-            request_serializer=infra_dot_grpc_dot_gen_dot_booking__pb2.BookingRequest.SerializeToString,
-            response_deserializer=infra_dot_grpc_dot_gen_dot_booking__pb2.BookingResponse.FromString,
+            request_serializer=app_dot_infra_dot_grpc_dot_gen_dot_booking__pb2.BookingRequest.SerializeToString,
+            response_deserializer=app_dot_infra_dot_grpc_dot_gen_dot_booking__pb2.BookingResponse.FromString,
             _registered_method=True,
         )
         self.Booked = channel.unary_unary(
             "/booking.Booking/Booked",
-            request_serializer=infra_dot_grpc_dot_gen_dot_booking__pb2.BookingRequest.SerializeToString,
-            response_deserializer=infra_dot_grpc_dot_gen_dot_booking__pb2.BookingResponse.FromString,
+            request_serializer=app_dot_infra_dot_grpc_dot_gen_dot_booking__pb2.BookingRequest.SerializeToString,
+            response_deserializer=app_dot_infra_dot_grpc_dot_gen_dot_booking__pb2.BookingResponse.FromString,
             _registered_method=True,
         )
 
@@ -83,18 +85,18 @@ def add_BookingServicer_to_server(servicer, server):
     rpc_method_handlers = {
         "RunBooking": grpc.unary_unary_rpc_method_handler(
             servicer.RunBooking,
-            request_deserializer=infra_dot_grpc_dot_gen_dot_booking__pb2.BookingRequest.FromString,
-            response_serializer=infra_dot_grpc_dot_gen_dot_booking__pb2.BookingResponse.SerializeToString,
+            request_deserializer=app_dot_infra_dot_grpc_dot_gen_dot_booking__pb2.BookingRequest.FromString,
+            response_serializer=app_dot_infra_dot_grpc_dot_gen_dot_booking__pb2.BookingResponse.SerializeToString,
         ),
         "StopBooking": grpc.unary_unary_rpc_method_handler(
             servicer.StopBooking,
-            request_deserializer=infra_dot_grpc_dot_gen_dot_booking__pb2.BookingRequest.FromString,
-            response_serializer=infra_dot_grpc_dot_gen_dot_booking__pb2.BookingResponse.SerializeToString,
+            request_deserializer=app_dot_infra_dot_grpc_dot_gen_dot_booking__pb2.BookingRequest.FromString,
+            response_serializer=app_dot_infra_dot_grpc_dot_gen_dot_booking__pb2.BookingResponse.SerializeToString,
         ),
         "Booked": grpc.unary_unary_rpc_method_handler(
             servicer.Booked,
-            request_deserializer=infra_dot_grpc_dot_gen_dot_booking__pb2.BookingRequest.FromString,
-            response_serializer=infra_dot_grpc_dot_gen_dot_booking__pb2.BookingResponse.SerializeToString,
+            request_deserializer=app_dot_infra_dot_grpc_dot_gen_dot_booking__pb2.BookingRequest.FromString,
+            response_serializer=app_dot_infra_dot_grpc_dot_gen_dot_booking__pb2.BookingResponse.SerializeToString,
         ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -125,8 +127,8 @@ class Booking(object):
             request,
             target,
             "/booking.Booking/RunBooking",
-            infra_dot_grpc_dot_gen_dot_booking__pb2.BookingRequest.SerializeToString,
-            infra_dot_grpc_dot_gen_dot_booking__pb2.BookingResponse.FromString,
+            app_dot_infra_dot_grpc_dot_gen_dot_booking__pb2.BookingRequest.SerializeToString,
+            app_dot_infra_dot_grpc_dot_gen_dot_booking__pb2.BookingResponse.FromString,
             options,
             channel_credentials,
             insecure,
@@ -155,8 +157,8 @@ class Booking(object):
             request,
             target,
             "/booking.Booking/StopBooking",
-            infra_dot_grpc_dot_gen_dot_booking__pb2.BookingRequest.SerializeToString,
-            infra_dot_grpc_dot_gen_dot_booking__pb2.BookingResponse.FromString,
+            app_dot_infra_dot_grpc_dot_gen_dot_booking__pb2.BookingRequest.SerializeToString,
+            app_dot_infra_dot_grpc_dot_gen_dot_booking__pb2.BookingResponse.FromString,
             options,
             channel_credentials,
             insecure,
@@ -185,8 +187,8 @@ class Booking(object):
             request,
             target,
             "/booking.Booking/Booked",
-            infra_dot_grpc_dot_gen_dot_booking__pb2.BookingRequest.SerializeToString,
-            infra_dot_grpc_dot_gen_dot_booking__pb2.BookingResponse.FromString,
+            app_dot_infra_dot_grpc_dot_gen_dot_booking__pb2.BookingRequest.SerializeToString,
+            app_dot_infra_dot_grpc_dot_gen_dot_booking__pb2.BookingResponse.FromString,
             options,
             channel_credentials,
             insecure,

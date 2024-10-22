@@ -1,9 +1,9 @@
 from typing import Optional
 
-from infra.grpc.gen.xray_pb2_grpc import XrayStub
-from infra.grpc.gen.xray_pb2 import RestartResponse, Null
+from app.infra.grpc.gen.xray_pb2_grpc import XrayStub
+from app.infra.grpc.gen.xray_pb2 import RestartResponse, Null
 
-from infra.grpc.grpc_client import GRPCClient
+from app.infra.grpc.grpc_client import GRPCClient
 
 
 class XrayClient(GRPCClient):

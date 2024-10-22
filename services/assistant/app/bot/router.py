@@ -16,13 +16,13 @@ from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 from aiogram.utils.markdown import hbold
 
-from services import BookingService, UserService, XrayService
+from app.services import BookingService, UserService, XrayService
 
-from bot.states import BaseState, BookingAccountAdding
-import bot.utils as utils
-import bot.text as text
-import bot.kb as kb
-from bot.schemas import BookingCallbackData, BookingAction
+from app.bot.states import BaseState, BookingAccountAdding
+import app.bot.utils as utils
+import app.bot.text as text
+import app.bot.kb as kb
+from app.bot.schemas import BookingCallbackData, BookingAction
 
 
 class MainRouter:

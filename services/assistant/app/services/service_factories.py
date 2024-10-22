@@ -3,13 +3,13 @@ from typing import AsyncContextManager, AsyncGenerator, Callable
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from database.orm import Repository
+from app.database.orm import Repository
 
-from infra.grpc import BookingClient, XrayClient
+from app.infra.grpc import BookingClient, XrayClient
 
-from services.booking_service import BookingService
-from services.user_service import UserService
-from services.xray_service import XrayService
+from app.services.booking_service import BookingService
+from app.services.user_service import UserService
+from app.services.xray_service import XrayService
 
 
 class UserServiceFactory:
