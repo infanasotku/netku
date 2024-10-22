@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database.orm import Repository
 
-from app.infra.grpc import BookingClient, XrayClient
+from app.infra.grpc import AbstractBookingClient, AbstractXrayClient
 
 from app.services.booking_service import BookingService
 from app.services.user_service import UserService
@@ -26,7 +26,7 @@ class BookingServiceFactory:
     def __init__(
         self,
         get_db: Callable[[], AsyncContextManager[AsyncSession]],
-        create_booking_client: Callable[[], AsyncContextManager[BookingClient]],
+        create_booking_client: Callable[[], AsyncContextManager[AbstractBookingClient]],
     ):
         self.get_db = get_db
         self.create_booking_client = create_booking_client
@@ -44,7 +44,7 @@ class XrayServiceFactory:
     def __init__(
         self,
         get_db: Callable[[], AsyncContextManager[AsyncSession]],
-        create_xray_client: Callable[[], AsyncContextManager[XrayClient]],
+        create_xray_client: Callable[[], AsyncContextManager[AbstractXrayClient]],
     ):
         self.get_db = get_db
         self.create_xray_client = create_xray_client

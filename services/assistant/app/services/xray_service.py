@@ -2,11 +2,11 @@ from typing import Optional
 
 from app.database.orm import AbstractRepository
 
-from app.infra.grpc.xray_client import XrayClient
+from app.infra.grpc import AbstractXrayClient
 
 
 class XrayService:
-    def __init__(self, repository: AbstractRepository, xray_client: XrayClient):
+    def __init__(self, repository: AbstractRepository, xray_client: AbstractXrayClient):
         self.repository = repository
         self.xray_client = xray_client
 

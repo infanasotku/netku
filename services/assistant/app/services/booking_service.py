@@ -5,11 +5,13 @@ from app.database.models import BookingAccount
 from app.database.orm import AbstractRepository
 from app.database.schemas import BookingAccountSchema, UserSchema
 
-from app.infra.grpc.booking_client import BookingClient
+from app.infra.grpc import AbstractBookingClient
 
 
 class BookingService:
-    def __init__(self, repository: AbstractRepository, booking_client: BookingClient):
+    def __init__(
+        self, repository: AbstractRepository, booking_client: AbstractBookingClient
+    ):
         self.repository = repository
         self.booking_client = booking_client
 
