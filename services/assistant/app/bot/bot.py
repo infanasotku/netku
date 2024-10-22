@@ -10,16 +10,19 @@ import aiogram.loggers as aloggers
 from pydantic import BaseModel
 
 from app.app import AbstractAppFactory
-from app.services import BookingService, UserService, XrayService
-
+from app.services import (
+    AbstractBookingService,
+    AbstractUserService,
+    AbstractXrayService,
+)
 from app.bot.router import MainRouter
 from app.bot import tasks
 
 
 class BotServicesFactory(BaseModel):
-    create_user_service: Callable[[], AsyncContextManager[UserService]]
-    create_booking_service: Callable[[], AsyncContextManager[BookingService]]
-    create_xray_service: Callable[[], AsyncContextManager[XrayService]]
+    create_user_service: Callable[[], AsyncContextManager[AbstractUserService]]
+    create_booking_service: Callable[[], AsyncContextManager[AbstractBookingService]]
+    create_xray_service: Callable[[], AsyncContextManager[AbstractXrayService]]
 
 
 class BotSettings(BaseModel):

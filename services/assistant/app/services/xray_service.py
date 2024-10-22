@@ -1,3 +1,4 @@
+from abc import ABC, abstractmethod
 from typing import Optional
 
 from app.database.orm import AbstractRepository
@@ -5,7 +6,17 @@ from app.database.orm import AbstractRepository
 from app.infra.grpc import AbstractXrayClient
 
 
-class XrayService:
+class AbstractXrayService(ABC):
+    @abstractmethod
+    async def restart_xray(self) -> Optional[str]:
+        pass
+
+    @abstractmethod
+    async def get_current_uid(self) -> Optional[str]:
+        pass
+
+
+class XrayService(AbstractXrayService):
     def __init__(self, repository: AbstractRepository, xray_client: AbstractXrayClient):
         self.repository = repository
         self.xray_client = xray_client
