@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from datetime import datetime
-from typing import Any, Optional, Type
+from typing import Any, Type
 
 from sqlalchemy import inspect
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -27,7 +27,7 @@ class AbstractRepository(ABC):
         model: Type[Base],
         column: Any,
         value: Any,
-    ) -> Optional[Base]:
+    ) -> Base | None:
         """Finds `model` row by `column == value`.
 
         :return: Row as `model` if it exist in DB, `None` otherwise."""
@@ -66,7 +66,7 @@ class AbstractRepository(ABC):
         pass
 
     @abstractmethod
-    async def get_xray_record(self) -> Optional[XrayRecord]:
+    async def get_xray_record(self) -> XrayRecord | None:
         """Gets xray record from DB."""
         pass
 
@@ -77,7 +77,7 @@ class Repository(AbstractRepository):
         model: Type[Base],
         column: Any,
         value: Any,
-    ) -> Optional[Base]:
+    ) -> Base | None:
         s = select(model).filter(column == value).options(*selectinload_all(model))
         raw = (await self.session.execute(s)).scalars().first()
         return raw
@@ -121,7 +121,7 @@ class Repository(AbstractRepository):
             xray_records[0].uid = xray_record.uid
             xray_records[0].last_update = xray_record.last_update
 
-    async def get_xray_record(self) -> Optional[XrayRecord]:
+    async def get_xray_record(self) -> XrayRecord | None:
         xray_records: list[XrayRecord] = await self.get_all(XrayRecord)
 
         if len(xray_records) > 0:

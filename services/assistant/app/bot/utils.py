@@ -1,4 +1,4 @@
-from typing import Any, Callable, Coroutine, Optional
+from typing import Any, Callable, Coroutine
 from collections import Counter
 from aiogram.types import Message, Contact, InlineKeyboardButton
 from aiogram.fsm.state import State
@@ -91,7 +91,7 @@ async def apply_field(
 
 async def get_user(
     message: Message, user_service: AbstractUserService
-) -> Optional[UserSchema]:
+) -> UserSchema | None:
     """Finds user by `message.chat.id`
     - Returns `UserSchema` if user exist,
     `None` otherwise."""
@@ -100,7 +100,7 @@ async def get_user(
 
 async def registrate_user(
     contact: Contact, user_service: AbstractUserService
-) -> Optional[UserSchema]:
+) -> UserSchema | None:
     """Registrates user by `contact.user_id` and `contact.phone_number`
     - Returns `UserSchema` if user registrated successful
     (User registrated successful if he founded by his `contact.phone_number` in db

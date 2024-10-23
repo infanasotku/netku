@@ -1,16 +1,15 @@
-from typing import Optional
 from pydantic import BaseModel, ConfigDict
 
 
 class BaseSchema(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
-    id: Optional[int] = -1
+    id: int | None = -1
 
 
 class UserSchema(BaseSchema):
-    phone_number: Optional[str]
-    telegram_id: Optional[int]
+    phone_number: str | None
+    telegram_id: int | None
 
     # Subscriptions
     proxy_subscription: bool

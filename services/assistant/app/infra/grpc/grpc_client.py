@@ -1,7 +1,7 @@
-from typing import Awaitable, Callable, Optional, TypeAlias
+from typing import Awaitable, Callable, TypeAlias
 from grpc import Channel
 
-CreateChannel: TypeAlias = Callable[[], Awaitable[Optional[Channel]]]
+CreateChannel: TypeAlias = Callable[[], Awaitable[Channel | None]]
 
 
 class GRPCClient:

@@ -1,4 +1,4 @@
-from typing import Any, Optional, Type
+from typing import Any, Type
 from app.database.orm import AbstractRepository
 from app.database.database import Base
 from app.database.models import XrayRecord
@@ -25,5 +25,5 @@ class StubRepository(AbstractRepository):
     async def update_xray_record(self, uid: str) -> None:
         raise NotImplementedError
 
-    async def get_xray_record(self) -> Optional[XrayRecord]:
+    async def get_xray_record(self) -> XrayRecord | None:
         raise NotImplementedError

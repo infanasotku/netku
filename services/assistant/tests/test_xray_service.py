@@ -1,4 +1,3 @@
-from typing import Optional
 from datetime import datetime
 import pytest
 
@@ -13,7 +12,7 @@ class _StubXrayClient(AbstractXrayClient):
     def __init__(self, uid: str) -> None:
         self.uid = uid
 
-    async def restart(self) -> Optional[str]:
+    async def restart(self) -> str | None:
         return self.uid
 
 
@@ -21,7 +20,7 @@ class _StubRepository(StubRepository):
     def __init__(self):
         self.uid = None
 
-    async def get_xray_record(self) -> Optional[XrayRecord]:
+    async def get_xray_record(self) -> XrayRecord | None:
         return XrayRecord(uid=self.uid, last_update=datetime.now())
 
     async def update_xray_record(self, uid: str) -> None:
