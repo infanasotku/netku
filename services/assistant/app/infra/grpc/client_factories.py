@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from contextlib import asynccontextmanager
-from typing import AsyncGenerator, Optional
+from typing import AsyncGenerator
 
 from grpc import StatusCode
 from grpc.aio import insecure_channel, AioRpcError, Channel
@@ -49,7 +49,7 @@ class ClientFactory(ABC):
             True if resp.status == HealthCheckResponse.ServingStatus.SERVING else False
         )
 
-    async def _create_channel(self) -> Optional[Channel]:
+    async def _create_channel(self) -> Channel | None:
         """Creates grpc channel.
 
         :return:
@@ -72,7 +72,7 @@ class ClientFactory(ABC):
         channel: Channel = None
 
         # Cached version of `self._create_channel`
-        async def create_channel() -> Optional[Channel]:
+        async def create_channel() -> Channel | None:
             nonlocal channel
             if channel is not None:
                 return channel

@@ -1,7 +1,6 @@
 import logging
 import pathlib
 import sys
-from typing import Optional
 import uuid
 
 from pydantic_settings import BaseSettings
@@ -14,8 +13,8 @@ class Settings(BaseSettings):
     host: str = Field(validation_alias="HOST", default="127.0.0.1")
     port: int = Field(validation_alias="PORT", default=5100)
     domain: str = Field(validation_alias="DOMAIN", default="127.0.0.1")
-    ssl_keyfile: Optional[str] = Field(validation_alias="SSL_KEYFILE", default=None)
-    ssl_certfile: Optional[str] = Field(validation_alias="SSL_CERTFILE", default=None)
+    ssl_keyfile: str | None = Field(validation_alias="SSL_KEYFILE", default=None)
+    ssl_certfile: str | None = Field(validation_alias="SSL_CERTFILE", default=None)
 
     reconnection_retries: int = Field(
         validation_alias="RECONNECTION_RETRIES", default=5
