@@ -12,26 +12,22 @@ class AbstractUserService(ABC):
         """Gets user by `UserSchema.telegram_id`.
 
         :return: User as `UserSchema` if it exist in db, `None` otherwise."""
-        pass
 
     @abstractmethod
     async def get_user_by_phone(self, phone: str) -> Optional[UserSchema]:
         """Gets user by `UserSchema.phone_number`.
 
         :return: User as `UserSchema` if it exist in db, `None` otherwise."""
-        pass
 
     @abstractmethod
     async def get_users(self) -> list[UserSchema]:
         """:return: All user in db."""
-        pass
 
     @abstractmethod
     async def update_user(self, user: UserSchema) -> bool:
         """Updates user.
 
         :return: `True` if user updated, `False` otherwise."""
-        pass
 
 
 class UserService(AbstractUserService):

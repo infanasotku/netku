@@ -34,7 +34,6 @@ class AbstractRepository(ABC):
         """Finds `model` row by `column == value`.
 
         :return: Row as `model` if it exist in DB, `None` otherwise."""
-        pass
 
     @abstractmethod
     async def get_all(
@@ -44,14 +43,12 @@ class AbstractRepository(ABC):
         """Gets all `model` rows.
 
         :return: Rows as `list[model]`."""
-        pass
 
     @abstractmethod
     async def update_user(self, user: UserSchema) -> bool:
         """Updates `user`.
 
         :return: `True` if user updated, `False` otherwise."""
-        pass
 
     @abstractmethod
     async def create_booking_account(
@@ -61,17 +58,14 @@ class AbstractRepository(ABC):
 
         :return: `True` if account created successful, `False` otherwise.
         """
-        pass
 
     @abstractmethod
     async def update_xray_record(self, uid: str) -> None:
         """Saves xray uid in DB."""
-        pass
 
     @abstractmethod
     async def get_xray_record(self) -> XrayRecord | None:
         """Gets xray record from DB."""
-        pass
 
 
 class Repository(AbstractRepository):

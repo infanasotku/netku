@@ -14,7 +14,6 @@ class AbstractXrayClient(ABC):
 
         :return: New uid, if xray restarted, `None` otherwise.
         """
-        pass
 
 
 class XrayClient(GRPCClient, AbstractXrayClient):

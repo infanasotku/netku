@@ -87,7 +87,6 @@ class ClientFactory(ABC):
     @abstractmethod
     def _init_client(self, create_channel: CreateChannel) -> GRPCClient:
         """Innits grpc client with needed params."""
-        pass
 
 
 class XrayClientFactory(ClientFactory):
