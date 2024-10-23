@@ -1,7 +1,7 @@
 import asyncio
 from logging import Logger
 import re
-from typing import AsyncContextManager, Callable, Union
+from typing import AsyncContextManager, Callable
 from aiogram import Dispatcher, Router, F
 from aiogram.types import (
     CallbackQuery,
@@ -173,7 +173,7 @@ class MainRouter:
 
     # region Booking
     async def _get_booking_menu(
-        self, message: Union[Message, CallbackQuery], state: FSMContext
+        self, message: Message | CallbackQuery, state: FSMContext
     ):
         await state.set_state(BaseState.none)
         if isinstance(message, CallbackQuery):
