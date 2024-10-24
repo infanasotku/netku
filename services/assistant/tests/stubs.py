@@ -1,17 +1,16 @@
 from typing import Any, Type
-from app.database.orm import AbstractRepository
-from app.database.database import Base
+from app.database.orm import AbstractRepository, ModelT
 from app.database.models import XrayRecord
 from app.database.schemas import UserSchema
 
 
 class StubRepository(AbstractRepository):
     async def find_first(
-        self, model: Type[Base], column: Any, value: Any
-    ) -> Base | None:
+        self, model: Type[ModelT], column: Any, value: Any
+    ) -> ModelT | None:
         raise NotImplementedError
 
-    async def get_all(self, model: Type[Base]) -> list[Base]:
+    async def get_all(self, model: Type[ModelT]) -> list[ModelT]:
         raise NotImplementedError
 
     async def update_user(self, user: UserSchema) -> bool:

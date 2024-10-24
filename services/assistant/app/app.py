@@ -10,11 +10,9 @@ class AbstractAppFactory(ABC):
     @abstractmethod
     def create_app(self) -> FastAPI:
         """Creates fastapi app."""
-        pass
 
     def create_lifespan(self) -> Callable[[FastAPI], AsyncGenerator]:
         """Creates fastapi lifespan."""
-        pass
 
 
 class AppFactory(AbstractAppFactory):

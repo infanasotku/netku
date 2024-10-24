@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from datetime import datetime
-from typing import Any, Type
+from typing import Any, Type, TypeVar
 
 from sqlalchemy import inspect
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -10,6 +10,9 @@ from sqlalchemy.orm import selectinload
 from app.database.database import Base
 from app.database.models import BookingAccount, User, XrayRecord
 from app.database.schemas import UserSchema
+
+
+ModelT = TypeVar("ModelT", bound=Base)
 
 
 class AbstractRepository(ABC):
@@ -24,31 +27,28 @@ class AbstractRepository(ABC):
     @abstractmethod
     async def find_first(
         self,
-        model: Type[Base],
+        model: Type[ModelT],
         column: Any,
         value: Any,
-    ) -> Base | None:
+    ) -> ModelT | None:
         """Finds `model` row by `column == value`.
 
         :return: Row as `model` if it exist in DB, `None` otherwise."""
-        pass
 
     @abstractmethod
     async def get_all(
         self,
-        model: Type[Base],
-    ) -> list[Base]:
+        model: Type[ModelT],
+    ) -> list[ModelT]:
         """Gets all `model` rows.
 
         :return: Rows as `list[model]`."""
-        pass
 
     @abstractmethod
     async def update_user(self, user: UserSchema) -> bool:
         """Updates `user`.
 
         :return: `True` if user updated, `False` otherwise."""
-        pass
 
     @abstractmethod
     async def create_booking_account(
@@ -58,31 +58,28 @@ class AbstractRepository(ABC):
 
         :return: `True` if account created successful, `False` otherwise.
         """
-        pass
 
     @abstractmethod
     async def update_xray_record(self, uid: str) -> None:
         """Saves xray uid in DB."""
-        pass
 
     @abstractmethod
     async def get_xray_record(self) -> XrayRecord | None:
         """Gets xray record from DB."""
-        pass
 
 
 class Repository(AbstractRepository):
     async def find_first(
         self,
-        model: Type[Base],
+        model: Type[ModelT],
         column: Any,
         value: Any,
-    ) -> Base | None:
+    ) -> ModelT | None:
         s = select(model).filter(column == value).options(*selectinload_all(model))
         raw = (await self.session.execute(s)).scalars().first()
         return raw
 
-    async def get_all(self, model: Base) -> list[Base]:
+    async def get_all(self, model: Type[ModelT]) -> list[ModelT]:
         s = select(model).options(*selectinload_all(model))
         raw_models = (await self.session.execute(s)).scalars().all()
         return list(raw_models)
@@ -113,7 +110,7 @@ class Repository(AbstractRepository):
 
     async def update_xray_record(self, uid: str) -> None:
         xray_record = XrayRecord(uid=uid, last_update=datetime.now())
-        xray_records: list[XrayRecord] = await self.get_all(XrayRecord)
+        xray_records = await self.get_all(XrayRecord)
 
         if len(xray_records) == 0:
             self.session.add(xray_record)
@@ -122,7 +119,7 @@ class Repository(AbstractRepository):
             xray_records[0].last_update = xray_record.last_update
 
     async def get_xray_record(self) -> XrayRecord | None:
-        xray_records: list[XrayRecord] = await self.get_all(XrayRecord)
+        xray_records = await self.get_all(XrayRecord)
 
         if len(xray_records) > 0:
             return xray_records[0]
