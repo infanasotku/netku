@@ -50,46 +50,55 @@ class MainRouter:
         dp.include_router(self.router)
 
     def _register_handlers(self):
-        self.router.message(Command("start"))(self._start)
-        self.router.message(Command("stop"))(self._stop)
-        self.router.message(BaseState.registration)(self._registrate)
+        self.router.message.register(self._start, Command("start"))
+        self.router.message.register(self._stop, Command("stop"))
+        self.router.message.register(self._stop, BaseState.registration)
 
         # Proxy
-        self.router.message(Command("proxy"))(self._subscribe_for_proxy)
-        self.router.message(Command("proxy_uid"))(self._get_proxy_uuid)
+        self.router.message.register(self._subscribe_for_proxy, Command("proxy"))
+        self.router.message.register(self._get_proxy_uuid, Command("proxy_uid"))
 
         # Booking
-        self.router.callback_query(F.data == "get_booking_menu")(
-            self.router.message(Command("machine_booking"))(self._get_booking_menu)
+        self.router.callback_query.register(
+            self._get_booking_menu, F.data == "get_booking_menu"
         )
-        self.router.callback_query(F.data == "create_booking_account_menu")(
-            self._get_booking_account_creating_menu
+        self.router.message.register(self._get_booking_menu, Command("machine_booking"))
+        self.router.callback_query.register(
+            self._get_booking_account_creating_menu,
+            F.data == "create_booking_account_menu",
         )
-        self.router.callback_query(F.data == "get_booking_accounts")(
-            self._get_booking_accounts
+        self.router.callback_query.register(
+            self._get_booking_accounts, F.data == "get_booking_accounts"
         )
-        self.router.callback_query(
-            BookingCallbackData.filter(F.action == BookingAction.stop)
-        )(self._stop_booking)
-        self.router.callback_query(
-            BookingCallbackData.filter(F.action == BookingAction.run)
-        )(self._run_booking)
-        self.router.callback_query(F.data == "submit_booking_account")(
-            self._submit_booking_account
+        self.router.callback_query.register(
+            self._stop_booking,
+            BookingCallbackData.filter(F.action == BookingAction.stop),
         )
-        self.router.callback_query(F.data == "fill_booking_email")(
-            self._fill_booking_email
+        self.router.callback_query.register(
+            self._run_booking, BookingCallbackData.filter(F.action == BookingAction.run)
         )
-        self.router.message(BookingAccountAdding.email)(self._apply_booking_email)
-        self.router.callback_query(F.data == "fill_booking_password")(
-            self._fill_booking_password
+        self.router.callback_query.register(
+            self._submit_booking_account, F.data == "submit_booking_account"
         )
-        self.router.message(BookingAccountAdding.password)(self._apply_booking_password)
+        self.router.callback_query.register(
+            self._fill_booking_email, F.data == "fill_booking_email"
+        )
+        self.router.message.register(
+            self._apply_booking_email, BookingAccountAdding.email
+        )
+        self.router.callback_query.register(
+            self._fill_booking_password, F.data == "fill_booking_password"
+        )
+        self.router.message.register(
+            self._apply_booking_password, BookingAccountAdding.password
+        )
 
         # Common
-        self.router.callback_query(F.data == "hide_keyboard")(self._hide_keyboard)
-        self.router.message(BaseState.none)(self._delete_extra)
-        self.router.error()(self._error_handler)
+        self.router.callback_query.register(
+            self._hide_keyboard, F.data == "hide_keyboard"
+        )
+        self.router.message.register(self._delete_extra, BaseState.none)
+        self.router.error.register(self._error_handler)
 
     async def _start(self, message: Message, state: FSMContext):
         async with self.create_user_service() as user_service:
