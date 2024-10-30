@@ -6,14 +6,14 @@ const { t } = useI18n();
 </script>
 
 <template>
-	<main>
-		<ContentBlock :title="t('content.default.header')">
-			<p>
-				{{ t("content.default.description") }}
-			</p>
-		</ContentBlock>
-		<slot></slot>
-	</main>
+  <main>
+    <ContentBlock :title="t('content.default.header')">
+      <p>
+        {{ t("content.default.description") }}
+      </p>
+    </ContentBlock>
+    <slot></slot>
+  </main>
 </template>
 
 <style scoped></style>
