@@ -1,43 +1,43 @@
 <script setup lang="ts"></script>
 
 <template>
-	<div class="logo">
-		<span class="icon"></span>
-	</div>
+  <div class="logo">
+    <span class="icon"></span>
+  </div>
 </template>
 
 <style scoped>
 .logo {
-	display: flex;
-	position: relative;
+  display: flex;
+  position: relative;
 }
 
 .icon {
-	width: 100%;
-	height: 100%;
+  width: 100%;
+  height: 100%;
 
-	color: transparent;
-	mask: url("/img/netku.svg") no-repeat;
+  color: transparent;
+  mask: url("/img/netku.svg") no-repeat;
 }
 
 .icon:before {
-	content: "";
+  content: "";
 
-	animation-name: shine;
-	animation-duration: 1s;
-	animation-iteration-count: infinite;
-	animation-timing-function: ease-in;
+  animation-name: shine;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in;
 
-	background: var(--shine-gradient);
+  background: var(--shine-gradient);
 
-	width: 300%;
-	height: 100%;
-	position: absolute;
+  width: 300%;
+  height: 100%;
+  position: absolute;
 }
 
 @keyframes shine {
-	100% {
-		transform: translateX(-66%);
-	}
+  100% {
+    transform: translateX(-66%);
+  }
 }
 </style>

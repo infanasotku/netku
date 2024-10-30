@@ -15,8 +15,8 @@ const setTheme = (dark: boolean) => {
        -o-transition: none !important;
        -ms-transition: none !important;
        transition: none !important;
-    }`
-    )
+    }`,
+    ),
   );
   document.head.appendChild(notransition);
 
