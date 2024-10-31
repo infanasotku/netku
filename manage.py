@@ -32,12 +32,11 @@ def restart():
 
 def restart_assitant():
     exec("docker compose stop assistant")
-    if "--with-deps" in sys.argv:
-        # Forces docker to build assitant again with deps.
-        exec("dcoker compoe rm -f")
-        exec("docker image rm netku-assistant")
-
+    exec("docker compose stop server")
+    exec("dcoker compoe rm -f")
+    exec("docker compose build assistant")
     exec("docker compose up -d assistant")
+    exec("docker compose up -d server")
 
 
 def restart_landing():
