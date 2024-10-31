@@ -58,10 +58,10 @@ def manage():
     sys.exit(1)
 
 
-modes: list[Mode] = {
+modes: list[Mode] = [
     Mode("-r", "Restarts service. Needed service_name after space.", restart),
     Mode("-h", "Shows available commands.", help),
-}
+]
 
 
 if __name__ == "__main__":
