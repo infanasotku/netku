@@ -3,7 +3,8 @@ from typing import Optional
 
 from app.database.models import User
 from app.database.orm import AbstractRepository
-from app.database.schemas import UserSchema
+
+from app.schemas.user_schemas import UserSchema
 
 
 class AbstractUserService(ABC):

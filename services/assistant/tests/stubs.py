@@ -1,7 +1,8 @@
 from typing import Any, Type
 from app.database.orm import AbstractRepository, ModelT
 from app.database.models import XrayRecord
-from app.database.schemas import UserSchema
+
+from app.schemas.user_schemas import UserSchema
 
 
 class StubRepository(AbstractRepository):

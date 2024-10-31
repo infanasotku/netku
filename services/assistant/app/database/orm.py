@@ -9,7 +9,8 @@ from sqlalchemy.orm import selectinload
 
 from app.database.database import Base
 from app.database.models import BookingAccount, User, XrayRecord
-from app.database.schemas import UserSchema
+
+from app.schemas.user_schemas import UserSchema
 
 
 ModelT = TypeVar("ModelT", bound=Base)

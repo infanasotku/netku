@@ -4,7 +4,9 @@ from typing import Optional
 
 from app.database.models import BookingAccount
 from app.database.orm import AbstractRepository
-from app.database.schemas import BookingAccountSchema, UserSchema
+
+from app.schemas.user_schemas import UserSchema
+from app.schemas.booking_schemas import BookingAccountSchema
 
 from app.infra.grpc import AbstractBookingClient
 
