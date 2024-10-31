@@ -1,4 +1,4 @@
-# Deploys only on closed pull request to master with label **landing**.
+# Deploys only on closed pull request to master with label **landing** and **enhancement**.
 name: landing-cd
 on:
   push:
@@ -28,4 +28,4 @@ jobs:
           ssh-keyscan -p ${{ secrets.SSH_PORT }} ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
 
       - name: Restart landing
-        run: ssh -p ${{ secrets.SSH_PORT }} root@${{ secrets.SERVER_IP }} 'cd /root/netku && git pull && cd .. && ./restart_landing.sh'
+        run: ssh -p ${{ secrets.SSH_PORT }} root@${{ secrets.SERVER_IP }} 'cd /root/netku && git pull && python manage.py -r landing'
