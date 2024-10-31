@@ -1,3 +1,3 @@
-from schemas.schema import BaseSchema
+from app.schemas.schema import BaseSchema
 
 __all__ = ["BaseSchema"]
