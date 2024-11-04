@@ -41,7 +41,11 @@ const prevLink: Ref<NavLink | undefined> = ref(undefined);
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/mixins";
+
 .layout {
   background-color: var(--bg-block);
   width: 100%;
@@ -57,6 +61,10 @@ const prevLink: Ref<NavLink | undefined> = ref(undefined);
   overflow-x: hidden;
   overflow-y: auto;
   z-index: 2;
+
+  transition:
+    opacity 0.5s,
+    transform 0.25s ease;
 }
 .headbar {
   position: fixed;
@@ -69,9 +77,8 @@ const prevLink: Ref<NavLink | undefined> = ref(undefined);
   z-index: 1;
 }
 .content {
-  display: flex;
-
   width: 100%;
+  height: fit-content;
 
   padding: calc(48px + var(--headbar-height)) 64px 128px
     calc(64px + var(--sidebar-width));
@@ -79,5 +86,15 @@ const prevLink: Ref<NavLink | undefined> = ref(undefined);
 }
 .page-link {
   width: 80%;
+}
+
+@include media-breakpoint-down(lg) {
+  .sidebar {
+    opacity: 0;
+    transform: translate(-100%);
+  }
+  .content {
+    padding: calc(48px + var(--headbar-height)) 64px 128px 64px;
+  }
 }
 </style>
