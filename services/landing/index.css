@@ -10,11 +10,6 @@ body,
   font-synthesis: style;
   text-rendering: optimizeLegibility;
 }
-
-body {
-  overflow-y: auto;
-}
-
 a {
   text-decoration: none;
   -webkit-font-smoothing: antialiased;
