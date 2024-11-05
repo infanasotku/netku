@@ -8,6 +8,11 @@ import { NavLink } from "@/types";
 
 const nextLink: Ref<NavLink | undefined> = ref(undefined);
 const prevLink: Ref<NavLink | undefined> = ref(undefined);
+
+const onPageChanged = () => {
+  const html = document.getElementsByTagName("html")[0];
+  html.scrollTo(0, 0);
+};
 </script>
 
 <template>
@@ -24,6 +29,7 @@ const prevLink: Ref<NavLink | undefined> = ref(undefined);
           <template #default>
             <component class="page" :is="Component" v-if="Component">
               <PageLink
+                @change="onPageChanged"
                 class="page-link"
                 :next-link="nextLink"
                 :prev-link="prevLink"
