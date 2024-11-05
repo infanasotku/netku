@@ -8,6 +8,7 @@ const props = defineProps({
     required: true,
   },
 });
+const emits = defineEmits(["change"]);
 </script>
 
 <template>
@@ -17,6 +18,7 @@ const props = defineProps({
       v-for="group in props.navGroups"
       :header="group.header"
       :list="group.list"
+      @change="emits('change')"
     ></NavGroup>
   </nav>
 </template>

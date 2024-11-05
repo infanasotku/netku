@@ -39,8 +39,6 @@ const groups = computed((): Array<NavData> => {
   nextLink.value =
     currentIndex + 1 < links.length ? links[currentIndex + 1] : undefined;
 
-  emits("change");
-
   return result;
 });
 
@@ -59,7 +57,11 @@ watch(route, () => {
 <template>
   <aside class="sidebar">
     <NetkuLogo class="logo"></NetkuLogo>
-    <NavBar class="navbar" :nav-groups="groups"></NavBar>
+    <NavBar
+      @change="emits('change')"
+      class="navbar"
+      :nav-groups="groups"
+    ></NavBar>
   </aside>
 </template>
 
