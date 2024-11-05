@@ -19,6 +19,7 @@ const onPageChanged = () => {
   <div class="layout">
     <HeadBar class="headbar"></HeadBar>
     <Sidebar
+      @change="onPageChanged"
       class="sidebar"
       v-model:next-link="nextLink"
       v-model:prev-link="prevLink"
@@ -107,7 +108,8 @@ const onPageChanged = () => {
     transform: translate(-100%);
   }
   .headbar {
-    padding-left: 30px;
+    padding-left: 20px;
+    padding-right: 20px;
   }
 }
 </style>

@@ -7,6 +7,8 @@ import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 import { NavData, NavLink } from "@/types";
 
+const emits = defineEmits(["change"]);
+
 const { tm, locale } = useI18n();
 const route = useRoute();
 
@@ -36,6 +38,8 @@ const groups = computed((): Array<NavData> => {
   prevLink.value = currentIndex - 1 >= 0 ? links[currentIndex - 1] : undefined;
   nextLink.value =
     currentIndex + 1 < links.length ? links[currentIndex + 1] : undefined;
+
+  emits("change");
 
   return result;
 });
