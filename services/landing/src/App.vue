@@ -81,9 +81,6 @@ const prevLink: Ref<NavLink | undefined> = ref(undefined);
   padding: calc(32px + var(--headbar-height)) 24px 96px;
   color: var(--text-color-1);
 }
-.page-link {
-  width: 80%;
-}
 
 @include media-breakpoint-up(md) {
   .content {
