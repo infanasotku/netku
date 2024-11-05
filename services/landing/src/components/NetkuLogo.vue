@@ -1,10 +1,17 @@
-<script></script>
+<script setup lang="ts">
+const props = defineProps({
+  withLabel: {
+    type: Boolean,
+    default: true,
+  },
+});
+</script>
 
 <template>
   <div class="logo">
     <a href="/">
       <img style="width: 25px" src="/img/netku.svg" />
-      <span>Netku</span>
+      <span v-if="props.withLabel">Netku</span>
     </a>
   </div>
 </template>
