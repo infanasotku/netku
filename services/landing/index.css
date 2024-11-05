@@ -3,6 +3,7 @@ body,
 #app {
   width: 100%;
   min-height: 100vh;
+  min-width: 320px;
   height: fit-content;
   overscroll-behavior: none;
   font-family: var(--font-family-base);
@@ -10,11 +11,6 @@ body,
   font-synthesis: style;
   text-rendering: optimizeLegibility;
 }
-
-body {
-  overflow-y: auto;
-}
-
 a {
   text-decoration: none;
   -webkit-font-smoothing: antialiased;
@@ -31,6 +27,9 @@ html.dark {
   --code-color: var(--highlight-color);
   --code-note-color: var(--yellow);
   --code-note-bg: var(--yellow-soft);
+  --backdrop-bg-color: rgba(0, 0, 0, 0.6);
+  --z-index-sidebar: 3;
+  --z-index-backdrop: 2;
 }
 
 :root {
@@ -102,24 +101,11 @@ html.dark {
   transition: 0.3s;
 }
 
-/* #region Transitions */
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.4s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-/* #endregion */
-
 main {
   display: flex;
-  align-items: center;
   flex-direction: column;
   flex-shrink: 0;
 
-  min-height: fit-content;
-  width: 100%;
+  max-width: 912px;
+  margin: 0 auto;
 }

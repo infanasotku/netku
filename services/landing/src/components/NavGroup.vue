@@ -14,6 +14,7 @@ const props = defineProps({
     required: true,
   },
 });
+const emits = defineEmits(["change"]);
 </script>
 
 <template>
@@ -23,7 +24,10 @@ const props = defineProps({
       <a
         :class="{ highlighted: link.active }"
         :href="link.href"
-        @click.prevent="router.push(link.href)"
+        @click.prevent="
+          router.push(link.href);
+          emits('change');
+        "
       >
         <span>{{ link.content }}</span>
       </a>
