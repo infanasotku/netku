@@ -20,7 +20,8 @@ const props = defineProps({
   flex-direction: column;
   align-items: flex-start;
 
-  width: 80%;
+  max-width: 912px;
+  margin: 0 auto;
 
   font-size: 16px;
   line-height: 28px;

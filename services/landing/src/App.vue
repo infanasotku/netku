@@ -78,21 +78,30 @@ const prevLink: Ref<NavLink | undefined> = ref(undefined);
   width: 100%;
   height: fit-content;
 
-  padding: calc(48px + var(--headbar-height)) 64px 128px
-    calc(64px + var(--sidebar-width));
+  padding: calc(32px + var(--headbar-height)) 24px 96px;
   color: var(--text-color-1);
 }
 .page-link {
   width: 80%;
 }
 
+@include media-breakpoint-up(md) {
+  .content {
+    padding: calc(48px + var(--headbar-height)) 64px 128px 64px;
+  }
+}
+
+@include media-breakpoint-up(lg) {
+  .content {
+    padding: calc(48px + var(--headbar-height)) 64px 128px
+      calc(64px + var(--sidebar-width));
+  }
+}
+
 @include media-breakpoint-down(lg) {
   .sidebar {
     opacity: 0;
     transform: translate(-100%);
-  }
-  .content {
-    padding: calc(48px + var(--headbar-height)) 64px 128px 64px;
   }
 }
 </style>
