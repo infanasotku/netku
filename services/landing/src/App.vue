@@ -31,10 +31,13 @@ const switchMenuVisibility = () => {
   backdropVisible.value = !backdropVisible.value;
   sidebarVisible.value = !sidebarVisible.value;
 
+  const html = document.getElementsByTagName("html")[0];
   if (!sidebarVisible.value) {
     sidebar.value.$el.classList.remove("expand");
+    html.classList.remove("disable-scroll");
   } else {
     sidebar.value.$el.classList.add("expand");
+    html.classList.add("disable-scroll");
   }
 };
 </script>
