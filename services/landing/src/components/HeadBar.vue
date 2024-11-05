@@ -3,11 +3,16 @@ import ThemeSwitch from "@/components/ThemeSwitch.vue";
 import LinkIcon from "@/components/LinkIcon.vue";
 import LanguageSelect from "@/components/LanguageSelect.vue";
 import NetkuLogo from "@/components/NetkuLogo.vue";
+
+const emits = defineEmits(["menu-click"]);
 </script>
 
 <template>
   <header class="headbar">
-    <NetkuLogo class="logo"></NetkuLogo>
+    <div class="menu">
+      <span @click.prevent="emits('menu-click')" class="menu-icon"></span>
+      <NetkuLogo :withLabel="false" class="logo"></NetkuLogo>
+    </div>
     <div class="tools">
       <div class="divider"></div>
       <LanguageSelect></LanguageSelect>
@@ -47,17 +52,37 @@ import NetkuLogo from "@/components/NetkuLogo.vue";
   border-bottom: 1px solid var(--divider-color);
 }
 
-/*#region logo */
-.logo {
+/*#region menu */
+.menu {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  gap: 10px;
   opacity: 0;
+}
+
+.menu-icon {
+  background-color: currentColor;
+  color: inherit;
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+  mask: url("/img/menu.svg") no-repeat;
+
+  color: var(--text-color-2);
+  transition: color 0.25s;
+}
+
+.menu-icon:hover {
+  color: var(--text-color-1);
+  cursor: pointer;
+}
+
+.logo {
   height: 63px;
 }
 
-@include media-breakpoint-down(lg) {
-  .logo {
-    opacity: 1;
-  }
-}
 /*#endregion */
 
 /*#region tools */
@@ -88,4 +113,10 @@ import NetkuLogo from "@/components/NetkuLogo.vue";
   margin-right: 8px;
 }
 /*#endregion */
+
+@include media-breakpoint-down(lg) {
+  .menu {
+    opacity: 1;
+  }
+}
 </style>
