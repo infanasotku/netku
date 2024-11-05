@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import NavBar from "@/components/NavBar.vue";
+import NetkuLogo from "@/components/NetkuLogo.vue";
 import { Navigation } from "@/lang/type";
 import { computed, PropType, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
@@ -53,12 +54,7 @@ watch(route, () => {
 
 <template>
   <aside class="sidebar">
-    <div class="header">
-      <a href="/">
-        <img style="width: 25px" src="/img/netku.svg" />
-        <span>Netku</span>
-      </a>
-    </div>
+    <NetkuLogo class="logo"></NetkuLogo>
     <NavBar class="navbar" :nav-groups="groups"></NavBar>
   </aside>
 </template>
@@ -74,35 +70,8 @@ watch(route, () => {
   flex-direction: column;
 }
 
-.navbar {
-  padding: 0;
-}
-
-/*#region Header */
-.header {
-  width: 100%;
-  height: 64px;
-  position: sticky;
-  top: 0;
-
-  display: flex;
-  align-items: center;
-  justify-content: start;
-  flex-grow: 0;
-  flex-shrink: 0;
-
-  z-index: 1;
-  background-color: inherit;
+.logo {
   border-bottom: 1px solid var(--divider-color);
+  width: 100%;
 }
-.header a {
-  display: flex;
-  gap: 10px;
-}
-.header span {
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--text-color-1);
-}
-/*#endregion */
 </style>
