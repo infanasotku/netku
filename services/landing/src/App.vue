@@ -106,5 +106,8 @@ const onPageChanged = () => {
     opacity: 0;
     transform: translate(-100%);
   }
+  .headbar {
+    padding-left: 30px;
+  }
 }
 </style>
