@@ -103,7 +103,6 @@ main {
   flex-direction: column;
   flex-shrink: 0;
 
-  width: fit-content;
   max-width: 912px;
   margin: 0 auto;
 }
