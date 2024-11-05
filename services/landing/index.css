@@ -27,6 +27,9 @@ html.dark {
   --code-color: var(--highlight-color);
   --code-note-color: var(--yellow);
   --code-note-bg: var(--yellow-soft);
+  --backdrop-bg-color: rgba(0, 0, 0, 0.6);
+  --z-index-sidebar: 3;
+  --z-index-backdrop: 2;
 }
 
 :root {

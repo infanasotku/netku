@@ -3,7 +3,7 @@ import Sidebar from "@/components/Sidebar.vue";
 import HeadBar from "@/components/HeadBar.vue";
 import LoadingPage from "./pages/LoadingPage.vue";
 import PageLink from "@/components/PageLink.vue";
-import { Ref, ref } from "vue";
+import { Ref, ref, useTemplateRef } from "vue";
 import { NavLink } from "@/types";
 
 const nextLink: Ref<NavLink | undefined> = ref(undefined);
@@ -12,15 +12,41 @@ const prevLink: Ref<NavLink | undefined> = ref(undefined);
 const onPageChanged = () => {
   const html = document.getElementsByTagName("html")[0];
   html.scrollTo(0, 0);
+  if (sidebarVisible.value) {
+    switchMenuVisibility();
+  }
+};
+
+const backdropVisible = ref(false);
+const backdropClicked = () => {
+  switchMenuVisibility();
+};
+
+const sidebar = useTemplateRef("sidebar");
+const sidebarVisible = ref(false);
+const switchMenuVisibility = () => {
+  if (sidebar.value === null) {
+    return;
+  }
+  backdropVisible.value = !backdropVisible.value;
+  sidebarVisible.value = !sidebarVisible.value;
+
+  if (!sidebarVisible.value) {
+    sidebar.value.$el.classList.remove("expand");
+  } else {
+    sidebar.value.$el.classList.add("expand");
+  }
 };
 </script>
 
 <template>
   <div class="layout">
-    <HeadBar class="headbar"></HeadBar>
+    <HeadBar @menu-click="switchMenuVisibility" class="headbar"></HeadBar>
+    <div @click="backdropClicked" v-if="backdropVisible" class="backdrop"></div>
     <Sidebar
       @change="onPageChanged"
       class="sidebar"
+      ref="sidebar"
       v-model:next-link="nextLink"
       v-model:prev-link="prevLink"
     ></Sidebar>
@@ -57,6 +83,7 @@ const onPageChanged = () => {
   min-height: 100vh;
   display: flex;
 }
+
 .sidebar {
   left: 0;
   position: fixed;
@@ -65,12 +92,13 @@ const onPageChanged = () => {
 
   overflow-x: hidden;
   overflow-y: auto;
-  z-index: 2;
+  z-index: var(--z-index-sidebar);
 
   transition:
-    opacity 0.5s,
+    opacity 0.25s,
     transform 0.25s ease;
 }
+
 .headbar {
   position: fixed;
   right: 0;
@@ -81,12 +109,25 @@ const onPageChanged = () => {
   padding-right: 30px;
   z-index: 1;
 }
+
 .content {
   width: 100%;
   height: fit-content;
 
   padding: calc(32px + var(--headbar-height)) 24px 96px;
   color: var(--text-color-1);
+}
+
+.backdrop {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  background-color: var(--backdrop-bg-color);
+  z-index: var(--z-index-backdrop);
+  transition: opacity 0.5s;
 }
 
 @include media-breakpoint-up(md) {
@@ -110,6 +151,10 @@ const onPageChanged = () => {
   .headbar {
     padding-left: 20px;
     padding-right: 20px;
+  }
+  .expand {
+    opacity: 1;
+    transform: translate(0);
   }
 }
 </style>
