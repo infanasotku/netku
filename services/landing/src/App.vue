@@ -20,22 +20,20 @@ const prevLink: Ref<NavLink | undefined> = ref(undefined);
     ></Sidebar>
     <div class="content">
       <RouterView v-slot="{ Component }">
-        <Transition name="fade">
-          <Suspense timeout="0">
-            <template #default>
-              <component class="page" :is="Component" v-if="Component">
-                <PageLink
-                  class="page-link"
-                  :next-link="nextLink"
-                  :prev-link="prevLink"
-                ></PageLink>
-              </component>
-            </template>
-            <template #fallback>
-              <LoadingPage></LoadingPage>
-            </template>
-          </Suspense>
-        </Transition>
+        <Suspense timeout="0">
+          <template #default>
+            <component class="page" :is="Component" v-if="Component">
+              <PageLink
+                class="page-link"
+                :next-link="nextLink"
+                :prev-link="prevLink"
+              ></PageLink>
+            </component>
+          </template>
+          <template #fallback>
+            <LoadingPage></LoadingPage>
+          </template>
+        </Suspense>
       </RouterView>
     </div>
   </div>
