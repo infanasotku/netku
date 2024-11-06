@@ -42,7 +42,6 @@ def restart_assitant():
 def restart_landing():
     exec("docker compose rm -f")
     exec("docker image rm netku-landing")
-    exec("docker compose build --no-cache landing")
     exec("docker compose up landing")
 
 
