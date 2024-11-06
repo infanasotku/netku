@@ -20,6 +20,10 @@ html.dark {
   color-scheme: dark;
 }
 
+.disable-scroll {
+  overflow: hidden !important;
+}
+
 :root {
   --input-switch-bg-color: var(--gray-soft);
   --input-border-hover-color: var(--highlight-color);
