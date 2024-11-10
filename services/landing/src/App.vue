@@ -160,8 +160,8 @@ const switchMenuVisibility = () => {
       transform: translate(-100%);
     }
     .headbar {
-      padding-left: 20px;
-      padding-right: 20px;
+      padding-left: 32px;
+      padding-right: 32px;
     }
     .expand {
       opacity: 1;
