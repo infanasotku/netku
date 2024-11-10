@@ -106,15 +106,6 @@ html.dark {
   transition: 0.3s;
 }
 
-main {
-  display: flex;
-  flex-direction: column;
-  flex-shrink: 0;
-
-  max-width: 912px;
-  margin: 0 auto;
-}
-
 .drop-down {
   display: flex;
   align-items: start;
