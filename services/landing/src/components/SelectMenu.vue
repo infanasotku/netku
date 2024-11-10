@@ -47,6 +47,7 @@ const list = computed(() => {
     padding: 0 24px 0 12px;
     line-height: 32px;
     white-space: nowrap;
+    user-select: none;
 
     &:not(.current) {
       font-weight: 500;
