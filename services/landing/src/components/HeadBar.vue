@@ -48,7 +48,10 @@ const popUpVisible = ref(false);
       <Transition name="tools">
         <div v-if="popUpVisible" class="pop-up-tools pop-up">
           <div class="group">
-            <LanguageSelect :list-only="true"></LanguageSelect>
+            <LanguageSelect
+              @change="popUpVisible = false"
+              :list-only="true"
+            ></LanguageSelect>
           </div>
           <div class="group">
             <div class="appearance">

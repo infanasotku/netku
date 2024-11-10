@@ -9,6 +9,7 @@ const props = defineProps({
     type: Boolean,
   },
 });
+const emits = defineEmits(["change"]);
 
 const menuVisible = ref(props.listOnly);
 
@@ -29,6 +30,7 @@ const current = computed({
     locale.value = newLang;
     localStorage.Lang = newLang;
     menuVisible.value = false;
+    emits("change");
   },
 });
 </script>
