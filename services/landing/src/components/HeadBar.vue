@@ -1,13 +1,16 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import { useI18n } from "vue-i18n";
 import ThemeSwitch from "@/components/ThemeSwitch.vue";
 import LinkIcon from "@/components/LinkIcon.vue";
 import LanguageSelect from "@/components/LanguageSelect.vue";
 import NetkuLogo from "@/components/NetkuLogo.vue";
 
+const { t } = useI18n();
+
 const emits = defineEmits(["menu-click"]);
 
-const popUpTools = ref(false);
+const popUpVisible = ref(false);
 </script>
 
 <template>
@@ -16,9 +19,7 @@ const popUpTools = ref(false);
       <span @click.prevent="emits('menu-click')" class="menu-icon"></span>
       <NetkuLogo :withLabel="false" class="logo"></NetkuLogo>
     </div>
-    <div class="tool-switch">
-      <span class="icon"></span>
-    </div>
+
     <div class="tools">
       <div class="divider"></div>
       <LanguageSelect></LanguageSelect>
@@ -36,9 +37,44 @@ const popUpTools = ref(false);
         ></LinkIcon>
       </div>
     </div>
-    <Transition name="tools">
-      <div v-if="popUpTools" class="pop-up-tools pop-up"></div>
-    </Transition>
+    <div
+      class="pop-up-wrapper"
+      @mouseenter="popUpVisible = true"
+      @mouseleave="popUpVisible = false"
+    >
+      <div class="tool-switch">
+        <span class="icon"></span>
+      </div>
+      <Transition name="tools">
+        <div v-if="popUpVisible" class="pop-up-tools pop-up">
+          <div class="group">
+            <LanguageSelect :list-only="true"></LanguageSelect>
+          </div>
+          <div class="group">
+            <div class="appearance">
+              <span>{{ t("common.appearance") }}</span>
+              <ThemeSwitch></ThemeSwitch>
+            </div>
+          </div>
+          <div class="group">
+            <div class="social-wrapper">
+              <div class="social-icons">
+                <LinkIcon
+                  class="link"
+                  imgSource="/img/github.svg"
+                  link="https://github.com/infanasotku"
+                ></LinkIcon>
+                <LinkIcon
+                  class="link"
+                  imgSource="/img/telegram.svg"
+                  link="https://t.me/infanasotku"
+                ></LinkIcon>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Transition>
+    </div>
   </header>
 </template>
 
@@ -50,7 +86,7 @@ const popUpTools = ref(false);
 .headbar {
   background-color: var(--bg-block);
 
-  height: 65px;
+  height: 64px;
 
   display: flex;
   flex-grow: 1;
@@ -90,29 +126,6 @@ const popUpTools = ref(false);
     }
   }
 
-  .tool-switch {
-    align-items: center;
-    position: relative;
-    padding: 0 12px;
-    margin-right: -12px;
-    height: 100%;
-
-    &:hover {
-      cursor: pointer;
-    }
-
-    .icon {
-      color: var(--text-color-1);
-      background-color: currentColor;
-      mask: url("/img/ellipsis.svg") no-repeat;
-
-      height: 20px;
-      width: 20px;
-    }
-
-    display: none;
-  }
-
   .tools {
     display: flex;
     flex-direction: row;
@@ -138,6 +151,82 @@ const popUpTools = ref(false);
     }
   }
 
+  .pop-up-wrapper {
+    display: flex;
+    position: relative;
+    height: 100%;
+
+    .tool-switch {
+      align-items: center;
+      padding: 0 12px;
+      margin-right: -12px;
+      height: 100%;
+
+      &:hover {
+        cursor: pointer;
+      }
+
+      .icon {
+        color: var(--text-color-1);
+        background-color: currentColor;
+        mask: url("/img/ellipsis.svg") no-repeat;
+
+        height: 20px;
+        width: 20px;
+      }
+
+      display: none;
+    }
+    .pop-up-tools {
+      flex-direction: column;
+
+      position: absolute;
+      right: -12px;
+      top: calc(100% / 2 + 20px);
+
+      min-width: 200px;
+      max-height: calc(100vh - var(--headbar-height));
+      padding: 0px;
+
+      overflow-y: auto;
+
+      .group:not(:first-child) {
+        border-top: 1px solid var(--divider-color);
+      }
+
+      .group {
+        width: 100%;
+        padding: 12px;
+      }
+
+      .appearance {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+
+        padding: 0 12px;
+
+        span {
+          color: var(--text-color-2);
+          line-height: 28px;
+          font-size: 12px;
+          font-weight: 500;
+        }
+      }
+
+      .social-wrapper {
+        padding: 0 12px;
+        .social-icons {
+          display: flex;
+          flex-direction: row;
+
+          margin: -4px -8px;
+        }
+      }
+    }
+  }
+
   .tools-enter-active,
   .tools-leave-active {
     transition: opacity 0.25s ease;
@@ -152,15 +241,17 @@ const popUpTools = ref(false);
     .menu {
       opacity: 1;
     }
-    .tool-switch {
-      display: flex;
-    }
     .tools {
       display: none;
     }
+    .pop-up-wrapper {
+      .tool-switch {
+        display: flex;
+      }
+    }
   }
   @include media-breakpoint-up(lg) {
-    .pop-up-tools {
+    .pop-up-wrapper {
       display: none;
     }
   }

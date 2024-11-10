@@ -4,8 +4,13 @@ import { ref, computed } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { locale } = useI18n();
+const props = defineProps({
+  listOnly: {
+    type: Boolean,
+  },
+});
 
-const menuVisible = ref(false);
+const menuVisible = ref(props.listOnly);
 
 const languageCode = {
   English: "en",
@@ -34,17 +39,22 @@ const current = computed({
     @mouseenter="menuVisible = true"
     @mouseleave="menuVisible = false"
   >
-    <button class="select">
+    <button v-if="!props.listOnly" class="select">
       <span class="icon">
         <span class="language select-icon"></span>
         <span class="arrow select-icon"></span>
       </span>
     </button>
     <Transition name="menu">
-      <div class="menu pop-up" v-if="menuVisible">
+      <div class="menu pop-up" v-if="menuVisible && !props.listOnly">
         <SelectMenu :list="menu" v-model:current="current"></SelectMenu>
       </div>
     </Transition>
+    <SelectMenu
+      v-if="props.listOnly"
+      :list="menu"
+      v-model:current="current"
+    ></SelectMenu>
   </div>
 </template>
 
