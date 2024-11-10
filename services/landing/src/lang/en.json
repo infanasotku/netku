@@ -43,7 +43,8 @@
     "todo": {
       "title": "TODO",
       "description": "To be continued..."
-    }
+    },
+    "appearance": "Appearance"
   },
   "content": {
     "default": {
