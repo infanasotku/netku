@@ -90,6 +90,8 @@ const emits = defineEmits(["menu-click"]);
   display: flex;
   flex-direction: row;
   align-items: center;
+
+  height: 100%;
 }
 
 .dark .headbar {
