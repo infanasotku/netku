@@ -106,7 +106,7 @@ html.dark {
   transition: 0.3s;
 }
 
-.drop-down {
+.pop-up {
   display: flex;
   align-items: start;
   justify-content: center;
