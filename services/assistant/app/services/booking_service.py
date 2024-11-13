@@ -1,11 +1,9 @@
 from abc import ABC, abstractmethod
-from typing import Optional
 
 
-from app.database.models import BookingAccount
+from app.database.models import BookingAccount, User
 from app.database.orm import AbstractRepository
 
-from app.schemas.user_schemas import UserSchema
 from app.schemas.booking_schemas import BookingAccountSchema
 
 from app.infra.grpc import AbstractBookingClient
@@ -14,14 +12,12 @@ from app.infra.grpc import AbstractBookingClient
 class AbstractBookingService(ABC):
     @abstractmethod
     async def create_booking_account(
-        self, user: UserSchema, email: str, password: str
-    ) -> bool:
-        pass
+        self, user_id: int, email: str, password: str
+    ) -> BookingAccountSchema | None:
+        """:return: booking account if it created, `None` otherwise."""
 
     @abstractmethod
-    async def get_booking_account_by_id(
-        self, id: int
-    ) -> Optional[BookingAccountSchema]:
+    async def get_booking_account_by_id(self, id: int) -> BookingAccountSchema | None:
         """:return: Booking account by `id`."""
 
     @abstractmethod
@@ -39,19 +35,26 @@ class AbstractBookingService(ABC):
 
 class BookingService(AbstractBookingService):
     def __init__(
-        self, repository: AbstractRepository, booking_client: AbstractBookingClient
+        self,
+        repository: AbstractRepository,
+        booking_client: AbstractBookingClient,
     ):
         self.repository = repository
         self.booking_client = booking_client
 
     async def create_booking_account(
-        self, user: UserSchema, email: str, password: str
-    ) -> bool:
-        return await self.repository.create_booking_account(user, email, password)
+        self, user_id: int, email: str, password: str
+    ) -> BookingAccountSchema | None:
+        raw_user = await self.repository.find_first(User, User.id, user_id)
 
-    async def get_booking_account_by_id(
-        self, id: int
-    ) -> Optional[BookingAccountSchema]:
+        if raw_user is None:
+            return None
+
+        booking_account = BookingAccount(email=email, password=password, owner=raw_user)
+
+        return await self.repository.create(booking_account)
+
+    async def get_booking_account_by_id(self, id: int) -> BookingAccountSchema | None:
         account = await self.repository.find_first(
             BookingAccount, BookingAccount.id, id
         )

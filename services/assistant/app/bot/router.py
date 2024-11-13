@@ -293,7 +293,7 @@ class MainRouter:
             return await callback.answer("Account with that email already exist")
 
         async with self.create_booking_service() as booking_service:
-            await booking_service.create_booking_account(user, email, password)
+            await booking_service.create_booking_account(user.id, email, password)
 
         await state.clear()
         await state.set_state(BaseState.none)

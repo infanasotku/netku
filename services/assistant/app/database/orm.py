@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from datetime import datetime
 from typing import Any, Type, TypeVar
 
 from sqlalchemy import inspect
@@ -8,9 +7,7 @@ from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
 
 from app.database.database import Base
-from app.database.models import BookingAccount, User, XrayRecord
-
-from app.schemas.user_schemas import UserSchema
+from app.database.models import XrayRecord
 
 
 ModelT = TypeVar("ModelT", bound=Base)
@@ -46,23 +43,15 @@ class AbstractRepository(ABC):
         :return: Rows as `list[model]`."""
 
     @abstractmethod
-    async def update_user(self, user: UserSchema) -> bool:
-        """Updates `user`.
+    async def create(self, entity: ModelT) -> ModelT:
+        """Creates `entity` in DB.
 
-        :return: `True` if user updated, `False` otherwise."""
-
-    @abstractmethod
-    async def create_booking_account(
-        self, user: UserSchema, email: str, password: str
-    ) -> bool:
-        """Creates new booking acccount for `user`
-
-        :return: `True` if account created successful, `False` otherwise.
+        :return: Created row.
         """
 
     @abstractmethod
-    async def update_xray_record(self, uid: str) -> None:
-        """Saves xray uid in DB."""
+    async def update(self, entity: ModelT) -> None:
+        """Update `entity` in DB."""
 
     @abstractmethod
     async def get_xray_record(self) -> XrayRecord | None:
@@ -85,39 +74,16 @@ class Repository(AbstractRepository):
         raw_models = (await self.session.execute(s)).scalars().all()
         return list(raw_models)
 
-    async def update_user(self, user: UserSchema) -> bool:
-        raw_user = await self.find_first(User, User.id, user.id)
-        if raw_user is None:
-            return False
+    async def create(self, entity: ModelT) -> ModelT:
+        self.session.add(entity)
+        await self.session.flush()
+        await self.session.refresh(entity)
 
-        raw_user.phone_number = user.phone_number
-        raw_user.telegram_id = user.telegram_id
-        raw_user.proxy_subscription = user.proxy_subscription
+        return entity
 
-        return True
-
-    async def create_booking_account(
-        self, user: UserSchema, email: str, password: str
-    ) -> bool:
-        raw_user = await self.find_first(User, User.id, user.id)
-        if raw_user is None:
-            return False
-
-        booking_account = BookingAccount(email=email, password=password, owner=raw_user)
-
-        self.session.add(booking_account)
-
-        return True
-
-    async def update_xray_record(self, uid: str) -> None:
-        xray_record = XrayRecord(uid=uid, last_update=datetime.now())
-        xray_records = await self.get_all(XrayRecord)
-
-        if len(xray_records) == 0:
-            self.session.add(xray_record)
-        else:
-            xray_records[0].uid = xray_record.uid
-            xray_records[0].last_update = xray_record.last_update
+    async def update(self, entity: ModelT) -> ModelT:
+        await self.session.flush()
+        await self.session.refresh(entity)
 
     async def get_xray_record(self) -> XrayRecord | None:
         xray_records = await self.get_all(XrayRecord)
