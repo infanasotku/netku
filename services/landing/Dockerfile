@@ -1,6 +1,11 @@
 FROM node:lts-alpine
 
-ADD . /app
 WORKDIR /app
+
+COPY package-lock.json .
+COPY package.json .
 RUN npm install
-RUN npx vite build .
+
+ADD . .
+
+CMD ["npx", "vite", "build", "."]

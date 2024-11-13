@@ -8,6 +8,7 @@ const router = useRouter();
 
 const { t } = useI18n();
 
+const emits = defineEmits(["change"]);
 const props = defineProps({
   nextLink: {
     type: Object as PropType<NavLink>,
@@ -25,7 +26,10 @@ const props = defineProps({
         v-if="props.prevLink !== undefined"
         class="link prev"
         :href="props.prevLink.href"
-        @click.prevent="router.push(props.prevLink.href)"
+        @click.prevent="
+          router.push(props.prevLink.href);
+          emits('change');
+        "
       >
         <span class="desc">{{ t("common.desc.prev") }}</span>
         <span class="title">{{ props.prevLink.content }}</span>
@@ -36,7 +40,10 @@ const props = defineProps({
         v-if="props.nextLink !== undefined"
         class="link next"
         :href="props.nextLink.href"
-        @click.prevent="router.push(props.nextLink.href)"
+        @click.prevent="
+          router.push(props.nextLink.href);
+          emits('change');
+        "
       >
         <span class="desc">{{ t("common.desc.next") }}</span>
         <span class="title">{{ props.nextLink.content }}</span>

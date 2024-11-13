@@ -3,6 +3,7 @@ body,
 #app {
   width: 100%;
   min-height: 100vh;
+  min-width: 320px;
   height: fit-content;
   overscroll-behavior: none;
   font-family: var(--font-family-base);
@@ -10,11 +11,6 @@ body,
   font-synthesis: style;
   text-rendering: optimizeLegibility;
 }
-
-body {
-  overflow-y: auto;
-}
-
 a {
   text-decoration: none;
   -webkit-font-smoothing: antialiased;
@@ -24,13 +20,21 @@ html.dark {
   color-scheme: dark;
 }
 
+.disable-scroll {
+  overflow: hidden !important;
+}
+
 :root {
+  --shadow: 0 12px 32px rgba(0, 0, 0, 0.1), 0 2px 6px rgba(0, 0, 0, 0.08);
   --input-switch-bg-color: var(--gray-soft);
   --input-border-hover-color: var(--highlight-color);
   --code-bg: var(--gray-soft);
   --code-color: var(--highlight-color);
   --code-note-color: var(--yellow);
   --code-note-bg: var(--yellow-soft);
+  --backdrop-bg-color: rgba(0, 0, 0, 0.6);
+  --z-index-sidebar: 3;
+  --z-index-backdrop: 2;
 }
 
 :root {
@@ -102,24 +106,18 @@ html.dark {
   transition: 0.3s;
 }
 
-/* #region Transitions */
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.4s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-/* #endregion */
-
-main {
+.pop-up {
   display: flex;
-  align-items: center;
-  flex-direction: column;
-  flex-shrink: 0;
+  align-items: start;
+  justify-content: center;
 
-  min-height: fit-content;
-  width: 100%;
+  padding: 12px;
+  min-width: 128px;
+  max-height: 200px;
+
+  border: 1px solid var(--divider-color);
+  border-radius: 12px;
+  background-color: var(--menu-bg);
+  box-shadow: var(--shadow);
+  transition: background-color 0.5s;
 }
