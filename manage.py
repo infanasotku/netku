@@ -1,5 +1,5 @@
-import os
 import sys
+from os import system as exec
 from typing import Callable, NamedTuple
 
 
@@ -7,10 +7,6 @@ class Mode(NamedTuple):
     arg: str
     description: str
     handle: Callable[[], None]
-
-
-def exec(command: str):
-    os.system(command)
 
 
 def restart():
@@ -61,10 +57,10 @@ def manage():
     sys.exit(1)
 
 
-modes: list[Mode] = {
+modes: list[Mode] = [
     Mode("-r", "Restarts service. Needed service_name after space.", restart),
     Mode("-h", "Shows available commands.", help),
-}
+]
 
 
 if __name__ == "__main__":

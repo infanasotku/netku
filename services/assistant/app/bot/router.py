@@ -271,7 +271,8 @@ class MainRouter:
             account = await booking_service.get_booking_account_by_id(
                 callback_data.account_id
             )
-            await booking_service.run_booking(account.email, account.password)
+            if not await booking_service.run_booking(account.email, account.password):
+                await callback.answer("Booking starting failed")
             await utils.try_delete_message(callback.message)
             await self._get_booking_accounts(callback)
 
@@ -293,7 +294,7 @@ class MainRouter:
             return await callback.answer("Account with that email already exist")
 
         async with self.create_booking_service() as booking_service:
-            await booking_service.create_booking_account(user, email, password)
+            await booking_service.create_booking_account(user.id, email, password)
 
         await state.clear()
         await state.set_state(BaseState.none)

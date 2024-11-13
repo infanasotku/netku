@@ -2,6 +2,7 @@ from datetime import datetime
 import pytest
 
 from app.database.models import XrayRecord
+from app.database.orm import ModelT
 from app.services import XrayService
 from app.infra.grpc import AbstractXrayClient
 
@@ -23,8 +24,8 @@ class _StubRepository(StubRepository):
     async def get_xray_record(self) -> XrayRecord | None:
         return XrayRecord(uid=self.uid, last_update=datetime.now())
 
-    async def update_xray_record(self, uid: str) -> None:
-        self.uid = uid
+    async def update(self, entity: ModelT) -> None:
+        self.uid = entity.uid
 
 
 @pytest.mark.parametrize("uid", ["test-uid1", "test-uid2"])

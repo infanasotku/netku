@@ -8,8 +8,8 @@ from app.infra.grpc.grpc_client import GRPCClient
 
 class AbstractBookingClient(ABC):
     @abstractmethod
-    async def run_booking(self, email: str, password: str):
-        pass
+    async def run_booking(self, email: str, password: str) -> bool:
+        """:return: `True` if booking ran, `False` otherwise."""
 
     @abstractmethod
     async def stop_booking(self, email: str, password: str):
@@ -21,13 +21,14 @@ class AbstractBookingClient(ABC):
 
 
 class BookingClient(GRPCClient, AbstractBookingClient):
-    async def run_booking(self, email: str, password: str):
+    async def run_booking(self, email: str, password: str) -> bool:
         ch = await self.get_channel()
         if ch is None:
-            return
+            return False
 
         stub = BookingStub(ch)
         await stub.RunBooking(BookingRequest(email=email, password=password))
+        return True
 
     async def stop_booking(self, email: str, password: str):
         ch = await self.get_channel()

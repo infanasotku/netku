@@ -1,27 +1,21 @@
-from typing import Any, Type
+from typing import Any
 from app.database.orm import AbstractRepository, ModelT
 from app.database.models import XrayRecord
-from app.database.schemas import UserSchema
 
 
 class StubRepository(AbstractRepository):
     async def find_first(
-        self, model: Type[ModelT], column: Any, value: Any
+        self, model: type[ModelT], column: Any, value: Any
     ) -> ModelT | None:
         raise NotImplementedError
 
-    async def get_all(self, model: Type[ModelT]) -> list[ModelT]:
+    async def get_all(self, model: type[ModelT]) -> list[ModelT]:
         raise NotImplementedError
 
-    async def update_user(self, user: UserSchema) -> bool:
+    async def create(self, entity: ModelT) -> ModelT:
         raise NotImplementedError
 
-    async def create_booking_account(
-        self, user: UserSchema, email: str, password: str
-    ) -> bool:
-        raise NotImplementedError
-
-    async def update_xray_record(self, uid: str) -> None:
+    async def update(self, entity: ModelT) -> None:
         raise NotImplementedError
 
     async def get_xray_record(self) -> XrayRecord | None:

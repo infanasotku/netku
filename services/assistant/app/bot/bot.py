@@ -109,6 +109,7 @@ class BotFactory(AbstractAppFactory):
             yield
             for task in task_list:
                 task.cancel()
+                await task
 
         return _lifespan
 
