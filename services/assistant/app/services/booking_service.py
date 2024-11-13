@@ -53,8 +53,9 @@ class BookingService(AbstractBookingService):
             return None
 
         booking_account = BookingAccount(email=email, password=password, owner=raw_user)
+        booking_account = await self.repository.create(booking_account)
 
-        return await self.repository.create(booking_account)
+        return BookingAccountSchema.model_validate(booking_account)
 
     async def get_booking_account_by_id(self, id: int) -> BookingAccountSchema | None:
         account = await self.repository.find_first(
