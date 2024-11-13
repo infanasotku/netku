@@ -25,8 +25,10 @@ class AbstractBookingService(ABC):
         """:return: `True` if mashine booked, `False` otherwise."""
 
     @abstractmethod
-    async def run_booking(self, email: str, password: str) -> None:
-        """Runs booking for given `email` and `password`."""
+    async def run_booking(self, email: str, password: str) -> bool:
+        """Runs booking for given `email` and `password`.
+
+        :return: `True` if booking ran, `False` otherwise."""
 
     @abstractmethod
     async def stop_booking(self, email: str, password: str) -> None:
@@ -67,8 +69,8 @@ class BookingService(AbstractBookingService):
     async def booked(self, email: str, password: str) -> bool:
         return await self.booking_client.booked(email, password)
 
-    async def run_booking(self, email: str, password: str) -> None:
-        await self.booking_client.run_booking(email, password)
+    async def run_booking(self, email: str, password: str) -> bool:
+        return await self.booking_client.run_booking(email, password)
 
     async def stop_booking(self, email: str, password: str) -> None:
         await self.booking_client.stop_booking(email, password)
