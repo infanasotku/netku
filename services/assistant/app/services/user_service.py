@@ -61,4 +61,4 @@ class UserService(AbstractUserService):
         raw_user.telegram_id = user.telegram_id
         raw_user.proxy_subscription = user.proxy_subscription
 
-        await self.repository.save_changes()
+        await self.repository.update(raw_user)
