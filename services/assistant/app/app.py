@@ -56,10 +56,10 @@ class AppFactory(AbstractAppFactory):
             for task in self._tasks:
                 task.start()
             yield
-            for generator in generators:
-                await anext(generator)
-
             for task in self._tasks:
                 await task.stop()
+
+            for generator in generators:
+                await anext(generator)
 
         return lifespan
