@@ -7,9 +7,6 @@ from app.tasks import Task
 
 
 class AbstractAppFactory(ABC):
-    def __init__(self):
-        self._tasks: list[Task] = []
-
     route_path: str
 
     @abstractmethod
@@ -22,19 +19,12 @@ class AbstractAppFactory(ABC):
     def register_task(self, task: Task) -> None:
         self._tasks.append(task)
 
-    def start_tasks(self) -> None:
-        for task in self._tasks:
-            task.start()
-
-    async def stop_tasks(self) -> None:
-        for task in self._tasks:
-            await task.stop()
-
 
 class AppFactory(AbstractAppFactory):
     def __init__(self):
         """Inits main app."""
         self._sub_factories: list[AbstractAppFactory] = []
+        self._tasks: list[Task] = []
 
     def register_sub_factory(self, sub_factory: AbstractAppFactory):
         self._sub_factories.append(sub_factory)
@@ -63,10 +53,13 @@ class AppFactory(AbstractAppFactory):
             for generator in generators:
                 await anext(generator)
 
-            self.start_tasks()
+            for task in self._tasks:
+                task.start()
             yield
             for generator in generators:
                 await anext(generator)
-            await self.stop_tasks()
+
+            for task in self._tasks:
+                await task.stop()
 
         return lifespan
