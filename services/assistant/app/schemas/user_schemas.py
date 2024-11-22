@@ -1,4 +1,4 @@
-from app.schemas.base_schema import BaseSchema
+from app.schemas.base_schema import BaseSchema, BaseSchemaPK
 from app.schemas.booking_schemas import BookingAccountSchema
 
 
@@ -8,7 +8,7 @@ class UserUpdateSchema(BaseSchema):
     proxy_subscription: bool | None = None
 
 
-class UserCreateSchema(BaseSchema):
+class UserCreateSchema(BaseSchemaPK):
     phone_number: str | None
     telegram_id: int | None
 

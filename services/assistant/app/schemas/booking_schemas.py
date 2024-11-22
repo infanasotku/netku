@@ -1,7 +1,7 @@
-from app.schemas.base_schema import BaseSchema
+from app.schemas.base_schema import BaseSchemaPK
 
 
-class BookingAccountCreateSchema(BaseSchema):
+class BookingAccountCreateSchema(BaseSchemaPK):
     email: str
     password: str
 

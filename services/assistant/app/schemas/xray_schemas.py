@@ -1,9 +1,9 @@
 from datetime import datetime
 from uuid import UUID
-from app.schemas.base_schema import BaseSchema
+from app.schemas.base_schema import BaseSchema, BaseSchemaPK
 
 
-class XrayRecordCreateSchema(BaseSchema):
+class XrayRecordCreateSchema(BaseSchemaPK):
     uid: UUID
     last_update: datetime
 
