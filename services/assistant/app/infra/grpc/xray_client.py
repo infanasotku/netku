@@ -1,19 +1,9 @@
-from abc import ABC, abstractmethod
+from app.clients.xray_client import XrayClient as AbstractXrayClient
 
 from app.infra.grpc.gen.xray_pb2_grpc import XrayStub
 from app.infra.grpc.gen.xray_pb2 import RestartResponse, Null
 
 from app.infra.grpc.grpc_client import GRPCClient
-
-
-class AbstractXrayClient(ABC):
-    @abstractmethod
-    async def restart(self) -> str | None:
-        """Sends grpc request to xray service for restart,
-        obtains new uid.
-
-        :return: New uid, if xray restarted, `None` otherwise.
-        """
 
 
 class XrayClient(GRPCClient, AbstractXrayClient):

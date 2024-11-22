@@ -4,7 +4,7 @@ from datetime import datetime
 from app.database.orm import AbstractRepository
 from app.database.models import XrayRecord
 
-from app.infra.grpc import AbstractXrayClient
+from app.clients.xray_client import XrayClient
 
 
 class AbstractXrayService(ABC):
@@ -18,7 +18,7 @@ class AbstractXrayService(ABC):
 
 
 class XrayService(AbstractXrayService):
-    def __init__(self, repository: AbstractRepository, xray_client: AbstractXrayClient):
+    def __init__(self, repository: AbstractRepository, xray_client: XrayClient):
         self.repository = repository
         self.xray_client = xray_client
 

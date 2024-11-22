@@ -4,12 +4,12 @@ import pytest
 from app.database.models import XrayRecord
 from app.database.orm import ModelT
 from app.services import XrayService
-from app.infra.grpc import AbstractXrayClient
+from app.clients.xray_client import XrayClient
 
 from tests.stubs import StubRepository
 
 
-class _StubXrayClient(AbstractXrayClient):
+class _StubXrayClient(XrayClient):
     def __init__(self, uid: str) -> None:
         self.uid = uid
 

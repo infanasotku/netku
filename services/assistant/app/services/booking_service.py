@@ -6,7 +6,7 @@ from app.database.orm import AbstractRepository
 
 from app.schemas.booking_schemas import BookingAccountSchema
 
-from app.infra.grpc import AbstractBookingClient
+from app.clients.booking_client import BookingClient
 
 
 class AbstractBookingService(ABC):
@@ -39,7 +39,7 @@ class BookingService(AbstractBookingService):
     def __init__(
         self,
         repository: AbstractRepository,
-        booking_client: AbstractBookingClient,
+        booking_client: BookingClient,
     ):
         self.repository = repository
         self.booking_client = booking_client
