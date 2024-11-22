@@ -7,7 +7,7 @@ from app.schemas.xray_schemas import (
 )
 
 
-class BookingRepository(ABC):
+class XrayRepository(ABC):
     @abstractmethod
     async def get_xray_record_by_id(self, id: int) -> XrayRecordSchema | None:
         """Gets xray record by `id`.
