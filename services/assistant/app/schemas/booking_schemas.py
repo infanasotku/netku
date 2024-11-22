@@ -1,6 +1,10 @@
-from app.schemas.schema import BaseSchema
+from app.schemas.base_schema import BaseSchema
 
 
-class BookingAccountSchema(BaseSchema):
+class BookingAccountCreateSchema(BaseSchema):
     email: str
     password: str
+
+
+class BookingAccountSchema(BookingAccountCreateSchema):
+    pass
