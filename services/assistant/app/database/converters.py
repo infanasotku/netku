@@ -1,7 +1,8 @@
 from app.schemas.user_schemas import UserCreateSchema, UserSchema
 from app.schemas.booking_schemas import BookingAccountCreateSchema, BookingAccountSchema
+from app.schemas.xray_schemas import XrayRecordCreateSchema, XrayRecordSchema
 
-from app.database.models import BookingAccount, User
+from app.database.models import BookingAccount, User, XrayRecord
 
 
 def user_create_schema_to_user(user_create: UserCreateSchema) -> User:
@@ -29,3 +30,18 @@ def booking_account_to_booking_account_schema(
     account: BookingAccount,
 ) -> BookingAccountSchema:
     return BookingAccountSchema.model_validate(account)
+
+
+def xray_record_to_xray_record_schema(
+    xray_record: XrayRecord,
+) -> XrayRecordSchema:
+    return XrayRecordSchema.model_validate(xray_record)
+
+
+def xray_record_create_schema_to_xray_record(
+    xray_record_create: XrayRecordCreateSchema,
+) -> BookingAccount:
+    return XrayRecord(
+        uid=xray_record_create.uid,
+        last_update=xray_record_create.last_update,
+    )
