@@ -1,6 +1,6 @@
 from sqlalchemy import select
 
-from app.repositories.xray_repository import XrayRepository
+from app.repositories import XrayRepository
 
 from app.database.repositories.base_repository import BaseRepository
 from app.schemas.xray_schemas import (
