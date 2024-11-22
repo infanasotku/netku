@@ -1,4 +1,3 @@
-import asyncio
 from logging import Logger
 from typing import Annotated, Any, AsyncContextManager, AsyncGenerator, Callable
 from fastapi import FastAPI, Header
@@ -16,7 +15,6 @@ from app.services import (
     AbstractXrayService,
 )
 from app.bot.router import MainRouter
-from app.bot import tasks
 
 
 class BotServicesFactory(BaseModel):
@@ -29,7 +27,6 @@ class BotSettings(BaseModel):
     bot_token: str
     telegram_token: str
     bot_webhook_url: str
-    xray_restart_minutes: float
 
 
 class BotFactory(AbstractAppFactory):
@@ -95,21 +92,8 @@ class BotFactory(AbstractAppFactory):
             self.logger.info(
                 "Webhook info: " + str(await self._webhook_info()).split()[0]
             )
-
-            self.logger.info("Starting bot tasks")
-            restart_proxy = tasks.restart_proxy_factory(
-                self.settings.xray_restart_minutes,
-                self.logger,
-                self.bot,
-                self.bot_service_factory.create_user_service,
-                self.bot_service_factory.create_xray_service,
-            )
-            task_list: list[asyncio.Task] = [asyncio.create_task(restart_proxy())]
-            self.logger.info("Bot tasks started")
             yield
-            for task in task_list:
-                task.cancel()
-                await task
+            await self.bot.delete_webhook(drop_pending_updates=True)
 
         return _lifespan
 

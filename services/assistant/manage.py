@@ -9,12 +9,10 @@ from app.bot import BotFactory, BotServicesFactory, BotSettings
 from app.database import get_db_factory
 from app.services import UserServiceFactory, BookingServiceFactory, XrayServiceFactory
 from app.infra.grpc import BookingClientFactory, XrayClientFactory
+from app.tasks.restart_proxy_task import RestartProxyTask
 
 
 def create_app() -> FastAPI:
-    async_engine = create_async_engine(settings.psql_dsn)
-    async_session = async_sessionmaker(async_engine)
-
     # grpc client factories
     bc_factory = BookingClientFactory(
         client_addr=settings.booking_host,
@@ -31,6 +29,9 @@ def create_app() -> FastAPI:
         reconnection_retries=settings.reconnection_retries,
     )
 
+    # db factory
+    async_engine = create_async_engine(settings.psql_dsn)
+    async_session = async_sessionmaker(async_engine)
     get_db = get_db_factory(async_session)
 
     # service factories
@@ -38,7 +39,7 @@ def create_app() -> FastAPI:
     bs_factory = BookingServiceFactory(get_db, bc_factory.create)
     xs_factory = XrayServiceFactory(get_db, xc_factory.create)
 
-    # bot
+    # Sub factories
     bot_factory = BotFactory(
         bot_settings=BotSettings(**settings.model_dump()),
         bot_services_factory=BotServicesFactory(
@@ -49,7 +50,20 @@ def create_app() -> FastAPI:
         logger=logger,
     )
 
-    factory = AppFactory(bot_factory)
+    # Tasks
+    restart_proxy = RestartProxyTask(
+        bot=bot_factory.bot,
+        create_user_service=us_factory.create,
+        create_xray_service=xs_factory.create,
+        logger=logger,
+        xray_restart_minutes=settings.xray_restart_minutes,
+    )
+
+    factory = AppFactory()
+    factory.register_sub_factory(bot_factory)
+
+    factory.register_task(restart_proxy)
+
     return factory.create_app()
 
 
