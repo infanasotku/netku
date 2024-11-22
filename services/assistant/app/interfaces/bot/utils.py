@@ -8,8 +8,8 @@ from aiogram.utils.markdown import hbold
 from app.schemas.user_schemas import UserSchema
 from app.services import AbstractUserService, AbstractBookingService
 
-import app.bot.kb as kb
-from app.bot.states import BaseState
+import app.interfaces.bot.kb as kb
+from app.interfaces.bot.states import BaseState
 
 
 async def try_delete_message(message: Message) -> bool:

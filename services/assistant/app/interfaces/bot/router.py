@@ -22,11 +22,11 @@ from app.services import (
     AbstractXrayService,
 )
 
-from app.bot.states import BaseState, BookingAccountAdding
-import app.bot.utils as utils
-import app.bot.text as text
-import app.bot.kb as kb
-from app.bot.schemas import BookingCallbackData, BookingAction
+from app.interfaces.bot.states import BaseState, BookingAccountAdding
+import app.interfaces.bot.utils as utils
+import app.interfaces.bot.text as text
+import app.interfaces.bot.kb as kb
+from app.interfaces.bot.schemas import BookingCallbackData, BookingAction
 
 
 class MainRouter:
