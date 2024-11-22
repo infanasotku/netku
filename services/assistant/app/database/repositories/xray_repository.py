@@ -23,8 +23,14 @@ class SQLXrayRepository(XrayRepository, BaseRepository):
         )
         return (await self.session.execute(s)).scalars().first()
 
-    async def get_xray_record_by_id(self, id: int) -> XrayRecordSchema | None:
-        xray_record = await self._get_xray_record_model_by_id(id)
+    async def get_last_xray_record(self) -> XrayRecordSchema | None:
+        s = (
+            select(XrayRecord)
+            .options(*selectinload_all(XrayRecord))
+            .order_by(XrayRecord.id.desc())
+            .limit(1)
+        )
+        xray_record = (await self.session.execute(s)).scalars().first()
 
         if xray_record is None:
             return None

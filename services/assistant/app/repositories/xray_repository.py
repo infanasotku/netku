@@ -9,8 +9,8 @@ from app.schemas.xray_schemas import (
 
 class XrayRepository(ABC):
     @abstractmethod
-    async def get_xray_record_by_id(self, id: int) -> XrayRecordSchema | None:
-        """Gets xray record by `id`.
+    async def get_last_xray_record(self) -> XrayRecordSchema | None:
+        """Gets last xray record.
 
         :return: xray record if it exist in DB, `None` otherwise."""
 
