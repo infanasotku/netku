@@ -24,11 +24,11 @@ from app.contracts.services import (
 
 from app.schemas.booking_schemas import BookingAccountCreateSchema
 
-from app.interfaces.bot.states import BaseState, BookingAccountAdding
-import app.interfaces.bot.utils as utils
-import app.interfaces.bot.text as text
-import app.interfaces.bot.kb as kb
-from app.interfaces.bot.schemas import BookingCallbackData, BookingAction
+from app.adapters.bot.states import BaseState, BookingAccountAdding
+import app.adapters.bot.utils as utils
+import app.adapters.bot.text as text
+import app.adapters.bot.kb as kb
+from app.adapters.bot.schemas import BookingCallbackData, BookingAction
 
 
 class MainRouter:

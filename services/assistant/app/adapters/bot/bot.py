@@ -14,7 +14,7 @@ from app.contracts.services import (
     UserService,
     XrayService,
 )
-from app.interfaces.bot.router import MainRouter
+from app.adapters.bot.router import MainRouter
 
 
 class BotServicesFactory(BaseModel):
