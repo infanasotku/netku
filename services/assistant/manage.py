@@ -5,8 +5,14 @@ from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 
 from settings import settings, logger
 from app.app import AppFactory
-from app.bot import BotFactory, BotServicesFactory, BotSettings
+from app.interfaces.bot import BotFactory, BotServicesFactory, BotSettings
 from app.database import get_db_factory
+from app.database.repositories.repository_factory import SQLRepositoryFactory
+from app.database.repositories import (
+    SQLBookingRepository,
+    SQLUserRepository,
+    SQLXrayRepository,
+)
 from app.services import UserServiceFactory, BookingServiceFactory, XrayServiceFactory
 from app.infra.grpc import BookingClientFactory, XrayClientFactory
 from app.tasks.restart_proxy_task import RestartProxyTask
@@ -33,11 +39,14 @@ def create_app() -> FastAPI:
     async_engine = create_async_engine(settings.psql_dsn)
     async_session = async_sessionmaker(async_engine)
     get_db = get_db_factory(async_session)
+    br_factory = SQLRepositoryFactory(get_db, SQLBookingRepository)
+    xr_factory = SQLRepositoryFactory(get_db, SQLXrayRepository)
+    ur_factory = SQLRepositoryFactory(get_db, SQLUserRepository)
 
     # service factories
-    us_factory = UserServiceFactory(get_db)
-    bs_factory = BookingServiceFactory(get_db, bc_factory.create)
-    xs_factory = XrayServiceFactory(get_db, xc_factory.create)
+    us_factory = UserServiceFactory(ur_factory.create)
+    bs_factory = BookingServiceFactory(br_factory.create, bc_factory.create)
+    xs_factory = XrayServiceFactory(xr_factory.create, xc_factory.create)
 
     # Sub factories
     bot_factory = BotFactory(
