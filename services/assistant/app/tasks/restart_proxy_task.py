@@ -4,7 +4,7 @@ from aiogram import Bot
 
 from app.services import AbstractUserService, AbstractXrayService
 
-import app.bot.text as text
+import app.interfaces.bot.text as text
 
 from app.tasks.task import Task
 
