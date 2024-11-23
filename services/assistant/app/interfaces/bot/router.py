@@ -22,6 +22,8 @@ from app.services import (
     AbstractXrayService,
 )
 
+from app.schemas.booking_schemas import BookingAccountCreateSchema
+
 from app.interfaces.bot.states import BaseState, BookingAccountAdding
 import app.interfaces.bot.utils as utils
 import app.interfaces.bot.text as text
@@ -294,7 +296,11 @@ class MainRouter:
             return await callback.answer("Account with that email already exist")
 
         async with self.create_booking_service() as booking_service:
-            await booking_service.create_booking_account(user.id, email, password)
+            await booking_service.create_booking_account(
+                BookingAccountCreateSchema(
+                    owner_id=user.id, email=email, password=password
+                )
+            )
 
         await state.clear()
         await state.set_state(BaseState.none)

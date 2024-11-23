@@ -5,7 +5,7 @@ from aiogram.fsm.state import State
 from aiogram.fsm.context import FSMContext
 from aiogram.utils.markdown import hbold
 
-from app.schemas.user_schemas import UserSchema
+from app.schemas.user_schemas import UserSchema, UserUpdateSchema
 from app.services import AbstractUserService, AbstractBookingService
 
 import app.interfaces.bot.kb as kb
@@ -109,9 +109,9 @@ async def registrate_user(
     if not user:
         return
 
-    user.telegram_id = contact.user_id
-    await user_service.update_user(user)
-    return user
+    return await user_service.update_user(
+        user.id, UserUpdateSchema(telegram_id=contact.user_id)
+    )
 
 
 async def subscribe_user(

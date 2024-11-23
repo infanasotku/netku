@@ -23,7 +23,9 @@ class AbstractUserService(ABC):
         """:return: All user in db."""
 
     @abstractmethod
-    async def update_user(self, user_id: int, user_update: UserUpdateSchema) -> bool:
+    async def update_user(
+        self, user_id: int, user_update: UserUpdateSchema
+    ) -> UserSchema:
         """Updates user.
 
         :return: `True` if user updated, `False` otherwise."""
@@ -40,7 +42,7 @@ class UserService(AbstractUserService):
         return await self._user_repository.get_user_by_phone(phone)
 
     async def get_users(self) -> list[UserSchema]:
-        await self._user_repository.get_all_users()
+        return await self._user_repository.get_all_users()
 
-    async def update_user(self, user_id, user_update: UserUpdateSchema) -> bool:
-        await self._user_repository.update_user(user_id, user_update)
+    async def update_user(self, user_id, user_update: UserUpdateSchema) -> UserSchema:
+        return await self._user_repository.update_user(user_id, user_update)

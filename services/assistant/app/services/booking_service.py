@@ -8,7 +8,7 @@ from app.clients.booking_client import BookingClient
 class AbstractBookingService(ABC):
     @abstractmethod
     async def create_booking_account(
-        self, user_id: int, email: str, password: str
+        self, booking_account_create: BookingAccountCreateSchema
     ) -> BookingAccountSchema | None:
         """:return: booking account if it created, `None` otherwise."""
 
