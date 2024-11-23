@@ -3,12 +3,12 @@ from sqlalchemy.orm import InstrumentedAttribute
 
 from app.contracts.repositories import UserRepository
 
-from app.database.sql_db.repositories.base_repository import SQLBaseRepository
+from app.infra.database.sql_db.repositories.base_repository import SQLBaseRepository
 from app.schemas.user_schemas import UserCreateSchema, UserSchema, UserUpdateSchema
 
-from app.database.sql_db import converters
-from app.database.sql_db.models import User
-from app.database.sql_db.orm import selectinload_all
+from app.infra.database.sql_db import converters
+from app.infra.database.sql_db.models import User
+from app.infra.database.sql_db.orm import selectinload_all
 
 
 class SQLUserRepository(UserRepository, SQLBaseRepository):

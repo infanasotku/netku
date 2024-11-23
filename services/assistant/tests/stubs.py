@@ -1,6 +1,6 @@
 from typing import Any
-from app.database.sql_db.orm import AbstractRepository, ModelT
-from app.database.sql_db.models import XrayRecord
+from app.infra.database.sql_db.orm import AbstractRepository, ModelT
+from app.infra.database.sql_db.models import XrayRecord
 
 
 class StubRepository(AbstractRepository):

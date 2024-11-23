@@ -2,12 +2,12 @@ from sqlalchemy import select
 
 from app.contracts.repositories import BookingRepository
 
-from app.database.sql_db.repositories.base_repository import SQLBaseRepository
+from app.infra.database.sql_db.repositories.base_repository import SQLBaseRepository
 from app.schemas.booking_schemas import BookingAccountCreateSchema, BookingAccountSchema
 
-from app.database.sql_db import converters
-from app.database.sql_db.models import BookingAccount
-from app.database.sql_db.orm import selectinload_all
+from app.infra.database.sql_db import converters
+from app.infra.database.sql_db.models import BookingAccount
+from app.infra.database.sql_db.orm import selectinload_all
 
 
 class SQLBookingRepository(BookingRepository, SQLBaseRepository):
