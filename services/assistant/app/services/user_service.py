@@ -1,9 +1,8 @@
 from abc import ABC, abstractmethod
 
-from app.database.models import User
-from app.database.orm import AbstractRepository
+from app.repositories import UserRepository
 
-from app.schemas.user_schemas import UserSchema
+from app.schemas.user_schemas import UserSchema, UserUpdateSchema
 
 
 class AbstractUserService(ABC):
@@ -24,41 +23,24 @@ class AbstractUserService(ABC):
         """:return: All user in db."""
 
     @abstractmethod
-    async def update_user(self, user: UserSchema) -> bool:
+    async def update_user(self, user_id: int, user_update: UserUpdateSchema) -> bool:
         """Updates user.
 
         :return: `True` if user updated, `False` otherwise."""
 
 
 class UserService(AbstractUserService):
-    def __init__(self, repository: AbstractRepository):
-        self.repository = repository
+    def __init__(self, user_repository: UserRepository):
+        self._user_repository = user_repository
 
     async def get_user_by_telegram_id(self, id: int) -> UserSchema | None:
-        user = await self.repository.find_first(User, User.telegram_id, id)
-        return UserSchema.model_validate(user) if user is not None else None
+        return await self._user_repository.get_user_by_telegram_id(id)
 
     async def get_user_by_phone(self, phone: str) -> UserSchema | None:
-        return [
-            UserSchema.model_validate(user)
-            for user in await self.repository.find_first(
-                UserSchema, User, User.phone_number, phone
-            )
-        ]
+        return await self._user_repository.get_user_by_phone(phone)
 
     async def get_users(self) -> list[UserSchema]:
-        return [
-            UserSchema.model_validate(user)
-            for user in await self.repository.get_all(User)
-        ]
+        await self._user_repository.get_all_users()
 
-    async def update_user(self, user: UserSchema) -> bool:
-        raw_user = await self.repository.find_first(User, User.id, user.id)
-        if raw_user is None:
-            return False
-
-        raw_user.phone_number = user.phone_number
-        raw_user.telegram_id = user.telegram_id
-        raw_user.proxy_subscription = user.proxy_subscription
-
-        await self.repository.update(raw_user)
+    async def update_user(self, user_id, user_update: UserUpdateSchema) -> bool:
+        await self._user_repository.update_user(user_id, user_update)
