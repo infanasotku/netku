@@ -1,6 +1,6 @@
 from sqlalchemy import select
 
-from app.repositories import BookingRepository
+from app.contracts.repositories import BookingRepository
 
 from app.database.sql_db.repositories.base_repository import SQLBaseRepository
 from app.schemas.booking_schemas import BookingAccountCreateSchema, BookingAccountSchema

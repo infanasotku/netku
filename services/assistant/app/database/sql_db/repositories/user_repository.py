@@ -1,7 +1,7 @@
 from sqlalchemy import select
 from sqlalchemy.orm import InstrumentedAttribute
 
-from app.repositories import UserRepository
+from app.contracts.repositories import UserRepository
 
 from app.database.sql_db.repositories.base_repository import SQLBaseRepository
 from app.schemas.user_schemas import UserCreateSchema, UserSchema, UserUpdateSchema

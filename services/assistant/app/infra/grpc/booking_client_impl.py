@@ -1,4 +1,4 @@
-from app.clients.booking_client import BookingClient as AbstractBookingClient
+from app.contracts.clients.booking_client import BookingClient as AbstractBookingClient
 
 from app.infra.grpc.gen.booking_pb2_grpc import BookingStub
 from app.infra.grpc.gen.booking_pb2 import BookingRequest, BookingResponse

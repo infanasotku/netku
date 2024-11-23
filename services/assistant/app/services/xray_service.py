@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 from datetime import datetime
 
-from app.repositories import XrayRepository
-from app.clients.xray_client import XrayClient
+from app.contracts.repositories import XrayRepository
+from app.contracts.clients.xray_client import XrayClient
 from app.schemas.xray_schemas import XrayRecordCreateSchema, XrayRecordUpdateSchema
 
 

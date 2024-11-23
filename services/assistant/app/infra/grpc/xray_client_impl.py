@@ -1,4 +1,4 @@
-from app.clients.xray_client import XrayClient as AbstractXrayClient
+from app.contracts.clients.xray_client import XrayClient as AbstractXrayClient
 
 from app.infra.grpc.gen.xray_pb2_grpc import XrayStub
 from app.infra.grpc.gen.xray_pb2 import RestartResponse, Null

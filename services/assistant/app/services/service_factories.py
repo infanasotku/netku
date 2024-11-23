@@ -1,10 +1,10 @@
 from contextlib import asynccontextmanager
 from typing import AsyncContextManager, AsyncGenerator, Callable
 
-from app.repositories import XrayRepository, UserRepository, BookingRepository
+from app.contracts.repositories import XrayRepository, UserRepository, BookingRepository
 
-from app.clients.xray_client import XrayClient
-from app.clients.booking_client import BookingClient
+from app.contracts.clients.xray_client import XrayClient
+from app.contracts.clients.booking_client import BookingClient
 
 from app.services.booking_service import BookingService
 from app.services.user_service import UserService

@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 
-from app.repositories import BookingRepository
+from app.contracts.repositories import BookingRepository
 from app.schemas.booking_schemas import BookingAccountSchema, BookingAccountCreateSchema
-from app.clients.booking_client import BookingClient
+from app.contracts.clients.booking_client import BookingClient
 
 
 class AbstractBookingService(ABC):

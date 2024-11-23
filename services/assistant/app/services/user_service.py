@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from app.repositories import UserRepository
+from app.contracts.repositories import UserRepository
 
 from app.schemas.user_schemas import UserSchema, UserUpdateSchema
 

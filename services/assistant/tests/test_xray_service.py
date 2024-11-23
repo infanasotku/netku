@@ -4,7 +4,7 @@ import pytest
 from app.database.sql_db.models import XrayRecord
 from app.database.sql_db.orm import ModelT
 from app.services import XrayService
-from app.clients.xray_client import XrayClient
+from app.contracts.clients.xray_client import XrayClient
 
 from tests.stubs import StubRepository
 
