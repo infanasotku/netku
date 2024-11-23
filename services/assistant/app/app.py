@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from contextlib import asynccontextmanager
+from logging import Logger
 from typing import AsyncGenerator, Callable
 from fastapi import FastAPI
 
@@ -8,6 +9,9 @@ from app.tasks import Task
 
 class AbstractAppFactory(ABC):
     route_path: str
+
+    def __init__(self, logger: Logger):
+        self._logger = logger
 
     @abstractmethod
     def create_app(self) -> FastAPI:
@@ -21,8 +25,9 @@ class AbstractAppFactory(ABC):
 
 
 class AppFactory(AbstractAppFactory):
-    def __init__(self):
+    def __init__(self, logger: Logger):
         """Inits main app."""
+        super().__init__(logger)
         self._sub_factories: list[AbstractAppFactory] = []
         self._tasks: list[Task] = []
 
@@ -50,11 +55,15 @@ class AppFactory(AbstractAppFactory):
         @asynccontextmanager
         async def lifespan(app: FastAPI) -> AsyncGenerator:
             generators = [lifespan(app) for lifespan in sub_lifespans]
+            self._logger.info("Starting lifespans.")
             for generator in generators:
                 await anext(generator)
+            self._logger.info("Starting lifespans finished.")
 
             for task in self._tasks:
+                self._logger.info(f"Starting task [{task.name}].")
                 task.start()
+                self._logger.info(f"Task [{task.name}] started.")
             yield
             for task in self._tasks:
                 await task.stop()

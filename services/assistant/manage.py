@@ -70,7 +70,7 @@ def create_app() -> FastAPI:
         xray_restart_minutes=settings.xray_restart_minutes,
     )
 
-    factory = AppFactory()
+    factory = AppFactory(logger)
     factory.register_sub_factory(bot_factory)
 
     factory.register_task(restart_proxy)
