@@ -1,4 +1,4 @@
-from app.contracts.clients import BookingClient as AbstractBookingClient
+from app.contracts.clients import BookingClient
 
 from app.infra.grpc.gen.booking_pb2_grpc import BookingStub
 from app.infra.grpc.gen.booking_pb2 import BookingRequest, BookingResponse
@@ -6,7 +6,7 @@ from app.infra.grpc.gen.booking_pb2 import BookingRequest, BookingResponse
 from app.infra.grpc.grpc_client import GRPCClient
 
 
-class BookingClient(GRPCClient, AbstractBookingClient):
+class GRPCBookingClient(GRPCClient, BookingClient):
     async def run_booking(self, email: str, password: str) -> bool:
         ch = await self.get_channel()
         if ch is None:
