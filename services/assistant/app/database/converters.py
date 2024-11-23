@@ -21,6 +21,7 @@ def booking_account_create_schema_to_booking_account(
     account_create: BookingAccountCreateSchema,
 ) -> BookingAccount:
     return BookingAccount(
+        owner_id=account_create.owner_id,
         email=account_create.email,
         password=account_create.password,
     )
