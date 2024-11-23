@@ -2,7 +2,7 @@ from datetime import datetime
 
 from app.contracts.services import XrayService
 from app.contracts.repositories import XrayRepository
-from app.contracts.clients.xray_client import XrayClient
+from app.contracts.clients import XrayClient
 from app.schemas.xray_schemas import XrayRecordCreateSchema, XrayRecordUpdateSchema
 
 
