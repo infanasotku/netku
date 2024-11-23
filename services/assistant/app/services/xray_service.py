@@ -1,10 +1,9 @@
 from abc import ABC, abstractmethod
 from datetime import datetime
 
-from app.database.orm import AbstractRepository
-from app.database.models import XrayRecord
-
+from app.repositories import XrayRepository
 from app.clients.xray_client import XrayClient
+from app.schemas.xray_schemas import XrayRecordCreateSchema, XrayRecordUpdateSchema
 
 
 class AbstractXrayService(ABC):
@@ -18,31 +17,32 @@ class AbstractXrayService(ABC):
 
 
 class XrayService(AbstractXrayService):
-    def __init__(self, repository: AbstractRepository, xray_client: XrayClient):
-        self.repository = repository
-        self.xray_client = xray_client
+    def __init__(self, xray_repository: XrayRepository, xray_client: XrayClient):
+        self._xray_repository = xray_repository
+        self._xray_client = xray_client
 
     async def restart_xray(self) -> str | None:
-        uid = await self.xray_client.restart()
+        uid = await self._xray_client.restart()
 
         if uid is None:
             return None
 
-        xray_record = await self.repository.get_xray_record()
+        xray_record = await self._xray_repository.get_last_xray_record()
 
         if xray_record is None:
-            await self.repository.create(
-                XrayRecord(uid=uid, last_update=datetime.now())
+            await self._xray_repository.create_xray_record(
+                XrayRecordCreateSchema(uid=uid, last_update=datetime.now())
             )
         else:
-            xray_record.uid = uid
-            xray_record.last_update = datetime.now()
-            await self.repository.update(xray_record)
+            await self._xray_repository.update_xray_record(
+                xray_record.id,
+                XrayRecordUpdateSchema(uid=uid, last_update=datetime.now()),
+            )
 
         return uid
 
     async def get_current_uid(self) -> str | None:
-        xray_record = await self.repository.get_xray_record()
+        xray_record = await self._xray_repository.get_last_xray_record()
 
         if xray_record is not None:
             return xray_record.uid

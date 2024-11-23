@@ -2,7 +2,7 @@ from sqlalchemy import select
 
 from app.repositories import XrayRepository
 
-from app.database.repositories.base_repository import BaseRepository
+from app.database.repositories.base_repository import SQLBaseRepository
 from app.schemas.xray_schemas import (
     XrayRecordSchema,
     XrayRecordCreateSchema,
@@ -14,7 +14,7 @@ from app.database.models import XrayRecord
 from app.database.orm import selectinload_all
 
 
-class SQLXrayRepository(XrayRepository, BaseRepository):
+class SQLXrayRepository(XrayRepository, SQLBaseRepository):
     async def _get_xray_record_model_by_id(self, id: int) -> XrayRecord | None:
         s = (
             select(XrayRecord)

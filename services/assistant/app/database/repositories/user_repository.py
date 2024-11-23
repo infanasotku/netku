@@ -3,7 +3,7 @@ from sqlalchemy.orm import InstrumentedAttribute
 
 from app.repositories import UserRepository
 
-from app.database.repositories.base_repository import BaseRepository
+from app.database.repositories.base_repository import SQLBaseRepository
 from app.schemas.user_schemas import UserCreateSchema, UserSchema, UserUpdateSchema
 
 from app.database import converters
@@ -11,7 +11,7 @@ from app.database.models import User
 from app.database.orm import selectinload_all
 
 
-class SQLUserRepository(UserRepository, BaseRepository):
+class SQLUserRepository(UserRepository, SQLBaseRepository):
     async def _get_user_model_by_column(
         self, column: InstrumentedAttribute, value
     ) -> User | None:
@@ -28,6 +28,14 @@ class SQLUserRepository(UserRepository, BaseRepository):
 
     async def get_user_by_telegram_id(self, telegram_id: int) -> UserSchema | None:
         user = await self._get_user_model_by_column(User.telegram_id, telegram_id)
+
+        if user is None:
+            return None
+
+        return converters.user_to_user_schema(user)
+
+    async def get_user_by_phone(self, phone_number: str) -> UserSchema | None:
+        user = await self._get_user_model_by_column(User.phone_number, phone_number)
 
         if user is None:
             return None

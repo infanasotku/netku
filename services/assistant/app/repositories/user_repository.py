@@ -17,6 +17,12 @@ class UserRepository(ABC):
         :return: User if it exist in DB, `None` otherwise."""
 
     @abstractmethod
+    async def get_user_by_phone(self, phone_number: str) -> UserSchema | None:
+        """Gets user by `phone_number`.
+
+        :return: User if it exist in DB, `None` otherwise."""
+
+    @abstractmethod
     async def get_all_users(self) -> list[UserSchema]:
         """Gets all users from DB."""
 

@@ -2,7 +2,7 @@ from sqlalchemy import select
 
 from app.repositories import BookingRepository
 
-from app.database.repositories.base_repository import BaseRepository
+from app.database.repositories.base_repository import SQLBaseRepository
 from app.schemas.booking_schemas import BookingAccountCreateSchema, BookingAccountSchema
 
 from app.database import converters
@@ -10,7 +10,7 @@ from app.database.models import BookingAccount
 from app.database.orm import selectinload_all
 
 
-class SQLBookingRepository(BookingRepository, BaseRepository):
+class SQLBookingRepository(BookingRepository, SQLBaseRepository):
     async def get_booking_account_by_id(self, id: int) -> BookingAccountSchema | None:
         s = (
             select(BookingAccount)
