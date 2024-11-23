@@ -3,7 +3,7 @@
 
 import grpc
 
-from app.infra.grpc.gen import (
+from app.adapters.output.grpc.gen import (
     booking_pb2 as app_dot_infra_dot_grpc_dot_gen_dot_booking__pb2,
 )
 

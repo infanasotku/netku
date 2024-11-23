@@ -14,7 +14,7 @@ from app.database.sql_db.repositories import (
     SQLXrayRepository,
 )
 from app.services import UserServiceFactory, BookingServiceFactory, XrayServiceFactory
-from app.infra.grpc import BookingClientFactory, XrayClientFactory
+from app.adapters.output.grpc import BookingClientFactory, XrayClientFactory
 from app.tasks.restart_proxy_task import RestartProxyTask
 
 

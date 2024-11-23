@@ -3,7 +3,7 @@ import pytest
 
 from app.database.sql_db.models import XrayRecord
 from app.database.sql_db.orm import ModelT
-from app.services import XrayService
+from app.services import XrayServiceImpl
 from app.contracts.clients.xray_client import XrayClient
 
 from tests.stubs import StubRepository
@@ -34,7 +34,7 @@ async def test_restart_xray(uid: str):
     stub_xray_client = _StubXrayClient(uid)
     stub_repository = _StubRepository()
 
-    xray_service = XrayService(stub_repository, stub_xray_client)
+    xray_service = XrayServiceImpl(stub_repository, stub_xray_client)
     await xray_service.restart_xray()
 
     assert uid == await xray_service.get_current_uid()

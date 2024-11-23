@@ -3,7 +3,9 @@
 
 import grpc
 
-from app.infra.grpc.gen import xray_pb2 as app_dot_infra_dot_grpc_dot_gen_dot_xray__pb2
+from app.adapters.output.grpc.gen import (
+    xray_pb2 as app_dot_infra_dot_grpc_dot_gen_dot_xray__pb2,
+)
 
 GRPC_GENERATED_VERSION = "1.67.0"
 GRPC_VERSION = grpc.__version__
