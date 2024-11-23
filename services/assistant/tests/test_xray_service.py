@@ -1,8 +1,8 @@
 from datetime import datetime
 import pytest
 
-from app.database.models import XrayRecord
-from app.database.orm import ModelT
+from app.database.sql_db.models import XrayRecord
+from app.database.sql_db.orm import ModelT
 from app.services import XrayService
 from app.clients.xray_client import XrayClient
 

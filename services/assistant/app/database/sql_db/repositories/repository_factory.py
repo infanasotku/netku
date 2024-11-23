@@ -2,7 +2,7 @@ from contextlib import asynccontextmanager
 from typing import AsyncGenerator, Callable, Type, TypeVar, AsyncContextManager
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.database.repositories.base_repository import SQLBaseRepository
+from app.database.sql_db.repositories.base_repository import SQLBaseRepository
 
 
 class SQLRepositoryFactory:

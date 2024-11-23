@@ -6,9 +6,9 @@ from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 from settings import settings, logger
 from app.app import AppFactory
 from app.interfaces.bot import BotFactory, BotServicesFactory, BotSettings
-from app.database import get_db_factory
-from app.database.repositories.repository_factory import SQLRepositoryFactory
-from app.database.repositories import (
+from app.database.sql_db import get_db_factory
+from app.database.sql_db.repositories.repository_factory import SQLRepositoryFactory
+from app.database.sql_db.repositories import (
     SQLBookingRepository,
     SQLUserRepository,
     SQLXrayRepository,

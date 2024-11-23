@@ -2,16 +2,16 @@ from sqlalchemy import select
 
 from app.repositories import XrayRepository
 
-from app.database.repositories.base_repository import SQLBaseRepository
+from app.database.sql_db.repositories.base_repository import SQLBaseRepository
 from app.schemas.xray_schemas import (
     XrayRecordSchema,
     XrayRecordCreateSchema,
     XrayRecordUpdateSchema,
 )
 
-from app.database import converters
-from app.database.models import XrayRecord
-from app.database.orm import selectinload_all
+from app.database.sql_db import converters
+from app.database.sql_db.models import XrayRecord
+from app.database.sql_db.orm import selectinload_all
 
 
 class SQLXrayRepository(XrayRepository, SQLBaseRepository):
