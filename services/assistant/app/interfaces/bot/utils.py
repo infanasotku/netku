@@ -6,7 +6,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.utils.markdown import hbold
 
 from app.schemas.user_schemas import UserSchema, UserUpdateSchema
-from app.services import AbstractUserService, AbstractBookingService
+from app.contracts.services import UserService, BookingService
 
 import app.interfaces.bot.kb as kb
 from app.interfaces.bot.states import BaseState
@@ -89,9 +89,7 @@ async def apply_field(
     await try_edit_or_answer(msg, menu_text, await menu_generator(state))
 
 
-async def get_user(
-    message: Message, user_service: AbstractUserService
-) -> UserSchema | None:
+async def get_user(message: Message, user_service: UserService) -> UserSchema | None:
     """Finds user by `message.chat.id`
     - Returns `UserSchema` if user exist,
     `None` otherwise."""
@@ -99,7 +97,7 @@ async def get_user(
 
 
 async def registrate_user(
-    contact: Contact, user_service: AbstractUserService
+    contact: Contact, user_service: UserService
 ) -> UserSchema | None:
     """Registrates user by `contact.user_id` and `contact.phone_number`
     - Returns `UserSchema` if user registrated successful
@@ -115,7 +113,7 @@ async def registrate_user(
 
 
 async def subscribe_user(
-    user: UserSchema, subscription: str, user_service: AbstractUserService
+    user: UserSchema, subscription: str, user_service: UserService
 ):
     """Subscribes user to `subscription`."""
     match subscription:
@@ -126,7 +124,7 @@ async def subscribe_user(
 
 
 async def unsubscribe_user(
-    user: UserSchema, subscription: str, user_service: AbstractUserService
+    user: UserSchema, subscription: str, user_service: UserService
 ):
     """Unsubscribes user from `subscription`."""
     match subscription:
@@ -140,8 +138,8 @@ async def unsubscribe_user(
 
 async def get_booking_machine_count(
     message: Message,
-    user_service: AbstractUserService,
-    booking_service: AbstractBookingService,
+    user_service: UserService,
+    booking_service: BookingService,
 ) -> int:
     user = await get_user(message, user_service)
     if user is None:

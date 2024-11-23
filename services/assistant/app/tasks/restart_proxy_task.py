@@ -2,7 +2,7 @@ from logging import Logger
 from typing import AsyncContextManager, Callable
 from aiogram import Bot
 
-from app.services import AbstractUserService, AbstractXrayService
+from app.contracts.services import UserService, XrayService
 
 import app.interfaces.bot.text as text
 
@@ -15,8 +15,8 @@ class RestartProxyTask(Task):
         xray_restart_minutes: float,
         logger: Logger,
         bot: Bot,
-        create_user_service: Callable[[], AsyncContextManager[AbstractUserService]],
-        create_xray_service: Callable[[], AsyncContextManager[AbstractXrayService]],
+        create_user_service: Callable[[], AsyncContextManager[UserService]],
+        create_xray_service: Callable[[], AsyncContextManager[XrayService]],
     ):
         super().__init__("restart_proxy", xray_restart_minutes * 60, logger)
         self.bot = bot

@@ -16,10 +16,10 @@ from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 from aiogram.utils.markdown import hbold
 
-from app.services import (
-    AbstractBookingService,
-    AbstractUserService,
-    AbstractXrayService,
+from app.contracts.services import (
+    BookingService,
+    UserService,
+    XrayService,
 )
 
 from app.schemas.booking_schemas import BookingAccountCreateSchema
@@ -34,11 +34,9 @@ from app.interfaces.bot.schemas import BookingCallbackData, BookingAction
 class MainRouter:
     def __init__(
         self,
-        create_booking_service: Callable[
-            [], AsyncContextManager[AbstractBookingService]
-        ],
-        create_user_service: Callable[[], AsyncContextManager[AbstractUserService]],
-        create_xray_service: Callable[[], AsyncContextManager[AbstractXrayService]],
+        create_booking_service: Callable[[], AsyncContextManager[BookingService]],
+        create_user_service: Callable[[], AsyncContextManager[UserService]],
+        create_xray_service: Callable[[], AsyncContextManager[XrayService]],
         logger: Logger,
     ):
         self.create_booking_service = create_booking_service
