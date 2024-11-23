@@ -1,11 +1,12 @@
-import logging
-import pathlib
 import sys
 import uuid
+import os
 
 from pydantic_settings import BaseSettings
 from pydantic import Field, computed_field
 from dotenv import load_dotenv
+
+from app.infra.logging.logger import logger
 
 
 class Settings(BaseSettings):
@@ -61,7 +62,7 @@ class Settings(BaseSettings):
     @computed_field
     @property
     def app_directory_path(self) -> str:
-        return (pathlib.Path(__file__).parent).resolve().as_posix()
+        return os.getcwd()
 
 
 def _generate() -> Settings:
@@ -70,9 +71,8 @@ def _generate() -> Settings:
         load_dotenv(override=True)
         return Settings()
     except Exception as e:
-        logging.critical(f"Settings generated with error: {e}")
+        logger.critical(f"Settings generated with error: {e}")
         sys.exit(1)
 
 
 settings = _generate()
-logger = logging.getLogger("uvicorn.error")

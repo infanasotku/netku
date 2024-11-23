@@ -1,9 +1,9 @@
-import logging
 from fastapi import FastAPI
 import uvicorn
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 
-from app.infra.config.settings import settings, logger
+from app.infra.config.settings import settings
+from app.infra.logging.logger import logger, config
 from app.app import AppFactory
 from app.adapters.bot import BotFactory, BotServicesFactory, BotSettings
 from app.infra.database.sql_db import get_db_factory
@@ -79,18 +79,11 @@ def create_app() -> FastAPI:
 
 
 def run():
-    logging.basicConfig(
-        level=logging.INFO,
-        format="%(levelname)s:     [%(asctime)s] %(message)s",
-        datefmt="%d-%m-%Y %H:%M:%S",
-    )
-    log_config_path = settings.app_directory_path + "/log_config.yaml"
-
     uvicorn.run(
         app=create_app(),
         host=settings.host,
         port=settings.port,
-        log_config=log_config_path,
+        log_config=config,
         ssl_keyfile=settings.ssl_keyfile,
         ssl_certfile=settings.ssl_certfile,
     )
