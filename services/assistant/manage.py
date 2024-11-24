@@ -15,7 +15,7 @@ from app.infra.database.sql_db.repositories import (
 )
 from app.services import UserServiceFactory, BookingServiceFactory, XrayServiceFactory
 from app.adapters.output.grpc import BookingClientFactory, XrayClientFactory
-from app.tasks.restart_proxy_task import RestartProxyTask
+from app.tasks.restart_proxy import RestartProxyTask
 
 
 def create_app() -> FastAPI:
