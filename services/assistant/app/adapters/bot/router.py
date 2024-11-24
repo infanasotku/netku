@@ -107,7 +107,7 @@ class MainRouter:
 
     async def _start(self, message: Message, state: FSMContext):
         async with self.create_user_service() as user_service:
-            user = await utils.get_user(message, user_service)
+            user = await user_service.get_user_by_telegram_id(message.chat.id)
 
         if user:
             await state.set_state(BaseState.none)
@@ -123,7 +123,7 @@ class MainRouter:
 
     async def _stop(self, message: Message):
         async with self.create_user_service() as user_service:
-            user = await utils.get_user(message, user_service)
+            user = await user_service.get_user_by_telegram_id(message.chat.id)
 
             if not user:
                 return await message.answer(text.please_click_start)
@@ -153,7 +153,7 @@ class MainRouter:
     # region Proxy
     async def _subscribe_for_proxy(self, message: Message):
         async with self.create_user_service() as user_service:
-            user = await utils.get_user(message, user_service)
+            user = await user_service.get_user_by_telegram_id(message.chat.id)
 
             if not user:
                 return await message.answer(text.please_click_start)
@@ -167,7 +167,7 @@ class MainRouter:
 
     async def _get_proxy_uuid(self, message: Message):
         async with self.create_user_service() as user_service:
-            user = await utils.get_user(message, user_service)
+            user = await user_service.get_user_by_telegram_id(message.chat.id)
 
         if not user:
             return await message.answer(text.please_click_start)
@@ -197,7 +197,7 @@ class MainRouter:
             self.create_user_service() as user_service,
             self.create_booking_analysis_service() as booking_analysis,
         ):
-            user = await utils.get_user(message, user_service)
+            user = await user_service.get_user_by_telegram_id(message.chat.id)
 
             if not user:
                 return await message.answer(text.please_click_start)
@@ -226,7 +226,7 @@ class MainRouter:
 
     async def _get_booking_accounts(self, callback: CallbackQuery):
         async with self.create_user_service() as user_service:
-            user = await utils.get_user(callback.message, user_service)
+            user = await user_service.get_user_by_telegram_id(callback.message.chat.id)
 
         accounts = user.booking_accounts
 
@@ -283,6 +283,7 @@ class MainRouter:
                 callback_data.account_id
             )
             if not await booking_service.run_booking(account.email, account.password):
+                self.logger.warning(f"Booking starting failed [{account.email}].")
                 await callback.answer("Booking starting failed")
             await utils.try_delete_message(callback.message)
             await self._get_booking_accounts(callback)
@@ -299,7 +300,7 @@ class MainRouter:
             return await callback.answer("Not valid email")
 
         async with self.create_user_service() as user_service:
-            user = await utils.get_user(callback.message, user_service)
+            user = await user_service.get_user_by_telegram_id(callback.message.chat.id)
 
         if email in (acc.email for acc in user.booking_accounts):
             return await callback.answer("Account with that email already exist")

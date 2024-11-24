@@ -108,21 +108,23 @@ async def subscribe_user(
     user: UserSchema, subscription: str, user_service: UserService
 ):
     """Subscribes user to `subscription`."""
+    user_update = UserUpdateSchema()
     match subscription:
         case "proxy":
-            user.proxy_subscription = True
+            user_update.proxy_subscription = True
 
-    await user_service.update_user(user)
+    await user_service.update_user(user.id, user_update)
 
 
 async def unsubscribe_user(
     user: UserSchema, subscription: str, user_service: UserService
 ):
     """Unsubscribes user from `subscription`."""
+    user_update = UserUpdateSchema()
     match subscription:
         case "proxy":
-            user.proxy_subscription = False
+            user_update.proxy_subscription = False
         case "all":
-            user.proxy_subscription = False
+            user_update.proxy_subscription = False
 
-    await user_service.update_user(user)
+    await user_service.update_user(user.id, user_update)
