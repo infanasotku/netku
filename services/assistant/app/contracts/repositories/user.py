@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from app.schemas.user_schemas import UserSchema, UserCreateSchema, UserUpdateSchema
+from app.schemas.user import UserSchema, UserCreateSchema, UserUpdateSchema
 
 
 class UserRepository(ABC):

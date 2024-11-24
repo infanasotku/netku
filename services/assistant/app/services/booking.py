@@ -1,6 +1,6 @@
 from app.contracts.repositories import BookingRepository
 from app.contracts.services import BookingService
-from app.schemas.booking_schemas import BookingAccountSchema, BookingAccountCreateSchema
+from app.schemas.booking import BookingAccountSchema, BookingAccountCreateSchema
 from app.contracts.clients import BookingClient
 
 

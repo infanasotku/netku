@@ -1,4 +1,4 @@
-from app.schemas.base_schema import BaseSchemaPK
+from app.schemas.base import BaseSchemaPK
 
 
 class BookingAccountCreateSchema(BaseSchemaPK):

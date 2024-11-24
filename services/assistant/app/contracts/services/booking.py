@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from app.schemas.booking_schemas import BookingAccountSchema, BookingAccountCreateSchema
+from app.schemas.booking import BookingAccountSchema, BookingAccountCreateSchema
 
 
 class BookingService(ABC):

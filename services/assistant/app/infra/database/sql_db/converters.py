@@ -1,6 +1,6 @@
-from app.schemas.user_schemas import UserCreateSchema, UserSchema
-from app.schemas.booking_schemas import BookingAccountCreateSchema, BookingAccountSchema
-from app.schemas.xray_schemas import XrayRecordCreateSchema, XrayRecordSchema
+from app.schemas.user import UserCreateSchema, UserSchema
+from app.schemas.booking import BookingAccountCreateSchema, BookingAccountSchema
+from app.schemas.xray import XrayRecordCreateSchema, XrayRecordSchema
 
 from app.infra.database.sql_db.models import BookingAccount, User, XrayRecord
 

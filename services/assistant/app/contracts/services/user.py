@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from app.schemas.user_schemas import UserSchema, UserUpdateSchema
+from app.schemas.user import UserSchema, UserUpdateSchema
 
 
 class UserService(ABC):

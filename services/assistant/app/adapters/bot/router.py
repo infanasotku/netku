@@ -22,7 +22,7 @@ from app.contracts.services import (
     XrayService,
 )
 
-from app.schemas.booking_schemas import BookingAccountCreateSchema
+from app.schemas.booking import BookingAccountCreateSchema
 
 from app.adapters.bot.states import BaseState, BookingAccountAdding
 import app.adapters.bot.utils as utils

@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from app.schemas.xray_schemas import (
+from app.schemas.xray import (
     XrayRecordSchema,
     XrayRecordCreateSchema,
     XrayRecordUpdateSchema,

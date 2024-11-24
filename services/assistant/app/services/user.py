@@ -1,7 +1,7 @@
 from app.contracts.repositories import UserRepository
 from app.contracts.services import UserService
 
-from app.schemas.user_schemas import UserSchema, UserUpdateSchema
+from app.schemas.user import UserSchema, UserUpdateSchema
 
 
 class UserServiceImpl(UserService):

@@ -5,7 +5,7 @@ from aiogram.fsm.state import State
 from aiogram.fsm.context import FSMContext
 from aiogram.utils.markdown import hbold
 
-from app.schemas.user_schemas import UserSchema, UserUpdateSchema
+from app.schemas.user import UserSchema, UserUpdateSchema
 from app.contracts.services import UserService, BookingService
 
 import app.adapters.bot.kb as kb

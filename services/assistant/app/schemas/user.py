@@ -1,5 +1,5 @@
-from app.schemas.base_schema import BaseSchema, BaseSchemaPK
-from app.schemas.booking_schemas import BookingAccountSchema
+from app.schemas.base import BaseSchema, BaseSchemaPK
+from app.schemas.booking import BookingAccountSchema
 
 
 class UserUpdateSchema(BaseSchema):
