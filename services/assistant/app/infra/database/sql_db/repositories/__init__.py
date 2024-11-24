@@ -1,7 +1,13 @@
-from app.infra.database.sql_db.repositories.booking_repository import (
+from app.infra.database.sql_db.repositories.booking import (
     SQLBookingRepository,
 )
-from app.infra.database.sql_db.repositories.user_repository import SQLUserRepository
-from app.infra.database.sql_db.repositories.xray_repository import SQLXrayRepository
+from app.infra.database.sql_db.repositories.user import SQLUserRepository
+from app.infra.database.sql_db.repositories.xray import SQLXrayRepository
+from app.infra.database.sql_db.repositories.factory import SQLRepositoryFactory
 
-__all__ = ["SQLBookingRepository", "SQLUserRepository", "SQLXrayRepository"]
+__all__ = [
+    "SQLBookingRepository",
+    "SQLUserRepository",
+    "SQLXrayRepository",
+    "SQLRepositoryFactory",
+]

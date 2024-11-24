@@ -7,13 +7,11 @@ from app.infra.logging.logger import logger, config
 from app.app import AppFactory
 from app.adapters.bot import BotFactory, BotServicesFactory, BotSettings
 from app.infra.database.sql_db import get_db_factory
-from app.infra.database.sql_db.repositories.repository_factory import (
-    SQLRepositoryFactory,
-)
 from app.infra.database.sql_db.repositories import (
     SQLBookingRepository,
     SQLUserRepository,
     SQLXrayRepository,
+    SQLRepositoryFactory,
 )
 from app.services import UserServiceFactory, BookingServiceFactory, XrayServiceFactory
 from app.adapters.output.grpc import BookingClientFactory, XrayClientFactory

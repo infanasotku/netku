@@ -2,7 +2,7 @@ from sqlalchemy import select
 
 from app.contracts.repositories import BookingRepository
 
-from app.infra.database.sql_db.repositories.base_repository import SQLBaseRepository
+from app.infra.database.sql_db.repositories.base import SQLBaseRepository
 from app.schemas.booking_schemas import BookingAccountCreateSchema, BookingAccountSchema
 
 from app.infra.database.sql_db import converters
