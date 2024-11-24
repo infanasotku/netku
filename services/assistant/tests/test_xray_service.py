@@ -1,7 +1,7 @@
 import pytest
 from datetime import datetime
 
-from app.services import XrayServiceImpl
+from app.services.xray import XrayServiceImpl
 from app.contracts.clients.xray import XrayClient
 from app.schemas.xray import (
     XrayRecordCreateSchema,
