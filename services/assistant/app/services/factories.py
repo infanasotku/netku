@@ -5,9 +5,9 @@ from app.contracts.repositories import XrayRepository, UserRepository, BookingRe
 
 from app.contracts.clients import XrayClient, BookingClient
 
-from app.services.booking_service import BookingServiceImpl
-from app.services.user_service import UserServiceImpl
-from app.services.xray_service import XrayServiceImpl
+from app.services.booking import BookingServiceImpl
+from app.services.user import UserServiceImpl
+from app.services.xray import XrayServiceImpl
 
 
 class UserServiceFactory:
