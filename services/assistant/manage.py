@@ -1,15 +1,26 @@
-import logging
 from fastapi import FastAPI
 import uvicorn
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 
-from settings import settings, logger
+from app.infra.config.settings import settings
+from app.infra.logging.logger import logger, config
 from app.app import AppFactory
-from app.bot import BotFactory, BotServicesFactory, BotSettings
-from app.database import get_db_factory
-from app.services import UserServiceFactory, BookingServiceFactory, XrayServiceFactory
-from app.infra.grpc import BookingClientFactory, XrayClientFactory
-from app.tasks.restart_proxy_task import RestartProxyTask
+from app.adapters.bot import BotFactory, BotServicesFactory, BotSettings
+from app.infra.database.sql_db import get_db_factory
+from app.infra.database.sql_db.repositories import (
+    SQLBookingRepository,
+    SQLUserRepository,
+    SQLXrayRepository,
+    SQLRepositoryFactory,
+)
+from app.services import (
+    UserServiceFactory,
+    BookingServiceFactory,
+    XrayServiceFactory,
+    BookingAnalysisServiceFactory,
+)
+from app.adapters.output.grpc import BookingClientFactory, XrayClientFactory
+from app.tasks.restart_proxy import RestartProxyTask
 
 
 def create_app() -> FastAPI:
@@ -33,11 +44,15 @@ def create_app() -> FastAPI:
     async_engine = create_async_engine(settings.psql_dsn)
     async_session = async_sessionmaker(async_engine)
     get_db = get_db_factory(async_session)
+    br_factory = SQLRepositoryFactory(get_db, SQLBookingRepository)
+    xr_factory = SQLRepositoryFactory(get_db, SQLXrayRepository)
+    ur_factory = SQLRepositoryFactory(get_db, SQLUserRepository)
 
     # service factories
-    us_factory = UserServiceFactory(get_db)
-    bs_factory = BookingServiceFactory(get_db, bc_factory.create)
-    xs_factory = XrayServiceFactory(get_db, xc_factory.create)
+    us_factory = UserServiceFactory(ur_factory.create)
+    bs_factory = BookingServiceFactory(br_factory.create, bc_factory.create)
+    xs_factory = XrayServiceFactory(xr_factory.create, xc_factory.create)
+    bas_factory = BookingAnalysisServiceFactory(bs_factory.create, us_factory.create)
 
     # Sub factories
     bot_factory = BotFactory(
@@ -46,6 +61,7 @@ def create_app() -> FastAPI:
             create_user_service=us_factory.create,
             create_booking_service=bs_factory.create,
             create_xray_service=xs_factory.create,
+            create_booking_analysis_service=bas_factory.create,
         ),
         logger=logger,
     )
@@ -59,7 +75,7 @@ def create_app() -> FastAPI:
         xray_restart_minutes=settings.xray_restart_minutes,
     )
 
-    factory = AppFactory()
+    factory = AppFactory(logger)
     factory.register_sub_factory(bot_factory)
 
     factory.register_task(restart_proxy)
@@ -68,18 +84,11 @@ def create_app() -> FastAPI:
 
 
 def run():
-    logging.basicConfig(
-        level=logging.INFO,
-        format="%(levelname)s:     [%(asctime)s] %(message)s",
-        datefmt="%d-%m-%Y %H:%M:%S",
-    )
-    log_config_path = settings.app_directory_path + "/log_config.yaml"
-
     uvicorn.run(
         app=create_app(),
         host=settings.host,
         port=settings.port,
-        log_config=log_config_path,
+        log_config=config,
         ssl_keyfile=settings.ssl_keyfile,
         ssl_certfile=settings.ssl_certfile,
     )
