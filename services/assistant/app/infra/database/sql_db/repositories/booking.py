@@ -17,7 +17,7 @@ class SQLBookingRepository(BookingRepository, SQLBaseRepository):
             .options(*selectinload_all(BookingAccount))
             .filter(BookingAccount.id == id)
         )
-        account = (await self.session.execute(s)).scalars().first()
+        account = (await self._session.execute(s)).scalars().first()
 
         if account is None:
             return None
@@ -30,8 +30,8 @@ class SQLBookingRepository(BookingRepository, SQLBaseRepository):
         account = converters.booking_account_create_schema_to_booking_account(
             account_create
         )
-        self.session.add(account)
-        await self.session.flush()
-        await self.session.refresh(account)
+        self._session.add(account)
+        await self._session.flush()
+        await self._session.refresh(account)
 
         return converters.booking_account_to_booking_account_schema(account)

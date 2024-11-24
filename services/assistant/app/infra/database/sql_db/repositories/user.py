@@ -16,7 +16,7 @@ class SQLUserRepository(UserRepository, SQLBaseRepository):
         self, column: InstrumentedAttribute, value
     ) -> User | None:
         s = select(User).options(*selectinload_all(User)).filter(column == value)
-        return (await self.session.execute(s)).scalars().first()
+        return (await self._session.execute(s)).scalars().first()
 
     async def get_user_by_id(self, id: int) -> UserSchema | None:
         user = await self._get_user_model_by_column(User.id, id)
@@ -45,15 +45,15 @@ class SQLUserRepository(UserRepository, SQLBaseRepository):
     async def get_all_users(self) -> list[UserSchema]:
         s = select(User).options(*selectinload_all(User))
 
-        users = (await self.session.execute(s)).scalars().all()
+        users = (await self._session.execute(s)).scalars().all()
 
         return [converters.user_to_user_schema(user) for user in users]
 
     async def create_user(self, user_create: UserCreateSchema) -> UserSchema:
         user = converters.user_create_schema_to_user(user_create)
-        self.session.add(user)
-        await self.session.flush()
-        await self.session.refresh(user)
+        self._session.add(user)
+        await self._session.flush()
+        await self._session.refresh(user)
 
         return converters.user_to_user_schema(user)
 
@@ -68,7 +68,7 @@ class SQLUserRepository(UserRepository, SQLBaseRepository):
         for field, value in user_update.model_dump(exclude_unset=True).items():
             setattr(user, field, value)
 
-        await self.session.flush()
-        await self.session.refresh(user)
+        await self._session.flush()
+        await self._session.refresh(user)
 
         return converters.user_to_user_schema(user)

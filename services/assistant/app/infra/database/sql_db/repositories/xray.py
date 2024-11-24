@@ -21,7 +21,7 @@ class SQLXrayRepository(XrayRepository, SQLBaseRepository):
             .options(*selectinload_all(XrayRecord))
             .filter(XrayRecord.id == id)
         )
-        return (await self.session.execute(s)).scalars().first()
+        return (await self._session.execute(s)).scalars().first()
 
     async def get_last_xray_record(self) -> XrayRecordSchema | None:
         s = (
@@ -30,7 +30,7 @@ class SQLXrayRepository(XrayRepository, SQLBaseRepository):
             .order_by(XrayRecord.id.desc())
             .limit(1)
         )
-        xray_record = (await self.session.execute(s)).scalars().first()
+        xray_record = (await self._session.execute(s)).scalars().first()
 
         if xray_record is None:
             return None
@@ -43,9 +43,9 @@ class SQLXrayRepository(XrayRepository, SQLBaseRepository):
         xray_record = converters.xray_record_create_schema_to_xray_record(
             xray_record_create
         )
-        self.session.add(xray_record)
-        await self.session.flush()
-        await self.session.refresh(xray_record)
+        self._session.add(xray_record)
+        await self._session.flush()
+        await self._session.refresh(xray_record)
 
         return converters.xray_record_to_xray_record_schema(xray_record)
 
@@ -60,7 +60,7 @@ class SQLXrayRepository(XrayRepository, SQLBaseRepository):
         for field, value in xray_record_update.model_dump(exclude_unset=True).items():
             setattr(xray_record, field, value)
 
-        await self.session.flush()
-        await self.session.refresh(xray_record)
+        await self._session.flush()
+        await self._session.refresh(xray_record)
 
         return converters.xray_record_to_xray_record_schema(xray_record)
