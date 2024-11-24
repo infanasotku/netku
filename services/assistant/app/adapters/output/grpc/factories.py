@@ -8,9 +8,9 @@ from grpc.aio import insecure_channel, AioRpcError, Channel
 from grpc_health.v1.health_pb2 import HealthCheckRequest, HealthCheckResponse
 from grpc_health.v1.health_pb2_grpc import HealthStub
 
-from app.adapters.output.grpc.booking_client import GRPCBookingClient
-from app.adapters.output.grpc.grpc_client import GRPCClient, CreateChannel
-from app.adapters.output.grpc.xray_client import GRPCXrayClient
+from app.adapters.output.grpc.booking import GRPCBookingClient
+from app.adapters.output.grpc.grpc import GRPCClient, CreateChannel
+from app.adapters.output.grpc.xray import GRPCXrayClient
 
 
 class ClientFactory(ABC):

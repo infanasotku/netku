@@ -3,7 +3,7 @@ from app.contracts.clients import BookingClient
 from app.adapters.output.grpc.gen.booking_pb2_grpc import BookingStub
 from app.adapters.output.grpc.gen.booking_pb2 import BookingRequest, BookingResponse
 
-from app.adapters.output.grpc.grpc_client import GRPCClient
+from app.adapters.output.grpc.grpc import GRPCClient
 
 
 class GRPCBookingClient(GRPCClient, BookingClient):
