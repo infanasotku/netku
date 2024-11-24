@@ -1,12 +1,15 @@
-from datetime import datetime
 import pytest
+from datetime import datetime
 
-from app.infra.database.sql_db.models import XrayRecord
-from app.infra.database.sql_db.orm import ModelT
 from app.services import XrayServiceImpl
 from app.contracts.clients.xray import XrayClient
+from app.schemas.xray import (
+    XrayRecordCreateSchema,
+    XrayRecordSchema,
+    XrayRecordUpdateSchema,
+)
 
-from tests.stubs import StubRepository
+from tests.stubs import StubXrayRepository
 
 
 class _StubXrayClient(XrayClient):
@@ -17,18 +20,30 @@ class _StubXrayClient(XrayClient):
         return self.uid
 
 
-class _StubRepository(StubRepository):
+class _StubRepository(StubXrayRepository):
     def __init__(self):
         self.uid = None
 
-    async def get_xray_record(self) -> XrayRecord | None:
-        return XrayRecord(uid=self.uid, last_update=datetime.now())
+    async def get_last_xray_record(self) -> XrayRecordSchema | None:
+        if self.uid is None:
+            return None
+        return XrayRecordSchema(uid=self.uid, last_update=datetime.now())
 
-    async def update(self, entity: ModelT) -> None:
-        self.uid = entity.uid
+    async def update_xray_record(
+        self, user_id: int, user_update: XrayRecordUpdateSchema
+    ) -> XrayRecordSchema:
+        self.uid = user_update.uid
+
+    async def create_xray_record(
+        self, account_create: XrayRecordCreateSchema
+    ) -> XrayRecordSchema:
+        self.uid = account_create.uid
 
 
-@pytest.mark.parametrize("uid", ["test-uid1", "test-uid2"])
+@pytest.mark.parametrize(
+    "uid",
+    ["3e2c1c6e-b6fe-486e-9d84-07f932b3590e", "d42c4276-cbd8-4203-9be3-e9071ffdb44e"],
+)
 @pytest.mark.asyncio
 async def test_restart_xray(uid: str):
     stub_xray_client = _StubXrayClient(uid)
