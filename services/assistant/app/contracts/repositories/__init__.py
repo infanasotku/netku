@@ -1,5 +1,5 @@
-from app.contracts.repositories.booking_repository import BookingRepository
-from app.contracts.repositories.xray_repository import XrayRepository
-from app.contracts.repositories.user_repository import UserRepository
+from app.contracts.repositories.booking import BookingRepository
+from app.contracts.repositories.xray import XrayRepository
+from app.contracts.repositories.user import UserRepository
 
 __all__ = ["BookingRepository", "XrayRepository", "UserRepository"]

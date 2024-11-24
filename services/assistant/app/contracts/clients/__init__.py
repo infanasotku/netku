@@ -1,4 +1,4 @@
-from app.contracts.clients.booking_client import BookingClient
-from app.contracts.clients.xray_client import XrayClient
+from app.contracts.clients.booking import BookingClient
+from app.contracts.clients.xray import XrayClient
 
 __all__ = ["BookingClient", "XrayClient"]
