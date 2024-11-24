@@ -35,4 +35,4 @@ class XrayServiceImpl(XrayService):
         xray_record = await self._xray_repository.get_last_xray_record()
 
         if xray_record is not None:
-            return xray_record.uid
+            return str(xray_record.uid)
