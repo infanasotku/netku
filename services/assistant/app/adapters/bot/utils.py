@@ -1,12 +1,11 @@
 from typing import Any, Callable, Coroutine
-from collections import Counter
 from aiogram.types import Message, Contact, InlineKeyboardButton
 from aiogram.fsm.state import State
 from aiogram.fsm.context import FSMContext
 from aiogram.utils.markdown import hbold
 
 from app.schemas.user import UserSchema, UserUpdateSchema
-from app.contracts.services import UserService, BookingService
+from app.contracts.services import UserService
 
 import app.adapters.bot.kb as kb
 from app.adapters.bot.states import BaseState
@@ -134,20 +133,3 @@ async def unsubscribe_user(
             user.proxy_subscription = False
 
     await user_service.update_user(user)
-
-
-async def get_booking_machine_count(
-    message: Message,
-    user_service: UserService,
-    booking_service: BookingService,
-) -> int:
-    user = await get_user(message, user_service)
-    if user is None:
-        return 0
-
-    return Counter(
-        [
-            await booking_service.booked(account.email, account.password)
-            for account in user.booking_accounts
-        ]
-    )[True]

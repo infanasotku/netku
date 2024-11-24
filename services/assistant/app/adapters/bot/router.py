@@ -195,16 +195,22 @@ class MainRouter:
 
         async with (
             self.create_user_service() as user_service,
-            self.create_booking_service() as booking_service,
+            self.create_booking_analysis_service() as booking_analysis,
         ):
             user = await utils.get_user(message, user_service)
 
             if not user:
                 return await message.answer(text.please_click_start)
 
+            booked_count = (
+                await booking_analysis.get_booked_machine_count_by_user_telegram_id(
+                    message.chat.id
+                )
+            )
+
             await utils.try_edit_or_answer(
                 message,
-                f"Now booked: {await utils.get_booking_machine_count(message, user_service, booking_service)}",
+                f"Now booked: {booked_count}",
                 kb.booking_menu,
             )
 
