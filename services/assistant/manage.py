@@ -13,7 +13,12 @@ from app.infra.database.sql_db.repositories import (
     SQLXrayRepository,
     SQLRepositoryFactory,
 )
-from app.services import UserServiceFactory, BookingServiceFactory, XrayServiceFactory
+from app.services import (
+    UserServiceFactory,
+    BookingServiceFactory,
+    XrayServiceFactory,
+    BookingAnalysisServiceFactory,
+)
 from app.adapters.output.grpc import BookingClientFactory, XrayClientFactory
 from app.tasks.restart_proxy import RestartProxyTask
 
@@ -47,6 +52,7 @@ def create_app() -> FastAPI:
     us_factory = UserServiceFactory(ur_factory.create)
     bs_factory = BookingServiceFactory(br_factory.create, bc_factory.create)
     xs_factory = XrayServiceFactory(xr_factory.create, xc_factory.create)
+    bas_factory = BookingAnalysisServiceFactory(bs_factory.create, us_factory.create)
 
     # Sub factories
     bot_factory = BotFactory(
@@ -55,6 +61,7 @@ def create_app() -> FastAPI:
             create_user_service=us_factory.create,
             create_booking_service=bs_factory.create,
             create_xray_service=xs_factory.create,
+            create_booking_analysis_service=bas_factory.create,
         ),
         logger=logger,
     )

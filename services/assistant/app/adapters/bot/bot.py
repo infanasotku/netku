@@ -13,6 +13,7 @@ from app.contracts.services import (
     BookingService,
     UserService,
     XrayService,
+    BookingAnalysisService,
 )
 from app.adapters.bot.router import MainRouter
 
@@ -21,6 +22,9 @@ class BotServicesFactory(BaseModel):
     create_user_service: Callable[[], AsyncContextManager[UserService]]
     create_booking_service: Callable[[], AsyncContextManager[BookingService]]
     create_xray_service: Callable[[], AsyncContextManager[XrayService]]
+    create_booking_analysis_service: Callable[
+        [], AsyncContextManager[BookingAnalysisService]
+    ]
 
 
 class BotSettings(BaseModel):
@@ -61,6 +65,7 @@ class BotFactory(AbstractAppFactory):
             create_booking_service=self.bot_service_factory.create_booking_service,
             create_user_service=self.bot_service_factory.create_user_service,
             create_xray_service=self.bot_service_factory.create_xray_service,
+            create_booking_analysis_service=self.bot_service_factory.create_booking_analysis_service,
             logger=self.logger,
         )
         main_router.register_router(self.dispatcher)

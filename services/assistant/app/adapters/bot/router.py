@@ -17,6 +17,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.utils.markdown import hbold
 
 from app.contracts.services import (
+    BookingAnalysisService,
     BookingService,
     UserService,
     XrayService,
@@ -37,11 +38,15 @@ class MainRouter:
         create_booking_service: Callable[[], AsyncContextManager[BookingService]],
         create_user_service: Callable[[], AsyncContextManager[UserService]],
         create_xray_service: Callable[[], AsyncContextManager[XrayService]],
+        create_booking_analysis_service: Callable[
+            [], AsyncContextManager[BookingAnalysisService]
+        ],
         logger: Logger,
     ):
         self.create_booking_service = create_booking_service
         self.create_user_service = create_user_service
         self.create_xray_service = create_xray_service
+        self.create_booking_analysis_service = create_booking_analysis_service
         self.router = Router(name="main")
         self.logger = logger
 

@@ -2,12 +2,13 @@ from contextlib import asynccontextmanager
 from typing import AsyncContextManager, AsyncGenerator, Callable
 
 from app.contracts.repositories import XrayRepository, UserRepository, BookingRepository
-
+from app.contracts.services import UserService, BookingService
 from app.contracts.clients import XrayClient, BookingClient
 
 from app.services.booking import BookingServiceImpl
 from app.services.user import UserServiceImpl
 from app.services.xray import XrayServiceImpl
+from app.services.analysis.user_booking import BookingAnalysisServiceImpl
 
 
 class UserServiceFactory:
@@ -57,3 +58,21 @@ class XrayServiceFactory:
             self._create_xray_client() as xray_client,
         ):
             yield XrayServiceImpl(xray_repository, xray_client)
+
+
+class BookingAnalysisServiceFactory:
+    def __init__(
+        self,
+        create_booking_service: Callable[[], AsyncContextManager[BookingService]],
+        create_user_service: Callable[[], AsyncContextManager[UserService]],
+    ):
+        self._create_booking_service = create_booking_service
+        self._create_user_service = create_user_service
+
+    @asynccontextmanager
+    async def create(self) -> AsyncGenerator[XrayServiceImpl, None]:
+        async with (
+            self._create_booking_service() as booking_service,
+            self._create_user_service() as user_service,
+        ):
+            yield BookingAnalysisServiceImpl(booking_service, user_service)
