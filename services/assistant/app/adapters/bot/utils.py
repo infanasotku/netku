@@ -88,13 +88,6 @@ async def apply_field(
     await try_edit_or_answer(msg, menu_text, await menu_generator(state))
 
 
-async def get_user(message: Message, user_service: UserService) -> UserSchema | None:
-    """Finds user by `message.chat.id`
-    - Returns `UserSchema` if user exist,
-    `None` otherwise."""
-    return await user_service.get_user_by_telegram_id(message.chat.id)
-
-
 async def registrate_user(
     contact: Contact, user_service: UserService
 ) -> UserSchema | None:
