@@ -17,7 +17,7 @@
   height: 100%;
 
   color: transparent;
-  mask: url("/img/netku.svg") no-repeat;
+  mask: url("/img/netku-light.svg") no-repeat;
 }
 
 .icon:before {
