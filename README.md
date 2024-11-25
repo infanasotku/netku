@@ -1,4 +1,4 @@
-## <img src="https://raw.githubusercontent.com/infanasotku/netku/master/services/landing/public/img/netku.svg" alt="Netku logo" width="22px" style="position: relative;top: 6px;"/> My own server unit.
+## <img src="https://raw.githubusercontent.com/infanasotku/netku/master/services/landing/public/img/netku-light.svg" alt="Netku logo" width="22px" style="position: relative;top: 6px;"/> My own server unit.
 
 ### Contains:
 
