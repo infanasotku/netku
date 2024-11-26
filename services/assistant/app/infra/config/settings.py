@@ -12,7 +12,7 @@ from app.infra.config.postgres import PostgreSQLSettings
 from app.infra.config.xray import XraySettings
 
 
-class Settings(BaseSettings):
+class Settings(XraySettings, BookingSettings, BotSettings, PostgreSQLSettings):
     # region Network
     host: str = Field(validation_alias="ASSISTANT_HOST", default="127.0.0.1")
     port: int = Field(validation_alias="ASSISTANT_PORT", default=5100)
