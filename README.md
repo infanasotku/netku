@@ -22,7 +22,7 @@
 title: Netku architecture
 ---
 flowchart TD
-    G@{shape: trap-t, label: "fa:fa-globe Gateaway"}
+    G@{shape: trap-t, label: "fa:fa-globe Gateway"}
 
 
     N(fa:fa-server Nginx)
