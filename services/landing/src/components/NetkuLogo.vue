@@ -49,7 +49,7 @@ const props = defineProps({
       width: 25px;
       height: 25px;
       fill: currentColor;
-      mask: url("/img/netku.svg") no-repeat;
+      mask: url("/img/netku-light.svg") no-repeat;
 
       color: var(--text-color-1);
       transition: color 0.25s;

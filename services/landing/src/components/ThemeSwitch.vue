@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { VueCookies } from "vue-cookies";
-import { inject, onMounted } from "vue";
+import { inject, onMounted, onUnmounted } from "vue";
 
 const $cookies = inject<VueCookies>("$cookies")!;
 let html: Element;
+let darkColorScheme: MediaQueryList;
 
 const setTheme = (dark: boolean) => {
   const notransition = document.createElement("style");
@@ -31,15 +32,43 @@ const setTheme = (dark: boolean) => {
   $cookies.set("theme", dark ? "dark" : "light");
 };
 
+const setPageIcon = (dark: boolean) => {
+  const iconLink: HTMLLinkElement | null =
+    document.querySelector("link[rel~='icon']");
+
+  if (!iconLink) {
+    return;
+  }
+
+  const iconId = dark ? "dark" : "light";
+  iconLink.href = `/img/netku-${iconId}.svg`;
+};
+
 const onClick = () => {
   setTheme(!html.classList.contains("dark"));
 };
 
-onMounted(() => {
-  const theme = $cookies.get("theme");
-  html = document.documentElement;
+const browserThemeChanged = () => {
+  const isThemeDark = darkColorScheme.matches;
+  setTheme(isThemeDark);
+  setPageIcon(isThemeDark);
+};
 
-  setTheme(theme && theme === "dark");
+onMounted(() => {
+  const savedTheme = $cookies.get("theme");
+  html = document.documentElement;
+  darkColorScheme = window.matchMedia("(prefers-color-scheme: dark)");
+
+  browserThemeChanged();
+  darkColorScheme.addEventListener("change", browserThemeChanged);
+
+  if (savedTheme) {
+    setTheme(savedTheme === "dark");
+  }
+});
+
+onUnmounted(() => {
+  darkColorScheme.removeEventListener("change", browserThemeChanged);
 });
 </script>
 

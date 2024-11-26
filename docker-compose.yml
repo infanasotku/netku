@@ -79,7 +79,7 @@ services:
     build:
       context: services/server
       args:
-        PORT:
+        ASSISTANT_PORT:
         DOMAIN:
         XRAY_FALLBACK_PORT:
 

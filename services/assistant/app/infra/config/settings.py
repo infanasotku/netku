@@ -12,9 +12,10 @@ from app.infra.config.postgres import PostgreSQLSettings
 from app.infra.config.xray import XraySettings
 
 
-class Settings(BookingSettings, BotSettings, PostgreSQLSettings, XraySettings):
-    host: str = Field(validation_alias="HOST", default="127.0.0.1")
-    port: int = Field(validation_alias="PORT", default=5100)
+class Settings(BaseSettings):
+    # region Network
+    host: str = Field(validation_alias="ASSISTANT_HOST", default="127.0.0.1")
+    port: int = Field(validation_alias="ASSISTANT_PORT", default=5100)
     domain: str = Field(validation_alias="DOMAIN", default="127.0.0.1")
     ssl_keyfile: str | None = Field(validation_alias="SSL_KEYFILE", default=None)
     ssl_certfile: str | None = Field(validation_alias="SSL_CERTFILE", default=None)

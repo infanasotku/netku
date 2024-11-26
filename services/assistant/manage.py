@@ -30,14 +30,12 @@ def create_app() -> FastAPI:
         client_port=settings.booking_port,
         service_name="booking",
         reconnection_delay=settings.reconnection_delay,
-        reconnection_retries=settings.reconnection_retries,
     )
     xc_factory = XrayClientFactory(
         client_addr=settings.xray_host,
         client_port=settings.xray_port,
         service_name="xray",
         reconnection_delay=settings.reconnection_delay,
-        reconnection_retries=settings.reconnection_retries,
     )
 
     # db factory
