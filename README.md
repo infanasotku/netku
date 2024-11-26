@@ -10,6 +10,14 @@
 4. **NGINX** http server for routing **1.**, **2.** and **3.** (named **server**).
 5. Web automation service for auto booking NSU washing machines (named **booking**).
 
+```mermaid
+graph TD;
+    A-->B;
+    A-->C;
+    B-->D;
+    C-->D;
+```
+
 ---
 
 - You can open [envs](./.env.example) for looking environment variables off app.
