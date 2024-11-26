@@ -1,4 +1,9 @@
-## <img src="https://raw.githubusercontent.com/infanasotku/netku/master/services/landing/public/img/netku-light.svg" alt="Netku logo" width="22px" style="position: relative;top: 6px;"/> My own server unit.
+<link
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+  rel="stylesheet"
+/>
+
+## <img src="./services/landing/public/img/netku-dark.svg" alt="Netku logo" width="30px" style="position: relative;top: 6px;"/> My own server unit.
 
 ### Contains:
 
@@ -12,62 +17,52 @@
 
 ---
 
-### Assitants envs:
+```mermaid
+---
+title: Netku architecture
+---
+flowchart TD
+    G@{shape: trap-t, label: "fa:fa-globe Gateaway"}
 
-##### General
 
-- `HOST`: Adress for serving.
-- `PORT`: PORT for serving.
-- `DOMAIN`: Domain name
-- `SSL_CERTFILE`: Path to ssl cert file.
-- `SSL_KEYFILE`: Path to ssl key file.
-- `RECONNECTION_RETRIES`: Count of retries to reconnect to services.
-- `RECONNECTION_DELAY`: Delay in seconds between reconnection retries.
+    N(fa:fa-server Nginx)
+    X(fa:fa-shield-halved Xray)
 
-##### Xray
+    NFallback@{ shape: braces, label: "xray fallback?"}
+    Nhttp@{ shape: braces, label: "direct http?"}
 
-- `XRAY_RESTART_MINUTES`: Minutes between restarting xray.
-- `XRAY_PORT`: Port for communicated with xray service.
-- `XRAY_HOST`: Adress for communicated with xray service.
 
-- `BOT_TOKEN`: Bot token from bot father.
-- `TELEGRAM_TOKEN`: Telegram secret.
-- `BOT_WEBHOOK_URL`: Webhook url for telegram.
+    L(fa:fa-eye Landing)
+    A(fa:fa-cloud Assistant)
+    B(fa:fa-book Booking)
+    P(fa:fa-database Postgres)
+    M(fa:fa-database Mongo)
 
-#### Booking
+    G <-->|https| X
+    G <--> |vless| X
 
-- `BOOKING_PORT`: Port for communicated with booking service.
-- `BOOKING_HOST`: Adress for communicated with xray service.
+    G -->|http| N
+    X <--> |fallback| N
 
-##### DB
 
-- `POSTGRES_PASSWORD`: DB password.
-- `POSTGRES_USER`: DB user.
-- `POSTGRES_HOST`: DB host.
-- `POSTGRES_PORT`: DB port.
-- `POSTGRES_DB_NAME`: DB name.
+    N --> Nhttp
+    N <--> NFallback
 
-##### BOT
+    Nhttp --> |https 301| G
 
-- `BOT_TOKEN`: Bot token.
-- `TELEGRAM_TOKEN`: Telegram secret.
-- `BOT_WEBHOOK_URL`: Full link to bot webhook endpoint.
+    NFallback <--> |static| L
+    NFallback <--> |bot webhook| A
+    NFallback <--> |api| A
 
-### Xray envs:
+    A <-.-> |grpc|X
+    A <-.-> |grpc|B
 
-- `XRAY_PORT`: PORT for serving.
-- `XRAY_FALLBACK`: Address for fallback (with port if need).
-- `XRAY_CONFIG_DIR`: Folder where xray take config.
-- `XRAY_LOG_DIR`: Folder where xray put logs.
-- `SSL_CERTFILE`: Path to ssl cert file.
-- `SSL_KEYFILE`: Path to ssl key file.
+    A <--> P
+    A <--> M
+```
 
-### Booking envs:
+---
 
-- `BOOKING_PORT`: PORT for serving.
-- `SSL_CERTFILE`: Path to ssl cert file.
-- `SSL_KEYFILE`: Path to ssl key file.
+### Envs:
 
-### Server envs:
-
-- `DOMAIN`: Server domain name.
+- You can open [envs](./.env.example) for looking environment variables off app.

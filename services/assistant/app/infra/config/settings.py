@@ -11,16 +11,11 @@ from app.infra.logging.logger import logger
 
 class Settings(BaseSettings):
     # region Network
-    host: str = Field(validation_alias="HOST", default="127.0.0.1")
-    port: int = Field(validation_alias="PORT", default=5100)
+    host: str = Field(validation_alias="ASSISTANT_HOST", default="127.0.0.1")
+    port: int = Field(validation_alias="ASSISTANT_PORT", default=5100)
     domain: str = Field(validation_alias="DOMAIN", default="127.0.0.1")
     ssl_keyfile: str | None = Field(validation_alias="SSL_KEYFILE", default=None)
     ssl_certfile: str | None = Field(validation_alias="SSL_CERTFILE", default=None)
-
-    reconnection_retries: int = Field(
-        validation_alias="RECONNECTION_RETRIES", default=5
-    )
-    reconnection_delay: float = Field(validation_alias="RECONNECTION_DELAY", default=3)
     # endregion
 
     # region Xray
