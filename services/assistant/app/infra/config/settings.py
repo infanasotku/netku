@@ -16,11 +16,6 @@ class Settings(BaseSettings):
     domain: str = Field(validation_alias="DOMAIN", default="127.0.0.1")
     ssl_keyfile: str | None = Field(validation_alias="SSL_KEYFILE", default=None)
     ssl_certfile: str | None = Field(validation_alias="SSL_CERTFILE", default=None)
-
-    reconnection_retries: int = Field(
-        validation_alias="RECONNECTION_RETRIES", default=5
-    )
-    reconnection_delay: float = Field(validation_alias="RECONNECTION_DELAY", default=3)
     # endregion
 
     # region Xray

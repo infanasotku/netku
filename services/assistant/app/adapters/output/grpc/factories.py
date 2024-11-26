@@ -21,13 +21,11 @@ class ClientFactory(ABC):
         client_addr: str,
         client_port: int,
         service_name: str,
-        reconnection_retries: int,
         reconnection_delay: float,
     ):
         self.client_addr = client_addr
         self.client_port = client_port
         self.grpc_service_name = service_name
-        self.reconnection_retries = reconnection_retries
         self.reconnection_delay = reconnection_delay
 
     async def _check_health(self, channel: Channel) -> bool:
