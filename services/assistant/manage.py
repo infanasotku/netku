@@ -2,8 +2,8 @@ from fastapi import FastAPI
 import uvicorn
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 
-from app.infra.config.settings import settings
-from app.infra.logging.logger import logger, config
+from app.infra.config import settings
+from app.infra.logging import logger, config
 from app.app import AppFactory
 from app.adapters.bot import BotFactory, BotServicesFactory, BotSettings
 from app.infra.database.sql_db import get_db_factory
