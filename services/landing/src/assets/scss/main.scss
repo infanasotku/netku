@@ -28,3 +28,8 @@ html.dark {
   border-color: var(--input-border-hover-color) !important;
   transition: 0.3s;
 }
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
