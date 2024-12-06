@@ -30,7 +30,8 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: node-dependencies
-          path: ./node_modules
+          path: services/landing/node_modules
+
   test:
     name: Test landing
     runs-on: ubuntu-latest
