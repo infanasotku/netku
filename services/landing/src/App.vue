@@ -57,7 +57,7 @@ const switchMenuVisibility = () => {
       <RouterView v-slot="{ Component }">
         <template v-if="Component">
           <Transition mode="out-in" name="fade">
-            <Suspense>
+            <Suspense timeout="0">
               <!-- main content -->
               <component class="page" :is="Component">
                 <PageLink
