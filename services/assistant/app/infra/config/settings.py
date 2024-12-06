@@ -10,9 +10,12 @@ from app.infra.config.booking import BookingSettings
 from app.infra.config.bot import BotSettings
 from app.infra.config.postgres import PostgreSQLSettings
 from app.infra.config.xray import XraySettings
+from app.infra.config.mongo import MongoSettings
 
 
-class Settings(XraySettings, BookingSettings, BotSettings, PostgreSQLSettings):
+class Settings(
+    XraySettings, BookingSettings, BotSettings, PostgreSQLSettings, MongoSettings
+):
     # region Network
     host: str = Field(validation_alias="ASSISTANT_HOST", default="127.0.0.1")
     port: int = Field(validation_alias="ASSISTANT_PORT", default=5100)
