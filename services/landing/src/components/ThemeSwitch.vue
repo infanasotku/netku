@@ -41,7 +41,7 @@ const setPageIcon = (dark: boolean) => {
   }
 
   const iconId = dark ? "dark" : "light";
-  iconLink.href = `/img/netku-${iconId}.svg`;
+  iconLink.href = `@/assets/icons/netku-${iconId}.svg`;
 };
 
 const onClick = () => {
@@ -136,12 +136,12 @@ onUnmounted(() => {
 }
 
 .sun {
-  mask: url("/img/sun.svg") no-repeat;
+  mask: url("@/assets/icons/sun.svg") no-repeat;
 }
 
 .moon {
   opacity: 0;
-  mask: url("/img/moon.svg") no-repeat;
+  mask: url("@/assets/icons/moon.svg") no-repeat;
 }
 
 .dark .sun {

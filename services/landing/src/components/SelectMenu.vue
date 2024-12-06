@@ -78,7 +78,7 @@ const list = computed(() => {
         transition: transform 0.25s;
         color: var(--text-color-3);
         background-color: currentColor;
-        mask: url("/img/arrow.svg") no-repeat;
+        mask: url("@/assets/icons/arrow.svg") no-repeat;
       }
     }
 

@@ -1,0 +1,15 @@
+@mixin popUp() {
+  display: flex;
+  align-items: start;
+  justify-content: center;
+
+  padding: 12px;
+  min-width: 128px;
+  max-height: 200px;
+
+  border: 1px solid var(--divider-color);
+  border-radius: 12px;
+  background-color: var(--menu-bg);
+  box-shadow: var(--shadow);
+  transition: background-color 0.5s;
+}
