@@ -3,7 +3,7 @@
   rel="stylesheet"
 />
 
-## <img src="./services/landing/src/assets/netku-dark.svg" alt="Netku logo" width="30px" style="position: relative;top: 6px;"/> My own server unit.
+## <img src="./services/landing/public/img/netku-dark.svg" alt="Netku logo" width="30px" style="position: relative;top: 6px;"/> My own server unit.
 
 ### Contains:
 
