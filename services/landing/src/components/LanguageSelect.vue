@@ -92,12 +92,12 @@ const current = computed({
       }
 
       .language {
-        mask: url("/img/language.svg") no-repeat;
+        mask: url("@/assets/icons/language.svg") no-repeat;
         width: 16px;
         height: 16px;
       }
       .arrow {
-        mask: url("/img/arrow.svg") no-repeat;
+        mask: url("@/assets/icons/arrow.svg") no-repeat;
         width: 14px;
         height: 14px;
         transform: rotate(90deg);
