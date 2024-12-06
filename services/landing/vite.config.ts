@@ -2,7 +2,6 @@ import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 
 import { fileURLToPath, URL } from "url";
-
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [vue()],
@@ -15,12 +14,14 @@ export default defineConfig({
     host: "0.0.0.0",
     port: 5001,
   },
+  envDir: "../../",
   css: {
     preprocessorOptions: {
       scss: {
         api: "modern-compiler",
         quietDeps: true,
         silenceDeprecations: ["import"],
+        additionalData: `@import "@/assets/scss/_variables.scss";@import "@/assets/scss/_mixins.scss";`,
       },
     },
   },

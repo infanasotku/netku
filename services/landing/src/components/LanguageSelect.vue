@@ -48,7 +48,7 @@ const current = computed({
       </span>
     </button>
     <Transition name="menu">
-      <div class="menu pop-up" v-if="menuVisible && !props.listOnly">
+      <div class="menu" v-if="menuVisible && !props.listOnly">
         <SelectMenu :list="menu" v-model:current="current"></SelectMenu>
       </div>
     </Transition>
@@ -92,12 +92,12 @@ const current = computed({
       }
 
       .language {
-        mask: url("/img/language.svg") no-repeat;
+        mask: url("@/assets/icons/language.svg") no-repeat;
         width: 16px;
         height: 16px;
       }
       .arrow {
-        mask: url("/img/arrow.svg") no-repeat;
+        mask: url("@/assets/icons/arrow.svg") no-repeat;
         width: 14px;
         height: 14px;
         transform: rotate(90deg);
@@ -113,6 +113,8 @@ const current = computed({
   }
 
   .menu {
+    @include popUp;
+
     position: absolute;
     right: -12px;
     top: calc(100% / 2 + 20px);

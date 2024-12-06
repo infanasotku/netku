@@ -11,6 +11,11 @@ const { t } = useI18n();
 const emits = defineEmits(["menu-click"]);
 
 const popUpVisible = ref(false);
+
+const icons = {
+  githubURL: new URL("@/assets/icons/github.svg", import.meta.url).href,
+  telegramURL: new URL("@/assets/icons/telegram.svg", import.meta.url).href,
+};
 </script>
 
 <template>
@@ -28,11 +33,11 @@ const popUpVisible = ref(false);
       <div class="divider"></div>
       <div class="social-icons">
         <LinkIcon
-          imgSource="/img/github.svg"
+          :imgSource="icons.githubURL"
           link="https://github.com/infanasotku"
         ></LinkIcon>
         <LinkIcon
-          imgSource="/img/telegram.svg"
+          :imgSource="icons.telegramURL"
           link="https://t.me/infanasotku"
         ></LinkIcon>
       </div>
@@ -46,7 +51,7 @@ const popUpVisible = ref(false);
         <span class="icon"></span>
       </div>
       <Transition name="tools">
-        <div v-if="popUpVisible" class="pop-up-tools pop-up">
+        <div v-if="popUpVisible" class="pop-up-tools">
           <div class="group">
             <LanguageSelect
               @change="popUpVisible = false"
@@ -64,12 +69,12 @@ const popUpVisible = ref(false);
               <div class="social-icons">
                 <LinkIcon
                   class="link"
-                  imgSource="/img/github.svg"
+                  :imgSource="icons.githubURL"
                   link="https://github.com/infanasotku"
                 ></LinkIcon>
                 <LinkIcon
                   class="link"
-                  imgSource="/img/telegram.svg"
+                  :imgSource="icons.telegramURL"
                   link="https://t.me/infanasotku"
                 ></LinkIcon>
               </div>
@@ -113,7 +118,7 @@ const popUpVisible = ref(false);
       width: 20px;
       height: 20px;
       fill: currentColor;
-      mask: url("/img/menu.svg") no-repeat;
+      mask: url("@/assets/icons/menu.svg") no-repeat;
 
       color: var(--text-color-2);
       transition: color 0.25s;
@@ -172,7 +177,7 @@ const popUpVisible = ref(false);
       .icon {
         color: var(--text-color-1);
         background-color: currentColor;
-        mask: url("/img/ellipsis.svg") no-repeat;
+        mask: url("@/assets/icons/ellipsis.svg") no-repeat;
 
         height: 20px;
         width: 20px;
@@ -181,6 +186,8 @@ const popUpVisible = ref(false);
       display: none;
     }
     .pop-up-tools {
+      @include popUp;
+
       flex-direction: column;
 
       position: absolute;

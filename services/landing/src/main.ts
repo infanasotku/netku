@@ -7,6 +7,7 @@ import App from "@/App.vue";
 import * as config from "@/config";
 import en from "@/lang/en.json";
 import ru from "@/lang/ru.json";
+import "@/assets/scss/main.scss";
 
 const app = createApp(App);
 

@@ -55,21 +55,26 @@ const switchMenuVisibility = () => {
     ></Sidebar>
     <div class="content">
       <RouterView v-slot="{ Component }">
-        <Suspense timeout="0">
-          <template #default>
-            <component class="page" :is="Component" v-if="Component">
-              <PageLink
-                @change="onPageChanged"
-                class="page-link"
-                :next-link="nextLink"
-                :prev-link="prevLink"
-              ></PageLink>
-            </component>
-          </template>
-          <template #fallback>
-            <LoadingPage></LoadingPage>
-          </template>
-        </Suspense>
+        <template v-if="Component">
+          <Transition mode="out-in" name="fade">
+            <Suspense timeout="0">
+              <!-- main content -->
+              <component class="page" :is="Component">
+                <PageLink
+                  @change="onPageChanged"
+                  class="page-link"
+                  :next-link="nextLink"
+                  :prev-link="prevLink"
+                ></PageLink>
+              </component>
+
+              <!-- loading state -->
+              <template #fallback>
+                <LoadingPage></LoadingPage>
+              </template>
+            </Suspense>
+          </Transition>
+        </template>
       </RouterView>
     </div>
   </div>
@@ -126,6 +131,8 @@ const switchMenuVisibility = () => {
 
       max-width: 912px;
       margin: 0 auto;
+
+      transition: opacity 0.5s;
     }
   }
 
