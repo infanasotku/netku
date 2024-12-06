@@ -11,6 +11,11 @@ const { t } = useI18n();
 const emits = defineEmits(["menu-click"]);
 
 const popUpVisible = ref(false);
+
+const icons = {
+  githubURL: new URL("@/assets/icons/github.svg", import.meta.url).href,
+  telegramURL: new URL("@/assets/icons/telegram.svg", import.meta.url).href,
+};
 </script>
 
 <template>
@@ -28,11 +33,11 @@ const popUpVisible = ref(false);
       <div class="divider"></div>
       <div class="social-icons">
         <LinkIcon
-          imgSource="/src/assets/icons/github.svg"
+          :imgSource="icons.githubURL"
           link="https://github.com/infanasotku"
         ></LinkIcon>
         <LinkIcon
-          imgSource="/src/assets/icons/telegram.svg"
+          :imgSource="icons.telegramURL"
           link="https://t.me/infanasotku"
         ></LinkIcon>
       </div>
@@ -64,12 +69,12 @@ const popUpVisible = ref(false);
               <div class="social-icons">
                 <LinkIcon
                   class="link"
-                  imgSource="/src/assets/icons/github.svg"
+                  :imgSource="icons.githubURL"
                   link="https://github.com/infanasotku"
                 ></LinkIcon>
                 <LinkIcon
                   class="link"
-                  imgSource="/src/assets/icons/telegram.svg"
+                  :imgSource="icons.telegramURL"
                   link="https://t.me/infanasotku"
                 ></LinkIcon>
               </div>
