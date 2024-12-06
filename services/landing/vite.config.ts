@@ -21,6 +21,7 @@ export default defineConfig({
         api: "modern-compiler",
         quietDeps: true,
         silenceDeprecations: ["import"],
+        additionalData: `@import "@/assets/scss/_variables.scss";@import "@/assets/scss/_mixins.scss";`,
       },
     },
   },

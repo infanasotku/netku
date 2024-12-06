@@ -48,7 +48,7 @@ const current = computed({
       </span>
     </button>
     <Transition name="menu">
-      <div class="menu pop-up" v-if="menuVisible && !props.listOnly">
+      <div class="menu" v-if="menuVisible && !props.listOnly">
         <SelectMenu :list="menu" v-model:current="current"></SelectMenu>
       </div>
     </Transition>
@@ -113,6 +113,8 @@ const current = computed({
   }
 
   .menu {
+    @include popUp;
+
     position: absolute;
     right: -12px;
     top: calc(100% / 2 + 20px);

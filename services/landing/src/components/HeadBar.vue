@@ -46,7 +46,7 @@ const popUpVisible = ref(false);
         <span class="icon"></span>
       </div>
       <Transition name="tools">
-        <div v-if="popUpVisible" class="pop-up-tools pop-up">
+        <div v-if="popUpVisible" class="pop-up-tools">
           <div class="group">
             <LanguageSelect
               @change="popUpVisible = false"
@@ -181,6 +181,8 @@ const popUpVisible = ref(false);
       display: none;
     }
     .pop-up-tools {
+      @include popUp;
+
       flex-direction: column;
 
       position: absolute;
