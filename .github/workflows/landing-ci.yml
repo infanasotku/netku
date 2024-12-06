@@ -7,8 +7,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-and-test:
-    name: Build and test landing
+  build:
+    name: Build landing
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -26,7 +26,24 @@ jobs:
         working-directory: services/landing
         run: npx -a prettier -c .
 
+      - name: Upload dependencies artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: node-dependencies
+          path: ./node_modules
+  test:
+    name: Test landing
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Download build artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: node-dependencies
+
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps chromium
       - name: Run Playwright tests
+        working-directory: services/landing
         run: npx playwright test
