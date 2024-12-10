@@ -18,9 +18,7 @@ class AvailabilityRepository(ABC):
         """
 
     @abstractmethod
-    async def get_average_service_availability_factor(
-        self, service_name: Service
-    ) -> float:
+    async def get_average_service_availability_factor(self, service: Service) -> float:
         """Counts average availability factor of service.
 
         :return: Counted factor.
