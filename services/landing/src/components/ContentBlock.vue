@@ -69,6 +69,7 @@ const props = defineProps({
   border-radius: 4px;
   padding: 3px 6px;
   background-color: var(--code-bg);
+  white-space: nowrap;
   transition:
     color 0.25s,
     background-color 0.5s;
