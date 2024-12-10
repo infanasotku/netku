@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from datetime import datetime
 
 from app.schemas.availability import (
     AvailabilitySchema,
@@ -19,11 +18,10 @@ class AvailabilityRepository(ABC):
         """
 
     @abstractmethod
-    async def get_service_availability_factor_by_period(
-        self, service_name: Service, start: datetime, end: datetime
+    async def get_average_service_availability_factor(
+        self, service_name: Service
     ) -> float:
-        """Counts average availability factor for service
-        for period from `start` to `end` in DB.
+        """Counts average availability factor of service.
 
         :return: Counted factor.
         """
