@@ -15,6 +15,7 @@ class AvailabilityCreateSchema(BaseSchemaPK):
     created: datetime
     service: Service
     availability_factor: float
+    response_time: float
 
     @field_serializer("service")
     def serialize_service(self, value: Service) -> int:

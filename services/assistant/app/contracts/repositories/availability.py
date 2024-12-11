@@ -3,7 +3,6 @@ from abc import ABC, abstractmethod
 from app.schemas.availability import (
     AvailabilitySchema,
     AvailabilityCreateSchema,
-    Service,
 )
 
 
@@ -22,20 +21,4 @@ class AvailabilityRepository(ABC):
         """Logs availability record to DB.
 
         :return: Logged availability row.
-        """
-
-    @abstractmethod
-    async def get_average_service_availability_factor(self, service: Service) -> float:
-        """Counts average availability factor of service.
-
-        :return: Counted factor.
-        """
-
-    @abstractmethod
-    async def get_availabilities_by_service(
-        self, service: Service
-    ) -> list[AvailabilitySchema]:
-        """Receives from DB all availability records for specified service.
-
-        :return: Received records.
         """
