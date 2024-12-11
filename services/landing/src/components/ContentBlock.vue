@@ -14,7 +14,7 @@ const props = defineProps({
   </div>
 </template>
 
-<style>
+<style lang="scss">
 .content-block {
   display: flex;
   flex-direction: column;
@@ -26,102 +26,104 @@ const props = defineProps({
 
   padding-bottom: 48px;
   border-bottom: 1px solid var(--divider-color);
-}
 
-.content-block:not(:first-child) {
-  margin-top: 24px;
-}
+  &:not(:first-child) {
+    margin-top: 24px;
+  }
 
-.content-block h1 {
-  line-height: 40px;
-  font-size: 32px;
-  font-weight: 600;
-  margin: 0;
-}
+  p {
+    margin-top: 16px;
+    margin-bottom: 0;
 
-.content-block p {
-  margin-top: 16px;
-  margin-bottom: 0;
-}
+    &:not(:last-child) {
+      margin-bottom: 16px;
+    }
+  }
 
-.content-block p:not(:last-child) {
-  margin-bottom: 16px;
-}
+  h1 {
+    line-height: 40px;
+    font-size: 32px;
+    font-weight: 600;
+    margin: 0;
+  }
 
-.content-block a {
-  color: var(--highlight-color-lighter);
-  text-decoration: underline;
-  text-underline-offset: 2px;
-  transition:
-    color 0.25s,
-    opacity 0.25s;
-}
+  a {
+    color: var(--highlight-color-lighter);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition:
+      color 0.25s,
+      opacity 0.25s;
 
-.content-block a:hover {
-  color: var(--highlight-color-lightest);
-}
+    &:hover {
+      color: var(--highlight-color-lightest);
+    }
 
-.content-block a:active {
-  color: var(--highlight-color-lightest);
-}
+    &:active {
+      color: var(--highlight-color-lightest);
+    }
+  }
 
-.content-block :not(pre) > code {
-  border-radius: 4px;
-  padding: 3px 6px;
-  background-color: var(--code-bg);
-  white-space: nowrap;
-  transition:
-    color 0.25s,
-    background-color 0.5s;
-}
+  code:not(pre) {
+    border-radius: 4px;
+    padding: 3px 6px;
+    background-color: var(--code-bg);
+    white-space: nowrap;
+    transition:
+      color 0.25s,
+      background-color 0.5s;
+  }
 
-.content-block :not(pre, h1, h2, h3, h4, h5, h6) > code {
-  color: var(--code-color);
-}
+  code:not(pre, h1, h2, h3, h4, h5, h6) {
+    color: var(--code-color);
+  }
 
-.content-block .custom {
-  width: 100%;
-  margin: 16px 0;
-  border: 1px solid transparent;
-  border-radius: 8px;
-  padding: 16px 16px 8px;
-  line-height: 24px;
-  font-size: 14px;
-}
+  .custom {
+    width: 100%;
+    margin: 16px 0;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    padding: 16px 16px 8px;
+    line-height: 24px;
+    font-size: 14px;
 
-.content-block .custom p {
-  margin: 8px 0;
-}
+    p {
+      margin: 8px 0;
 
-.content-block .custom p:first-child {
-  margin: 0;
-}
+      &:first-child {
+        margin: 0;
+      }
+    }
 
-.content-block .custom .title {
-  font-weight: 600;
-}
+    .title {
+      font-weight: 600;
+    }
 
-.content-block .note {
-  background-color: var(--code-note-bg);
-}
+    &.note {
+      background-color: var(--code-note-bg);
 
-.content-block .note code {
-  color: var(--code-note-color);
-  background-color: var(--code-note-bg);
-  white-space: nowrap;
-}
+      code {
+        color: var(--code-note-color);
+        background-color: var(--code-note-bg);
+        white-space: nowrap;
+      }
+    }
+  }
 
-.content-block ul {
-  list-style: disc;
-  margin: 0;
-  padding-left: 1.25rem;
-}
+  ul {
+    list-style: disc;
+    margin: 0;
+    padding-left: 1.25rem;
 
-.content-block ul li p {
-  margin-top: 0 !important;
-}
+    li {
+      p {
+        margin-top: 0 !important;
+      }
 
-.content-block ul li + li {
-  margin-top: 8px;
+      & + li {
+        margin-top: 8px;
+      }
+    }
+  }
 }
 </style>
