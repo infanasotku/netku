@@ -7,11 +7,13 @@ from app.adapters.output.grpc.grpc import GRPCClient
 
 
 class GRPCXrayClient(GRPCClient, XrayClient):
+    service_name = "xray"
+
     async def restart(self) -> str | None:
-        ch = await self.get_channel()
-        if ch is None:
+        healthy = await self.check_health()
+        if not healthy:
             return
 
-        stub = XrayStub(ch)
+        stub = XrayStub(self._channel)
         resp: RestartResponse = await stub.RestartXray(Null())
         return resp.uuid
