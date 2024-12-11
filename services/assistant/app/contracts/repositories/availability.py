@@ -16,7 +16,7 @@ class AvailabilityRepository(ABC):
 
     @abstractmethod
     async def log_availability(
-        self, availability: AvailabilityCreateSchema
+        self, availability_create: AvailabilityCreateSchema
     ) -> AvailabilitySchema:
         """Logs availability record to DB.
 

@@ -21,9 +21,9 @@ class MongoAvailabilityRepository(AvailabilityRepository, MongoBaseRepository):
         return result_to_schema(availability, AvailabilitySchema)
 
     async def log_availability(
-        self, availability: AvailabilityCreateSchema
+        self, availability_create: AvailabilityCreateSchema
     ) -> AvailabilitySchema:
-        dump = availability.model_dump(exclude_unset=True)
+        dump = availability_create.model_dump(exclude_unset=True)
         inserted_result = await self._collection.insert_one(dump)
 
         return await self.get_availability_by_id(inserted_result.inserted_id)
