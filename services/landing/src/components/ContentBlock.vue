@@ -9,7 +9,8 @@ const props = defineProps({
   },
 });
 
-const titleId = "#" + props.title.toLowerCase().replace(" ", "-");
+const title = props.title.toLowerCase().replace(" ", "-");
+const titleId = "#" + title;
 
 const route = useRoute();
 
@@ -26,17 +27,19 @@ onMounted(() => {
 
 <template>
   <div class="content-block">
-    <h1 :id="titleId">
+    <h1 :id="title">
       {{ props.title }}
-      <a @click="moveToTitle" class="anchor" :href="titleId"
-        >&ZeroWidthSpace;</a
-      >
+      <a @click="moveToTitle" :href="titleId">&ZeroWidthSpace;</a>
     </h1>
     <slot></slot>
   </div>
 </template>
 
 <style lang="scss">
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/mixins";
+
 .content-block {
   display: flex;
   flex-direction: column;
@@ -172,6 +175,17 @@ onMounted(() => {
 
       & + li {
         margin-top: 8px;
+      }
+    }
+  }
+
+  @include media-breakpoint-down(md) {
+    h1 {
+      a {
+        right: 0;
+        left: unset;
+        margin-right: -0.87em;
+        margin-left: 0;
       }
     }
   }
