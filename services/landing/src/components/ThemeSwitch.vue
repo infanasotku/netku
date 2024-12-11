@@ -5,6 +5,10 @@ import { inject, onMounted, onUnmounted } from "vue";
 const $cookies = inject<VueCookies>("$cookies")!;
 let html: Element;
 let darkColorScheme: MediaQueryList;
+const pageIconURL = {
+  dark: new URL("@/assets/icons/netku-dark.svg", import.meta.url).href,
+  light: new URL("@/assets/icons/netku-light.svg", import.meta.url).href,
+};
 
 const setTheme = (dark: boolean) => {
   const notransition = document.createElement("style");
@@ -40,8 +44,7 @@ const setPageIcon = (dark: boolean) => {
     return;
   }
 
-  const iconId = dark ? "dark" : "light";
-  iconLink.href = `@/assets/icons/netku-${iconId}.svg`;
+  iconLink.href = dark ? pageIconURL.dark : pageIconURL.light;
 };
 
 const onClick = () => {
