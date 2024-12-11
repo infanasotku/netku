@@ -9,6 +9,13 @@ from app.schemas.availability import (
 
 class AvailabilityRepository(ABC):
     @abstractmethod
+    async def get_availability_by_id(self, id: int) -> AvailabilitySchema | None:
+        """Receives from DB availability record by specified id.
+
+        :return: Received record if it existm `None` otherwise.
+        """
+
+    @abstractmethod
     async def log_availability(
         self, availability: AvailabilityCreateSchema
     ) -> AvailabilitySchema:
@@ -22,4 +29,13 @@ class AvailabilityRepository(ABC):
         """Counts average availability factor of service.
 
         :return: Counted factor.
+        """
+
+    @abstractmethod
+    async def get_availabilities_by_service(
+        self, service: Service
+    ) -> list[AvailabilitySchema]:
+        """Receives from DB all availability records for specified service.
+
+        :return: Received records.
         """

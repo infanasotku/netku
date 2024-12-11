@@ -18,11 +18,8 @@ class MongoAvailabilityRepository(AvailabilityRepository, MongoBaseRepository):
     ) -> AvailabilitySchema:
         dump = availability.model_dump(exclude_unset=True)
         inserted_result = await self._collection.insert_one(dump)
-        created_availability = await self._collection.find_one(
-            {"_id": inserted_result.inserted_id}
-        )
 
-        return result_to_schema(created_availability, AvailabilitySchema)
+        return await self.get_availability_by_id(inserted_result.inserted_id)
 
     async def get_average_service_availability_factor(self, service: Service) -> float:
         pipeline = [
@@ -46,3 +43,21 @@ class MongoAvailabilityRepository(AvailabilityRepository, MongoBaseRepository):
         list = await async_list.to_list()
 
         return list[0]["averageFactor"]
+
+    async def get_availability_by_id(self, id: int) -> AvailabilitySchema | None:
+        availability = await self._collection.find_one({"_id": id})
+
+        if availability is None:
+            return None
+
+        return result_to_schema(availability, AvailabilitySchema)
+
+    async def get_availabilities_by_service(
+        self, service: Service
+    ) -> list[AvailabilitySchema]:
+        availabilities = self._collection.find({"service": service.value})
+
+        return [
+            result_to_schema(availability, AvailabilitySchema)
+            async for availability in availabilities
+        ]
