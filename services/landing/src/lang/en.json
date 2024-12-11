@@ -78,43 +78,69 @@
       }
     },
     "skills": {
-      "python": {
-        "title": "Python",
+      "backend": {
+        "title": "Backend",
         "python": "Python",
-        "backend": "backend systems",
-        "description": "I use {0} to develop high-load {1}.",
+        "go": "Golang",
+        "safety": "safety",
+        "load": "high-load",
+        "layer": "three-layer",
+        "database": "multi-database",
+        "description": "I use {0} and {1} to develop {2} and {3} backend systems, practice {4} architecture with {5} repositories.",
         "skills": [
           {
-            "name": "FastAPI | Starlette"
-          },
-          {
-            "name": "Pydantic"
+            "name": "FastAPI | Starlette | Aiogram"
           },
           {
             "name": "SQLAlchemy | Alembic | PostgreSQL"
           },
           {
-            "name": "Aiogram"
+            "name": "PyMongo | MongoDB"
+          },
+          {
+            "name": "Pydantic | Ruff | PyTest"
+          },
+          {
+            "name": "RestAPI | GRPC | OAuth2"
           }
         ]
       },
-      "typescript": {
-        "title": "Typescript",
+      "frontend": {
+        "title": "Frontend",
         "spa": "SPA",
         "vue": "Vue.js",
-        "description": "I am developing {0} based on {1}.",
+        "ts": "Typescript",
+        "react": "React",
+        "three": "Three.js",
+        "description": "I develop adaptive {0} based on {1} with {2} and have work experience supporting {3} apps with {4} engine.",
         "skills": [
           {
-            "name": "Vue.js | Vue Router"
+            "name": "Vue.js | Vue Router | Pinia"
           },
           {
-            "name": "Pinia"
+            "name": "React | Mobx | Three.js"
           },
           {
-            "name": "Vite"
+            "name": "Vite | Playwright | Capacitor"
           },
           {
-            "name": "HTML | CSS"
+            "name": "HTML | SCSS | Bootstrap"
+          }
+        ]
+      },
+      "devops": {
+        "title": "DevOps",
+        "ci": "CI/CD",
+        "monitoring": "monitoring",
+        "integration": "integration",
+        "any": "anywhere",
+        "description": "I build {0} pipelines and set up the tools for {1} and {2} services from {3} in the world.",
+        "skills": [
+          {
+            "name": "Github Action | Docker Compose | Bash | Nginx"
+          },
+          {
+            "name": "Elasticsearch | Kibana | LogStash"
           }
         ]
       }

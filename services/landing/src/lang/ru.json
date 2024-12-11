@@ -42,7 +42,7 @@
     },
     "todo": {
       "title": "TODO",
-      "description": "Продолжение следует..."
+      "description": "Это еще не конец..."
     },
     "appearance": "Тема"
   },
@@ -78,43 +78,69 @@
       }
     },
     "skills": {
-      "python": {
-        "title": "Python",
+      "backend": {
+        "title": "Backend",
         "python": "Python",
-        "backend": "бэкенд-систем",
-        "description": "Использую {0} для разработки высоконагруженных {1}.",
+        "go": "Golang",
+        "safety": "безопасных",
+        "load": "высоконагруженных",
+        "layer": "трехслойную",
+        "database": "несколько баз данных",
+        "description": "Я использую {0} и {1} для разработки {2} и {3} бэкэнд-систем, практикую {4} архитектуру с репозиториями, использующими {5}.",
         "skills": [
           {
-            "name": "FastAPI | Starlette"
-          },
-          {
-            "name": "Pydantic"
+            "name": "FastAPI | Starlette | Aiogram"
           },
           {
             "name": "SQLAlchemy | Alembic | PostgreSQL"
           },
           {
-            "name": "Aiogram"
+            "name": "PyMongo | MongoDB"
+          },
+          {
+            "name": "Pydantic | Ruff | PyTest"
+          },
+          {
+            "name": "RestAPI | GRPC | OAuth2"
           }
         ]
       },
-      "typescript": {
-        "title": "Typescript",
+      "frontend": {
+        "title": "Frontend",
         "spa": "SPA",
         "vue": "Vue.js",
-        "description": "Веду разработку {0} на базе {1}.",
+        "ts": "Typescript",
+        "react": "React",
+        "three": "Three.js",
+        "description": "Я разрабатываю адаптивные {0} на основе {1} с использованием {2} и имею опыт поддержки {3} приложений с использованием движка {4}.",
         "skills": [
           {
-            "name": "Vue.js | Vue Router"
+            "name": "Vue.js | Vue Router | Pinia"
           },
           {
-            "name": "Pinia"
+            "name": "React | Mobx | Three.js"
           },
           {
-            "name": "Vite"
+            "name": "Vite | Playwright | Capacitor"
           },
           {
-            "name": "HTML | CSS"
+            "name": "HTML | SCSS | Bootstrap"
+          }
+        ]
+      },
+      "devops": {
+        "title": "DevOps",
+        "ci": "CI/CD",
+        "monitoring": "мониторинга",
+        "integration": "интеграции",
+        "any": "любой точки",
+        "description": "Я создаю {0} конвейеры и настраиваю инструменты для {1} и {2} сервисов из {3} мира.",
+        "skills": [
+          {
+            "name": "Github Action | Docker Compose | Bash | Nginx"
+          },
+          {
+            "name": "Elasticsearch | Kibana | LogStash"
           }
         ]
       }
