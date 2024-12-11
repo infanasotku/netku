@@ -1,15 +1,37 @@
 <script setup lang="ts">
+import { onMounted } from "vue";
+import { useRoute } from "vue-router";
+
 const props = defineProps({
   title: {
     type: String,
     required: true,
   },
 });
+
+const titleId = "#" + props.title.toLowerCase().replace(" ", "-");
+
+const route = useRoute();
+
+const moveToTitle = () => {
+  document.getElementById(titleId)?.scrollIntoView();
+};
+
+onMounted(() => {
+  if (route.fullPath.includes(titleId)) {
+    moveToTitle();
+  }
+});
 </script>
 
 <template>
   <div class="content-block">
-    <h1>{{ props.title }}</h1>
+    <h1 :id="titleId">
+      {{ props.title }}
+      <a @click="moveToTitle" class="anchor" :href="titleId"
+        >&ZeroWidthSpace;</a
+      >
+    </h1>
     <slot></slot>
   </div>
 </template>
@@ -41,10 +63,38 @@ const props = defineProps({
   }
 
   h1 {
+    position: relative;
+
     line-height: 40px;
     font-size: 32px;
     font-weight: 600;
     margin: 0;
+
+    a {
+      top: 0;
+      left: 0;
+      position: absolute;
+      margin-left: -0.87em;
+
+      display: flex;
+      flex-direction: row;
+
+      opacity: 0;
+      user-select: none;
+      text-decoration: none;
+
+      &::before {
+        content: "#";
+        font-size: 32px;
+        display: block;
+      }
+    }
+
+    &:hover {
+      a {
+        opacity: 1;
+      }
+    }
   }
 
   a {
