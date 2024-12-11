@@ -1,13 +1,19 @@
 from contextlib import asynccontextmanager
 from typing import AsyncContextManager, AsyncGenerator, Callable
 
-from app.contracts.repositories import XrayRepository, UserRepository, BookingRepository
+from app.contracts.repositories import (
+    XrayRepository,
+    UserRepository,
+    BookingRepository,
+    AvailabilityRepository,
+)
 from app.contracts.services import UserService, BookingService
-from app.contracts.clients import XrayClient, BookingClient
+from app.contracts.clients import XrayClient, BookingClient, AssistantClient
 
 from app.services.booking import BookingServiceImpl
 from app.services.user import UserServiceImpl
 from app.services.xray import XrayServiceImpl
+from app.services.availability import AvailabilityServiceImpl
 from app.services.analysis.user_booking import BookingAnalysisServiceImpl
 
 
@@ -76,3 +82,31 @@ class BookingAnalysisServiceFactory:
             self._create_user_service() as user_service,
         ):
             yield BookingAnalysisServiceImpl(booking_service, user_service)
+
+
+class AvailabilityServiceFactory:
+    def __init__(
+        self,
+        create_booking_client: Callable[[], AsyncContextManager[BookingClient]],
+        create_xray_client: Callable[[], AsyncContextManager[XrayClient]],
+        create_assistant_client: Callable[[], AsyncContextManager[AssistantClient]],
+        create_availability_repository: Callable[
+            [], AsyncContextManager[AvailabilityRepository]
+        ],
+    ):
+        self._create_xray_client = create_xray_client
+        self._create_booking_client = create_booking_client
+        self._create_assistant_client = create_assistant_client
+        self._create_availability_repository = create_availability_repository
+
+    @asynccontextmanager
+    async def create(self) -> AsyncGenerator[XrayServiceImpl, None]:
+        async with (
+            self._create_booking_client() as booking_client,
+            self._create_xray_client() as xray_client,
+            self._create_assistant_client() as assistant_client,
+            self._create_availability_repository() as availability_repository,
+        ):
+            yield AvailabilityServiceImpl(
+                availability_repository, booking_client, xray_client, assistant_client
+            )
