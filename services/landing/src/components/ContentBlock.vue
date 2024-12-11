@@ -1,20 +1,42 @@
 <script setup lang="ts">
+import { onMounted } from "vue";
+import { useRoute } from "vue-router";
+
 const props = defineProps({
   title: {
     type: String,
     required: true,
   },
 });
+
+const titleId = "#" + props.title.toLowerCase().replace(" ", "-");
+
+const route = useRoute();
+
+const moveToTitle = () => {
+  document.getElementById(titleId)?.scrollIntoView();
+};
+
+onMounted(() => {
+  if (route.fullPath.includes(titleId)) {
+    moveToTitle();
+  }
+});
 </script>
 
 <template>
   <div class="content-block">
-    <h1>{{ props.title }}</h1>
+    <h1 :id="titleId">
+      {{ props.title }}
+      <a @click="moveToTitle" class="anchor" :href="titleId"
+        >&ZeroWidthSpace;</a
+      >
+    </h1>
     <slot></slot>
   </div>
 </template>
 
-<style>
+<style lang="scss">
 .content-block {
   display: flex;
   flex-direction: column;
@@ -26,101 +48,132 @@ const props = defineProps({
 
   padding-bottom: 48px;
   border-bottom: 1px solid var(--divider-color);
-}
 
-.content-block:not(:first-child) {
-  margin-top: 24px;
-}
+  &:not(:first-child) {
+    margin-top: 24px;
+  }
 
-.content-block h1 {
-  line-height: 40px;
-  font-size: 32px;
-  font-weight: 600;
-  margin: 0;
-}
+  p {
+    margin-top: 16px;
+    margin-bottom: 0;
 
-.content-block p {
-  margin-top: 16px;
-  margin-bottom: 0;
-}
+    &:not(:last-child) {
+      margin-bottom: 16px;
+    }
+  }
 
-.content-block p:not(:last-child) {
-  margin-bottom: 16px;
-}
+  h1 {
+    position: relative;
 
-.content-block a {
-  color: var(--highlight-color-lighter);
-  text-decoration: underline;
-  text-underline-offset: 2px;
-  transition:
-    color 0.25s,
-    opacity 0.25s;
-}
+    line-height: 40px;
+    font-size: 32px;
+    font-weight: 600;
+    margin: 0;
 
-.content-block a:hover {
-  color: var(--highlight-color-lightest);
-}
+    a {
+      top: 0;
+      left: 0;
+      position: absolute;
+      margin-left: -0.87em;
 
-.content-block a:active {
-  color: var(--highlight-color-lightest);
-}
+      display: flex;
+      flex-direction: row;
 
-.content-block :not(pre) > code {
-  border-radius: 4px;
-  padding: 3px 6px;
-  background-color: var(--code-bg);
-  transition:
-    color 0.25s,
-    background-color 0.5s;
-}
+      opacity: 0;
+      user-select: none;
+      text-decoration: none;
 
-.content-block :not(pre, h1, h2, h3, h4, h5, h6) > code {
-  color: var(--code-color);
-}
+      &::before {
+        content: "#";
+        font-size: 32px;
+        display: block;
+      }
+    }
 
-.content-block .custom {
-  width: 100%;
-  margin: 16px 0;
-  border: 1px solid transparent;
-  border-radius: 8px;
-  padding: 16px 16px 8px;
-  line-height: 24px;
-  font-size: 14px;
-}
+    &:hover {
+      a {
+        opacity: 1;
+      }
+    }
+  }
 
-.content-block .custom p {
-  margin: 8px 0;
-}
+  a {
+    color: var(--highlight-color-lighter);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition:
+      color 0.25s,
+      opacity 0.25s;
 
-.content-block .custom p:first-child {
-  margin: 0;
-}
+    &:hover {
+      color: var(--highlight-color-lightest);
+    }
 
-.content-block .custom .title {
-  font-weight: 600;
-}
+    &:active {
+      color: var(--highlight-color-lightest);
+    }
+  }
 
-.content-block .note {
-  background-color: var(--code-note-bg);
-}
+  code:not(pre) {
+    border-radius: 4px;
+    padding: 3px 6px;
+    background-color: var(--code-bg);
+    white-space: nowrap;
+    transition:
+      color 0.25s,
+      background-color 0.5s;
+  }
 
-.content-block .note code {
-  color: var(--code-note-color);
-  background-color: var(--code-note-bg);
-  white-space: nowrap;
-}
+  code:not(pre, h1, h2, h3, h4, h5, h6) {
+    color: var(--code-color);
+  }
 
-.content-block ul {
-  list-style: disc;
-  margin: 0;
-  padding-left: 1.25rem;
-}
+  .custom {
+    width: 100%;
+    margin: 16px 0;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    padding: 16px 16px 8px;
+    line-height: 24px;
+    font-size: 14px;
 
-.content-block ul li p {
-  margin-top: 0 !important;
-}
+    p {
+      margin: 8px 0;
 
-.content-block ul li + li {
-  margin-top: 8px;
+      &:first-child {
+        margin: 0;
+      }
+    }
+
+    .title {
+      font-weight: 600;
+    }
+
+    &.note {
+      background-color: var(--code-note-bg);
+
+      code {
+        color: var(--code-note-color);
+        background-color: var(--code-note-bg);
+        white-space: nowrap;
+      }
+    }
+  }
+
+  ul {
+    list-style: disc;
+    margin: 0;
+    padding-left: 1.25rem;
+
+    li {
+      p {
+        margin-top: 0 !important;
+      }
+
+      & + li {
+        margin-top: 8px;
+      }
+    }
+  }
 }
 </style>
