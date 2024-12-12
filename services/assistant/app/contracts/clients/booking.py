@@ -1,9 +1,9 @@
 from abc import ABC, abstractmethod
 
-from app.contracts.clients.base import BaseClient
+from app.contracts.clients.base import InternalBaseClient
 
 
-class BookingClient(BaseClient, ABC):
+class BookingClient(InternalBaseClient, ABC):
     @abstractmethod
     async def run_booking(self, email: str, password: str) -> bool:
         """:return: `True` if booking ran, `False` otherwise."""

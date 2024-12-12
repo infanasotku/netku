@@ -1,7 +1,7 @@
 from abc import ABC
 
-from app.contracts.clients.base import BaseClient
+from app.contracts.clients.base import InternalBaseClient
 
 
-class AssistantClient(BaseClient, ABC):
+class AssistantClient(InternalBaseClient, ABC):
     pass
