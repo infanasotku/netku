@@ -8,7 +8,12 @@ from app.contracts.repositories import (
     AvailabilityRepository,
 )
 from app.contracts.services import UserService, BookingService
-from app.contracts.clients import XrayClient, BookingClient, AssistantClient
+from app.contracts.clients import (
+    XrayClient,
+    BookingClient,
+    AssistantClient,
+    TelegramClient,
+)
 
 from app.services.booking import BookingServiceImpl
 from app.services.user import UserServiceImpl
@@ -90,6 +95,7 @@ class AvailabilityServiceFactory:
         create_booking_client: Callable[[], AsyncContextManager[BookingClient]],
         create_xray_client: Callable[[], AsyncContextManager[XrayClient]],
         create_assistant_client: Callable[[], AsyncContextManager[AssistantClient]],
+        create_telegram_client: Callable[[], AsyncContextManager[TelegramClient]],
         create_availability_repository: Callable[
             [], AsyncContextManager[AvailabilityRepository]
         ],
@@ -97,6 +103,7 @@ class AvailabilityServiceFactory:
         self._create_xray_client = create_xray_client
         self._create_booking_client = create_booking_client
         self._create_assistant_client = create_assistant_client
+        self._create_telegram_client = create_telegram_client
         self._create_availability_repository = create_availability_repository
 
     @asynccontextmanager
@@ -106,7 +113,12 @@ class AvailabilityServiceFactory:
             self._create_xray_client() as xray_client,
             self._create_assistant_client() as assistant_client,
             self._create_availability_repository() as availability_repository,
+            self._create_telegram_client() as telegram_client,
         ):
             yield AvailabilityServiceImpl(
-                availability_repository, booking_client, xray_client, assistant_client
+                availability_repository,
+                booking_client,
+                xray_client,
+                assistant_client,
+                telegram_client,
             )

@@ -3,7 +3,12 @@ from typing import Awaitable, Callable
 
 from app.contracts.repositories import AvailabilityRepository
 from app.contracts.services import AvailabilityService
-from app.contracts.clients import BookingClient, XrayClient, AssistantClient
+from app.contracts.clients import (
+    BookingClient,
+    XrayClient,
+    AssistantClient,
+    TelegramClient,
+)
 
 from app.schemas.availability import (
     AvailabilitySchema,
@@ -19,11 +24,13 @@ class AvailabilityServiceImpl(AvailabilityService):
         booking_client: BookingClient,
         xray_client: XrayClient,
         assistant_client: AssistantClient,
+        telegram_client: TelegramClient,
     ):
         self._availability_repository = availability_repository
         self._booking_client = booking_client
         self._xray_client = xray_client
         self._assistant_client = assistant_client
+        self._telegram_client = telegram_client
 
     async def check_availability(
         self,
