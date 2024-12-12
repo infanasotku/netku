@@ -1,7 +1,9 @@
 from pymongo.asynchronous.collection import AsyncCollection
 
+from app.contracts.repositories.base import BaseRepository
 
-class MongoBaseRepository:
+
+class MongoBaseRepository(BaseRepository):
     collection_name: str = "base_collection"
 
     def __init__(self, collection: AsyncCollection):
