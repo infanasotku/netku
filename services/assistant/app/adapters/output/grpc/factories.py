@@ -5,7 +5,7 @@ from typing import AsyncGenerator
 from grpc.aio import insecure_channel, Channel
 
 from app.adapters.output.grpc.booking import GRPCBookingClient
-from app.adapters.output.grpc.grpc import GRPCClient
+from app.adapters.output.grpc.base import GRPCClient
 from app.adapters.output.grpc.xray import GRPCXrayClient
 
 
