@@ -1,7 +1,7 @@
 from contextlib import asynccontextmanager
-from typing import AsyncGenerator, Callable, Type, TypeVar, AsyncContextManager
-from sqlalchemy.ext.asyncio import AsyncSession
+from typing import AsyncGenerator, Type, TypeVar
 
+from app.infra.database.sql_db.orm import GetSQLDB
 from app.infra.database.sql_db.repositories.base import SQLBaseRepository
 
 
@@ -10,7 +10,7 @@ class SQLRepositoryFactory:
 
     def __init__(
         self,
-        get_db: Callable[[], AsyncContextManager[AsyncSession]],
+        get_db: GetSQLDB,
         repository_type: Type[SQLRepositoryT],
     ):
         self.get_db = get_db
