@@ -1,9 +1,11 @@
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 
 from app.schemas.user import UserSchema, UserCreateSchema, UserUpdateSchema
 
+from app.contracts.repositories.base import BaseRepository
 
-class UserRepository(ABC):
+
+class UserRepository(BaseRepository):
     @abstractmethod
     async def get_user_by_id(self, id: int) -> UserSchema | None:
         """Gets user by `id`.

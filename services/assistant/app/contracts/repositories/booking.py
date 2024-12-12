@@ -1,9 +1,11 @@
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 
 from app.schemas.booking import BookingAccountSchema, BookingAccountCreateSchema
 
+from app.contracts.repositories.base import BaseRepository
 
-class BookingRepository(ABC):
+
+class BookingRepository(BaseRepository):
     @abstractmethod
     async def get_booking_account_by_id(self, id: int) -> BookingAccountSchema | None:
         """Gets booking account by `id`.
