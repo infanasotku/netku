@@ -1,13 +1,15 @@
-from typing import Callable, Type, TypeVar
+from typing import Protocol, Type, TypeVar
 from pymongo import AsyncMongoClient
 from pymongo.asynchronous.database import AsyncDatabase
 
 from app.schemas import BaseSchema
 
 
-def get_db_factory(
-    mongo_dsn: str, default_db_name: str | None = None
-) -> Callable[[str | None], AsyncDatabase]:
+class GetMongoDB(Protocol):
+    def __call__(self, db_name: str | None = ...) -> AsyncDatabase: ...
+
+
+def get_db_factory(mongo_dsn: str, default_db_name: str | None = None) -> GetMongoDB:
     """Returns method which returns mongo database database name.
 
     :param default_db_name: if defined `get_db` might use without explicit `db_name`.

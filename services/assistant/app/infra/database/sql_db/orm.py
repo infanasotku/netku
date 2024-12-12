@@ -1,4 +1,4 @@
-from typing import Type
+from typing import Type, TypeAlias
 
 from sqlalchemy import inspect
 from sqlalchemy.orm import selectinload
@@ -18,9 +18,12 @@ class Base(DeclarativeBase):
     id: Mapped[intpk]
 
 
+GetSQLDB: TypeAlias = Callable[[], AsyncContextManager[AsyncSession]]
+
+
 def get_db_factory(
     async_session: async_sessionmaker[AsyncSession],
-) -> Callable[[], AsyncContextManager[AsyncSession]]:
+) -> GetSQLDB:
     @asynccontextmanager
     async def get_db():
         async with async_session.begin() as session:
