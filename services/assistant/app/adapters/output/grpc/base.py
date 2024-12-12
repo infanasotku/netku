@@ -4,8 +4,10 @@ from grpc.aio import AioRpcError, Channel
 from grpc_health.v1.health_pb2 import HealthCheckRequest, HealthCheckResponse
 from grpc_health.v1.health_pb2_grpc import HealthStub
 
+from app.contracts.clients.base import BaseClient
 
-class GRPCClient:
+
+class GRPCClient(BaseClient):
     service_name: str = "grpc"
 
     def __init__(self, channel: Channel) -> None:
