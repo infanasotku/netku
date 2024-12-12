@@ -1,12 +1,14 @@
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 
 from app.schemas.availability import (
     AvailabilitySchema,
     Service,
 )
 
+from app.contracts.services.base import BaseService
 
-class AvailabilityService(ABC):
+
+class AvailabilityService(BaseService):
     @abstractmethod
     async def check_availability(
         self,

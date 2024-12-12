@@ -1,7 +1,9 @@
-from abc import ABC, abstractmethod
+from abc import abstractmethod
+
+from app.contracts.services.base import BaseService
 
 
-class XrayService(ABC):
+class XrayService(BaseService):
     @abstractmethod
     async def restart_xray(self) -> str | None:
         pass

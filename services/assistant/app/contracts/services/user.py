@@ -1,9 +1,11 @@
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 
 from app.schemas.user import UserSchema, UserUpdateSchema
 
+from app.contracts.services.base import BaseService
 
-class UserService(ABC):
+
+class UserService(BaseService):
     @abstractmethod
     async def get_user_by_telegram_id(self, id: int) -> UserSchema | None:
         """Gets user by `UserSchema.telegram_id`.

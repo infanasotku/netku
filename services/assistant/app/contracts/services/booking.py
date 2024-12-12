@@ -1,9 +1,11 @@
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 
 from app.schemas.booking import BookingAccountSchema, BookingAccountCreateSchema
 
+from app.contracts.services.base import BaseService
 
-class BookingService(ABC):
+
+class BookingService(BaseService):
     @abstractmethod
     async def create_booking_account(
         self, booking_account_create: BookingAccountCreateSchema
