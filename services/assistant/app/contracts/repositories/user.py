@@ -43,3 +43,13 @@ class UserRepository(BaseRepository):
 
         :return: Updated user.
         """
+
+    @abstractmethod
+    async def get_users_by_active_subscriptions(
+        self, subscriptions: list[str], every: bool = False
+    ) -> list[UserSchema]:
+        """Finds user with active `subscriptions`.
+
+        :param every: If `True` then matches user with all specified `subscriptions`.
+
+        :return: Found users."""

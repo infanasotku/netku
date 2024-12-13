@@ -1,5 +1,6 @@
-from sqlalchemy import select
+from sqlalchemy import or_, select, and_
 from sqlalchemy.orm import InstrumentedAttribute
+from sqlalchemy.orm import MappedColumn
 
 from app.contracts.repositories import UserRepository
 
@@ -72,3 +73,18 @@ class SQLUserRepository(UserRepository, SQLBaseRepository):
         await self._session.refresh(user)
 
         return converters.user_to_user_schema(user)
+
+    async def get_users_by_active_subscriptions(
+        self, subscriptions: list[str], every: bool = False
+    ) -> list[UserSchema]:
+        columns: list[MappedColumn] = [
+            getattr(User, subscription) for subscription in subscriptions
+        ]
+        conditions = [column == True for column in columns]  # noqa
+        mode = and_ if every else or_
+
+        s = select(User).where(mode(*conditions)).options(*selectinload_all(User))
+
+        users = (await self._session.execute(s)).scalars().all()
+
+        return [converters.user_to_user_schema(user) for user in users]
