@@ -6,6 +6,7 @@ class UserUpdateSchema(BaseSchema):
     phone_number: str | None = None
     telegram_id: int | None = None
     proxy_subscription: bool | None = None
+    availability_subscription: bool | None = None
 
 
 class UserCreateSchema(BaseSchemaPK):
@@ -14,6 +15,7 @@ class UserCreateSchema(BaseSchemaPK):
 
     # Subscriptions
     proxy_subscription: bool
+    availability_subscription: bool
 
 
 class UserSchema(UserCreateSchema):

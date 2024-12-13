@@ -14,6 +14,9 @@ class User(Base):
 
     # Subscriptions
     proxy_subscription: Mapped[bool] = mapped_column(default=False, nullable=False)
+    availability_subscription: Mapped[bool] = mapped_column(
+        default=False, nullable=True
+    )
 
     booking_accounts: Mapped[list["BookingAccount"]] = relationship(
         "BookingAccount", cascade="all,delete", back_populates="owner"
