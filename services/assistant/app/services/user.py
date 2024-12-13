@@ -19,3 +19,10 @@ class UserServiceImpl(UserService):
 
     async def update_user(self, user_id, user_update: UserUpdateSchema) -> UserSchema:
         return await self._user_repository.update_user(user_id, user_update)
+
+    async def get_users_by_active_subscriptions(
+        self, subscriptions: list[str], every: bool = False
+    ) -> list[UserSchema]:
+        return await self._user_repository.get_users_by_active_subscriptions(
+            subscriptions, every
+        )
