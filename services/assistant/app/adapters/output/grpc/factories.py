@@ -9,7 +9,7 @@ from app.adapters.output.grpc.base import GRPCClient
 from app.adapters.output.grpc.xray import GRPCXrayClient
 
 
-class ClientFactory(ABC):
+class GRPCClientFactory(ABC):
     """Specifies factory for grpc clients."""
 
     def __init__(
@@ -46,11 +46,11 @@ class ClientFactory(ABC):
         """Innits grpc client with needed params."""
 
 
-class XrayClientFactory(ClientFactory):
+class GRPCXrayClientFactory(GRPCClientFactory):
     def _init_client(self, channel: Channel) -> GRPCXrayClient:
         return GRPCXrayClient(channel)
 
 
-class BookingClientFactory(ClientFactory):
+class GRPCBookingClientFactory(GRPCClientFactory):
     def _init_client(self, channel: Channel) -> GRPCBookingClient:
         return GRPCBookingClient(channel)
