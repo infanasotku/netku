@@ -16,7 +16,7 @@ class MongoRepositoryFactory:
     ):
         self.get_db = get_db
         self._Repo = repository_type
-        self.collection: AsyncCollection
+        self.collection: AsyncCollection = None
 
     # Async need for compatibility with app.contracts.protocols.CreateRepository
     @asynccontextmanager
@@ -25,6 +25,6 @@ class MongoRepositoryFactory:
             yield self._Repo(self.collection)
         else:
             db = self.get_db()
-            collection: AsyncCollection = db(self._Repo.collection_name)
+            collection = db[self._Repo.collection_name]
             self.collection = collection
             yield self._Repo(collection)

@@ -10,7 +10,7 @@ from app.adapters.output.http.telegram import HTTPTelegramClient
 class HTTPAssistantClientFactory:
     def __init__(self, assistant_addr: str):
         self.assistant_addr = assistant_addr
-        self.instance: HTTPAssistantClient
+        self.instance: HTTPAssistantClient = None
 
     @asynccontextmanager
     async def create(self) -> AsyncGenerator[HTTPAssistantClient, None]:
@@ -18,13 +18,13 @@ class HTTPAssistantClientFactory:
         if self.instance is None:
             self.instance = HTTPAssistantClient(self.assistant_addr)
 
-        return self.instance
+        yield self.instance
 
 
 class HTTPTelegramClientFactory:
     def __init__(self, bot: Bot):
         self.bot = bot
-        self.instance: HTTPTelegramClient
+        self.instance: HTTPTelegramClient = None
 
     @asynccontextmanager
     async def create(self) -> AsyncGenerator[HTTPAssistantClient, None]:
@@ -32,4 +32,4 @@ class HTTPTelegramClientFactory:
         if self.instance is None:
             self.instance = HTTPTelegramClient(self.bot)
 
-        return self.instance
+        yield self.instance
