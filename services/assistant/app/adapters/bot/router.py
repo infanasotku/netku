@@ -1,7 +1,6 @@
 import asyncio
 from logging import Logger
 import re
-from typing import AsyncContextManager, Callable
 from aiogram import Dispatcher, Router, F
 from aiogram.types import (
     CallbackQuery,
@@ -16,6 +15,7 @@ from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 from aiogram.utils.markdown import hbold
 
+from app.contracts.protocols import CreateService
 from app.contracts.services import (
     BookingAnalysisService,
     BookingService,
@@ -35,12 +35,10 @@ from app.adapters.bot.schemas import BookingCallbackData, BookingAction
 class MainRouter:
     def __init__(
         self,
-        create_booking_service: Callable[[], AsyncContextManager[BookingService]],
-        create_user_service: Callable[[], AsyncContextManager[UserService]],
-        create_xray_service: Callable[[], AsyncContextManager[XrayService]],
-        create_booking_analysis_service: Callable[
-            [], AsyncContextManager[BookingAnalysisService]
-        ],
+        create_booking_service: CreateService[BookingService],
+        create_user_service: CreateService[UserService],
+        create_xray_service: CreateService[XrayService],
+        create_booking_analysis_service: CreateService[BookingAnalysisService],
         logger: Logger,
     ):
         self.create_booking_service = create_booking_service

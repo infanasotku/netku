@@ -1,12 +1,14 @@
 from logging import Logger
-from typing import Annotated, Any, AsyncContextManager, AsyncGenerator, Callable
+from typing import Annotated, Any, AsyncGenerator, Callable
 from fastapi import FastAPI, Header
 from aiogram import Dispatcher, Bot
 from aiogram.types import Update, WebhookInfo, BotCommand
 import aiogram.loggers as aloggers
 from pydantic import BaseModel
 
+
 from app.app import AbstractAppFactory
+from app.contracts.protocols import CreateService
 from app.contracts.services import (
     BookingService,
     UserService,
@@ -17,12 +19,10 @@ from app.adapters.bot.router import MainRouter
 
 
 class BotServicesFactory(BaseModel):
-    create_user_service: Callable[[], AsyncContextManager[UserService]]
-    create_booking_service: Callable[[], AsyncContextManager[BookingService]]
-    create_xray_service: Callable[[], AsyncContextManager[XrayService]]
-    create_booking_analysis_service: Callable[
-        [], AsyncContextManager[BookingAnalysisService]
-    ]
+    create_user_service: CreateService[UserService]
+    create_booking_service: CreateService[BookingService]
+    create_xray_service: CreateService[XrayService]
+    create_booking_analysis_service: CreateService[BookingAnalysisService]
 
 
 class BotSettings(BaseModel):
