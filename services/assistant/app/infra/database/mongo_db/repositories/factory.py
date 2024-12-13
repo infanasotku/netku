@@ -16,10 +16,15 @@ class MongoRepositoryFactory:
     ):
         self.get_db = get_db
         self._Repo = repository_type
+        self.collection: AsyncCollection
 
     # Async need for compatibility with app.contracts.protocols.CreateRepository
     @asynccontextmanager
     async def create(self) -> AsyncGenerator[MongoRepositoryT, None]:
-        db = self.get_db()
-        collection: AsyncCollection = db(self._Repo.collection_name)
-        yield self._Repo(collection)
+        if self.collection is not None:
+            yield self._Repo(self.collection)
+        else:
+            db = self.get_db()
+            collection: AsyncCollection = db(self._Repo.collection_name)
+            self.collection = collection
+            yield self._Repo(collection)
