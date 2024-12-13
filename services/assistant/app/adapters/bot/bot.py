@@ -2,8 +2,6 @@ from logging import Logger
 from typing import Annotated, Any, AsyncContextManager, AsyncGenerator, Callable
 from fastapi import FastAPI, Header
 from aiogram import Dispatcher, Bot
-from aiogram.client.default import DefaultBotProperties
-from aiogram.enums import ParseMode
 from aiogram.types import Update, WebhookInfo, BotCommand
 import aiogram.loggers as aloggers
 from pydantic import BaseModel
@@ -33,9 +31,10 @@ class BotSettings(BaseModel):
     bot_webhook_url: str
 
 
-class BotFactory(AbstractAppFactory):
+class BotAppFactory(AbstractAppFactory):
     def __init__(
         self,
+        bot: Bot,
         bot_settings: BotSettings,
         bot_services_factory: BotServicesFactory,
         logger: Logger,
@@ -46,10 +45,7 @@ class BotFactory(AbstractAppFactory):
         self.bot_service_factory = bot_services_factory
 
         self.dispatcher = Dispatcher()
-        self.bot = Bot(
-            token=self.settings.bot_token,
-            default=DefaultBotProperties(parse_mode=ParseMode.HTML),
-        )
+        self.bot = bot
 
         # Disables aiogram loggers
         aloggers.dispatcher.propagate = False

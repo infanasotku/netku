@@ -1,3 +1,3 @@
-from app.adapters.bot.bot import BotFactory, BotServicesFactory, BotSettings
+from app.adapters.bot.bot import BotAppFactory, BotServicesFactory, BotSettings
 
-__all__ = ["BotFactory", "BotServicesFactory", "BotSettings"]
+__all__ = ["BotAppFactory", "BotServicesFactory", "BotSettings"]
