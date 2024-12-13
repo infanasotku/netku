@@ -38,7 +38,7 @@ class AvailabilityServiceImpl(AvailabilityService):
         retries_count: int = 10,
         notify_factor_level: float = 0.5,
     ) -> AvailabilitySchema:
-        average_response_time = 0
+        average_response_time = None
         availability_count = 0
 
         check_health: Callable[[], Awaitable[bool]]
@@ -63,7 +63,8 @@ class AvailabilityServiceImpl(AvailabilityService):
                 average_response_time += (end - start).microseconds * 1000
 
         availability_factor = availability_count / retries_count
-        average_response_time /= availability_count
+        if availability_count != 0:
+            average_response_time /= availability_count
 
         availability_create = AvailabilityCreateSchema(
             created=datetime.now(),
