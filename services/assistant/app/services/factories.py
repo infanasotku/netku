@@ -1,5 +1,5 @@
 from contextlib import asynccontextmanager
-from typing import AsyncContextManager, AsyncGenerator, Callable
+from typing import AsyncGenerator
 
 from app.contracts.repositories import (
     XrayRepository,
@@ -7,6 +7,7 @@ from app.contracts.repositories import (
     BookingRepository,
     AvailabilityRepository,
 )
+from app.contracts.protocols import CreateClient, CreateRepository, CreateService
 from app.contracts.services import UserService, BookingService
 from app.contracts.clients import (
     XrayClient,
@@ -25,7 +26,7 @@ from app.services.analysis.user_booking import BookingAnalysisServiceImpl
 class UserServiceFactory:
     def __init__(
         self,
-        create_user_repository: Callable[[], AsyncContextManager[UserRepository]],
+        create_user_repository: CreateRepository[UserRepository],
     ):
         self._create_user_repository = create_user_repository
 
@@ -38,8 +39,8 @@ class UserServiceFactory:
 class BookingServiceFactory:
     def __init__(
         self,
-        create_booking_repository: Callable[[], AsyncContextManager[BookingRepository]],
-        create_booking_client: Callable[[], AsyncContextManager[BookingClient]],
+        create_booking_repository: CreateRepository[BookingRepository],
+        create_booking_client: CreateClient[BookingClient],
     ):
         self._create_booking_repository = create_booking_repository
         self._create_booking_client = create_booking_client
@@ -56,8 +57,8 @@ class BookingServiceFactory:
 class XrayServiceFactory:
     def __init__(
         self,
-        create_xray_repository: Callable[[], AsyncContextManager[XrayRepository]],
-        create_xray_client: Callable[[], AsyncContextManager[XrayClient]],
+        create_xray_repository: CreateRepository[XrayRepository],
+        create_xray_client: CreateClient[XrayClient],
     ):
         self._create_xray_repository = create_xray_repository
         self._create_xray_client = create_xray_client
@@ -74,8 +75,8 @@ class XrayServiceFactory:
 class BookingAnalysisServiceFactory:
     def __init__(
         self,
-        create_booking_service: Callable[[], AsyncContextManager[BookingService]],
-        create_user_service: Callable[[], AsyncContextManager[UserService]],
+        create_booking_service: CreateService[BookingService],
+        create_user_service: CreateService[UserService],
     ):
         self._create_booking_service = create_booking_service
         self._create_user_service = create_user_service
@@ -92,13 +93,11 @@ class BookingAnalysisServiceFactory:
 class AvailabilityServiceFactory:
     def __init__(
         self,
-        create_booking_client: Callable[[], AsyncContextManager[BookingClient]],
-        create_xray_client: Callable[[], AsyncContextManager[XrayClient]],
-        create_assistant_client: Callable[[], AsyncContextManager[AssistantClient]],
-        create_telegram_client: Callable[[], AsyncContextManager[TelegramClient]],
-        create_availability_repository: Callable[
-            [], AsyncContextManager[AvailabilityRepository]
-        ],
+        create_booking_client: CreateClient[BookingClient],
+        create_xray_client: CreateClient[XrayClient],
+        create_assistant_client: CreateClient[AssistantClient],
+        create_telegram_client: CreateClient[TelegramClient],
+        create_availability_repository: CreateRepository[AvailabilityRepository],
     ):
         self._create_xray_client = create_xray_client
         self._create_booking_client = create_booking_client
