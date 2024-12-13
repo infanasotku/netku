@@ -98,12 +98,14 @@ class AvailabilityServiceFactory:
         create_assistant_client: CreateClient[AssistantClient],
         create_telegram_client: CreateClient[TelegramClient],
         create_availability_repository: CreateRepository[AvailabilityRepository],
+        create_user_service: CreateService[UserService],
     ):
         self._create_xray_client = create_xray_client
         self._create_booking_client = create_booking_client
         self._create_assistant_client = create_assistant_client
         self._create_telegram_client = create_telegram_client
         self._create_availability_repository = create_availability_repository
+        self._create_user_service = create_user_service
 
     @asynccontextmanager
     async def create(self) -> AsyncGenerator[XrayServiceImpl, None]:
@@ -113,6 +115,7 @@ class AvailabilityServiceFactory:
             self._create_assistant_client() as assistant_client,
             self._create_availability_repository() as availability_repository,
             self._create_telegram_client() as telegram_client,
+            self._create_user_service() as user_service,
         ):
             yield AvailabilityServiceImpl(
                 availability_repository,
@@ -120,4 +123,5 @@ class AvailabilityServiceFactory:
                 xray_client,
                 assistant_client,
                 telegram_client,
+                user_service,
             )

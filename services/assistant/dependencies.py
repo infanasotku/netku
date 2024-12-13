@@ -152,4 +152,5 @@ class AssistantDependencies:
             self.create_assistant_client,
             self.create_telegram_client,
             self.create_availability_repo,
+            self.create_user_service,
         ).create

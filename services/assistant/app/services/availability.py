@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Awaitable, Callable
 
 from app.contracts.repositories import AvailabilityRepository
-from app.contracts.services import AvailabilityService
+from app.contracts.services import AvailabilityService, UserService
 from app.contracts.clients import (
     BookingClient,
     XrayClient,
@@ -25,12 +25,14 @@ class AvailabilityServiceImpl(AvailabilityService):
         xray_client: XrayClient,
         assistant_client: AssistantClient,
         telegram_client: TelegramClient,
+        user_service: UserService,
     ):
         self._availability_repository = availability_repository
         self._booking_client = booking_client
         self._xray_client = xray_client
         self._assistant_client = assistant_client
         self._telegram_client = telegram_client
+        self._user_service = user_service
 
     async def check_availability(
         self,
@@ -73,7 +75,17 @@ class AvailabilityServiceImpl(AvailabilityService):
             response_time=average_response_time,
         )
 
-        await self._availability_repository.log_availability(availability_create)
+        # await self._availability_repository.log_availability(availability_create)
 
-        if availability_factor >= notify_factor_level:
-            pass  # TODO: send notify to bot
+        if availability_factor <= notify_factor_level:
+            users = await self._user_service.get_users_by_active_subscriptions(
+                ["availability_subscription"], True
+            )
+
+            for user in users:
+                if user.telegram_id is None:
+                    pass  # TODO: logging
+                    continue
+                await self._telegram_client.send_message(
+                    f"Service not available: {service.name}", user.telegram_id
+                )
