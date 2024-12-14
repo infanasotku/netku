@@ -87,15 +87,21 @@ class BookingAnalysisServiceFactory:
 
 
 class BotServiceFactory:
-    def __init__(self, create_bot_client: CreateClient[BotClient]):
+    def __init__(
+        self,
+        create_bot_client: CreateClient[BotClient],
+        create_user_service: CreateService[UserService],
+    ):
         self._create_bot_client = create_bot_client
+        self._create_user_service = create_user_service
 
     @asynccontextmanager
     async def create(self) -> AsyncGenerator[BotServiceImpl, None]:
         async with (
             self._create_bot_client() as bot_client,
+            self._create_user_service() as user_service,
         ):
-            yield BotServiceImpl(bot_client)
+            yield BotServiceImpl(bot_client, user_service)
 
 
 class AvailabilityServiceFactory:

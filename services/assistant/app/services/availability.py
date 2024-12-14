@@ -77,14 +77,6 @@ class AvailabilityServiceImpl(AvailabilityService):
         await self._availability_repository.log_availability(availability_create)
 
         if availability_factor <= notify_factor_level:
-            users = await self._user_service.get_users_by_active_subscriptions(
-                ["availability_subscription"], True
+            await self._bot_service.send_notify_by_subscriptions(
+                ["availability_subscription"], f"Service not available: {service.name}"
             )
-
-            for user in users:
-                if user.telegram_id is None:
-                    pass  # TODO: logging
-                    continue
-                await self._telegram_client.send_message(
-                    f"Service not available: {service.name}", user.telegram_id
-                )

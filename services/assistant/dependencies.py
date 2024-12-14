@@ -40,7 +40,7 @@ from app.adapters.output.grpc import (
 )
 from app.adapters.output.http import (
     HTTPAssistantClientFactory,
-    HTTPTelegramClientFactory,
+    HTTPAiogramClientFactory,
 )
 
 from app.contracts.services import (
@@ -139,7 +139,7 @@ class AssistantDependencies:
         self.create_assistant_client = HTTPAssistantClientFactory(
             assistant_addr=""
         ).create
-        self.create_bot_client = HTTPTelegramClientFactory(bot=self.bot).create
+        self.create_bot_client = HTTPAiogramClientFactory(bot=self.bot).create
 
     def _init_services(self):
         self.create_user_service = UserServiceFactory(self.create_user_repo).create
@@ -153,7 +153,8 @@ class AssistantDependencies:
             self.create_xray_repo, self.create_xray_client
         ).create
         self.create_bot_service = BotServiceFactory(
-            create_bot_client=self.create_bot_client
+            create_bot_client=self.create_bot_client,
+            create_user_service=self.create_user_service,
         ).create
         self.create_availability_service = AvailabilityServiceFactory(
             self.create_booking_client,

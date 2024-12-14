@@ -4,7 +4,7 @@ from app.contracts.clients.bot import BotClient
 from app.adapters.output.http.base import HTTPClient
 
 
-class AiogramBotClient(HTTPClient, BotClient):
+class HTTPAiogramClient(HTTPClient, BotClient):
     def __init__(self, bot: Bot):
         self._bot = bot
 
