@@ -1,4 +1,4 @@
-from app.adapters.output.http.telegram import HTTPTelegramClient
+from app.adapters.output.http.telegram import AiogramBotClient
 from app.adapters.output.http.assistant import HTTPAssistantClient
 
 from app.adapters.output.http.factories import (
@@ -7,7 +7,7 @@ from app.adapters.output.http.factories import (
 )
 
 __all__ = [
-    "HTTPTelegramClient",
+    "AiogramBotClient",
     "HTTPAssistantClient",
     "HTTPTelegramClientFactory",
     "HTTPAssistantClientFactory",

@@ -1,10 +1,10 @@
 from aiogram import Bot
-from app.contracts.clients.telegram import TelegramClient
+from app.contracts.clients.bot import BotClient
 
 from app.adapters.output.http.base import HTTPClient
 
 
-class HTTPTelegramClient(HTTPClient, TelegramClient):
+class AiogramBotClient(HTTPClient, BotClient):
     def __init__(self, bot: Bot):
         self._bot = bot
 
