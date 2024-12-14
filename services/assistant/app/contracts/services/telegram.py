@@ -4,7 +4,7 @@ from aiogram import Router
 from app.contracts.services.base import BaseService
 
 
-class TelegramService(BaseService):
+class BotService(BaseService):
     @abstractmethod
     async def register_router(self, router: Router) -> None:
         """Registers router for telegram bot."""
