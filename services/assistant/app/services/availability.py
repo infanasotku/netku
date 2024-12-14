@@ -7,7 +7,7 @@ from app.contracts.clients import (
     BookingClient,
     XrayClient,
     AssistantClient,
-    TelegramClient,
+    BotClient,
 )
 
 from app.schemas.availability import (
@@ -24,7 +24,7 @@ class AvailabilityServiceImpl(AvailabilityService):
         booking_client: BookingClient,
         xray_client: XrayClient,
         assistant_client: AssistantClient,
-        telegram_client: TelegramClient,
+        telegram_client: BotClient,
         user_service: UserService,
     ):
         self._availability_repository = availability_repository
@@ -40,7 +40,7 @@ class AvailabilityServiceImpl(AvailabilityService):
         retries_count: int = 10,
         notify_factor_level: float = 0.5,
     ) -> AvailabilitySchema:
-        average_response_time = None
+        average_response_time = 0
         availability_count = 0
 
         check_health: Callable[[], Awaitable[bool]]
@@ -62,11 +62,13 @@ class AvailabilityServiceImpl(AvailabilityService):
 
             if healthy:
                 availability_count += 1
-                average_response_time += (end - start).microseconds * 1000
+                average_response_time += (end - start).microseconds / 1000
 
         availability_factor = availability_count / retries_count
         if availability_count != 0:
             average_response_time /= availability_count
+        else:
+            availability_count = None
 
         availability_create = AvailabilityCreateSchema(
             created=datetime.now(),
@@ -75,7 +77,7 @@ class AvailabilityServiceImpl(AvailabilityService):
             response_time=average_response_time,
         )
 
-        # await self._availability_repository.log_availability(availability_create)
+        await self._availability_repository.log_availability(availability_create)
 
         if availability_factor <= notify_factor_level:
             users = await self._user_service.get_users_by_active_subscriptions(

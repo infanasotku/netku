@@ -32,7 +32,7 @@ from app.contracts.clients import (
     AssistantClient,
     XrayClient,
     BookingClient,
-    TelegramClient,
+    BotClient,
 )
 from app.adapters.output.grpc import (
     GRPCXrayClientFactory,
@@ -65,6 +65,8 @@ from app.infra.config.settings import Settings
 class AssistantDependencies:
     def __init__(self, settings: Settings):
         self._settings = settings
+        self.bot: Bot = None
+        self._create_bot()
 
         self.get_sql_db: GetSQLDB
         self.get_mongo_db: GetMongoDB
@@ -76,15 +78,10 @@ class AssistantDependencies:
         self.create_availability_repo: CreateRepository[AvailabilityRepository]
         self._init_repositories()
 
-        self.bot = Bot(
-            token=self._settings.bot_token,
-            default=DefaultBotProperties(parse_mode=ParseMode.HTML),
-        )
-
         self.create_booking_client: CreateClient[BookingClient]
         self.create_xray_client: CreateClient[XrayClient]
         self.create_assistant_client: CreateClient[AssistantClient]
-        self.create_telegram_client: CreateClient[TelegramClient]
+        self.create_telegram_client: CreateClient[BotClient]
         self._init_clients()
 
         self.create_user_service: CreateService[UserService]
@@ -93,6 +90,12 @@ class AssistantDependencies:
         self.create_xray_service: CreateService[XrayService]
         self.create_availability_service: CreateService[AvailabilityService]
         self._init_services()
+
+    def _create_bot(self):
+        self.bot = Bot(
+            token=self._settings.bot_token,
+            default=DefaultBotProperties(parse_mode=ParseMode.HTML),
+        )
 
     def _init_databases(self):
         async_engine = create_async_engine(self._settings.psql_dsn)
@@ -154,3 +157,6 @@ class AssistantDependencies:
             self.create_availability_repo,
             self.create_user_service,
         ).create
+
+    async def close_dependencies(self):
+        await self.bot.session.close()

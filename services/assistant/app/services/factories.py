@@ -13,7 +13,7 @@ from app.contracts.clients import (
     XrayClient,
     BookingClient,
     AssistantClient,
-    TelegramClient,
+    BotClient,
 )
 
 from app.services.booking import BookingServiceImpl
@@ -96,7 +96,7 @@ class AvailabilityServiceFactory:
         create_booking_client: CreateClient[BookingClient],
         create_xray_client: CreateClient[XrayClient],
         create_assistant_client: CreateClient[AssistantClient],
-        create_telegram_client: CreateClient[TelegramClient],
+        create_telegram_client: CreateClient[BotClient],
         create_availability_repository: CreateRepository[AvailabilityRepository],
         create_user_service: CreateService[UserService],
     ):
