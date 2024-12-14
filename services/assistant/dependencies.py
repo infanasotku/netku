@@ -49,6 +49,7 @@ from app.contracts.services import (
     BookingService,
     XrayService,
     AvailabilityService,
+    BotService,
 )
 from app.services import (
     UserServiceFactory,
@@ -56,6 +57,7 @@ from app.services import (
     XrayServiceFactory,
     BookingAnalysisServiceFactory,
     AvailabilityServiceFactory,
+    BotServiceFactory,
 )
 
 
@@ -81,13 +83,14 @@ class AssistantDependencies:
         self.create_booking_client: CreateClient[BookingClient]
         self.create_xray_client: CreateClient[XrayClient]
         self.create_assistant_client: CreateClient[AssistantClient]
-        self.create_telegram_client: CreateClient[BotClient]
+        self.create_bot_client: CreateClient[BotClient]
         self._init_clients()
 
         self.create_user_service: CreateService[UserService]
         self.create_booking_service: CreateService[BookingService]
         self.create_booking_analysis_service: CreateService[BookingAnalysisService]
         self.create_xray_service: CreateService[XrayService]
+        self.create_bot_service: CreateService[BotService]
         self.create_availability_service: CreateService[AvailabilityService]
         self._init_services()
 
@@ -136,7 +139,7 @@ class AssistantDependencies:
         self.create_assistant_client = HTTPAssistantClientFactory(
             assistant_addr=""
         ).create
-        self.create_telegram_client = HTTPTelegramClientFactory(bot=self.bot).create
+        self.create_bot_client = HTTPTelegramClientFactory(bot=self.bot).create
 
     def _init_services(self):
         self.create_user_service = UserServiceFactory(self.create_user_repo).create
@@ -149,13 +152,15 @@ class AssistantDependencies:
         self.create_xray_service = XrayServiceFactory(
             self.create_xray_repo, self.create_xray_client
         ).create
+        self.create_bot_service = BotServiceFactory(
+            create_bot_client=self.create_bot_client
+        ).create
         self.create_availability_service = AvailabilityServiceFactory(
             self.create_booking_client,
             self.create_xray_client,
             self.create_assistant_client,
-            self.create_telegram_client,
             self.create_availability_repo,
-            self.create_user_service,
+            self.create_bot_service,
         ).create
 
     async def close_dependencies(self):

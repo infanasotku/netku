@@ -8,15 +8,11 @@ from app.contracts.repositories import (
     AvailabilityRepository,
 )
 from app.contracts.protocols import CreateClient, CreateRepository, CreateService
-from app.contracts.services import UserService, BookingService
-from app.contracts.clients import (
-    XrayClient,
-    BookingClient,
-    AssistantClient,
-    BotClient,
-)
+from app.contracts.services import UserService, BookingService, BotService
+from app.contracts.clients import XrayClient, BookingClient, AssistantClient, BotClient
 
 from app.services.booking import BookingServiceImpl
+from app.services.bot import BotServiceImpl
 from app.services.user import UserServiceImpl
 from app.services.xray import XrayServiceImpl
 from app.services.availability import AvailabilityServiceImpl
@@ -82,12 +78,24 @@ class BookingAnalysisServiceFactory:
         self._create_user_service = create_user_service
 
     @asynccontextmanager
-    async def create(self) -> AsyncGenerator[XrayServiceImpl, None]:
+    async def create(self) -> AsyncGenerator[BookingAnalysisServiceImpl, None]:
         async with (
             self._create_booking_service() as booking_service,
             self._create_user_service() as user_service,
         ):
             yield BookingAnalysisServiceImpl(booking_service, user_service)
+
+
+class BotServiceFactory:
+    def __init__(self, create_bot_client: CreateClient[BotClient]):
+        self._create_bot_client = create_bot_client
+
+    @asynccontextmanager
+    async def create(self) -> AsyncGenerator[BotServiceImpl, None]:
+        async with (
+            self._create_bot_client() as bot_client,
+        ):
+            yield BotServiceImpl(bot_client)
 
 
 class AvailabilityServiceFactory:
@@ -96,32 +104,28 @@ class AvailabilityServiceFactory:
         create_booking_client: CreateClient[BookingClient],
         create_xray_client: CreateClient[XrayClient],
         create_assistant_client: CreateClient[AssistantClient],
-        create_telegram_client: CreateClient[BotClient],
         create_availability_repository: CreateRepository[AvailabilityRepository],
-        create_user_service: CreateService[UserService],
+        create_bot_service: CreateService[BotService],
     ):
         self._create_xray_client = create_xray_client
         self._create_booking_client = create_booking_client
         self._create_assistant_client = create_assistant_client
-        self._create_telegram_client = create_telegram_client
         self._create_availability_repository = create_availability_repository
-        self._create_user_service = create_user_service
+        self._create_bot_service = create_bot_service
 
     @asynccontextmanager
-    async def create(self) -> AsyncGenerator[XrayServiceImpl, None]:
+    async def create(self) -> AsyncGenerator[AvailabilityServiceImpl, None]:
         async with (
             self._create_booking_client() as booking_client,
             self._create_xray_client() as xray_client,
             self._create_assistant_client() as assistant_client,
             self._create_availability_repository() as availability_repository,
-            self._create_telegram_client() as telegram_client,
-            self._create_user_service() as user_service,
+            self._create_bot_service() as bot_service,
         ):
             yield AvailabilityServiceImpl(
                 availability_repository,
                 booking_client,
                 xray_client,
                 assistant_client,
-                telegram_client,
-                user_service,
+                bot_service,
             )
