@@ -6,4 +6,4 @@ class BaseSchema(BaseModel):
 
 
 class BaseSchemaPK(BaseSchema):
-    id: int = -1
+    id: int | str | None = None

@@ -1,9 +1,11 @@
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 
 from app.schemas.user import UserSchema, UserUpdateSchema
 
+from app.contracts.services.base import BaseService
 
-class UserService(ABC):
+
+class UserService(BaseService):
     @abstractmethod
     async def get_user_by_telegram_id(self, id: int) -> UserSchema | None:
         """Gets user by `UserSchema.telegram_id`.
@@ -27,3 +29,19 @@ class UserService(ABC):
         """Updates user.
 
         :return: `True` if user updated, `False` otherwise."""
+
+    @abstractmethod
+    async def get_users_by_active_subscriptions(
+        self, subscriptions: list[str], every: bool = False
+    ) -> list[UserSchema]:
+        """Finds user with active `subscriptions`.
+
+        :param every: If `True` then matches user with all specified `subscriptions`.
+
+        :return: Found users."""
+
+    @abstractmethod
+    async def send_notify_by_subscriptions(
+        self, subscriptions: list[str], message: str
+    ) -> None:
+        """Sends `message` to all users with active `subscriptions`."""

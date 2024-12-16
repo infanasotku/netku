@@ -2,17 +2,16 @@ import pytest
 from datetime import datetime
 
 from app.services.xray import XrayServiceImpl
-from app.contracts.clients.xray import XrayClient
 from app.schemas.xray import (
     XrayRecordCreateSchema,
     XrayRecordSchema,
     XrayRecordUpdateSchema,
 )
 
-from tests.stubs import StubXrayRepository
+from tests.stubs import StubXrayRepository, StubXrayClient
 
 
-class _StubXrayClient(XrayClient):
+class _StubXrayClient(StubXrayClient):
     def __init__(self, uid: str) -> None:
         self.uid = uid
 

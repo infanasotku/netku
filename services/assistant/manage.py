@@ -1,95 +1,80 @@
+import sys
+import asyncio
 from fastapi import FastAPI
 import uvicorn
-from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 
-from app.infra.config.settings import settings
-from app.infra.logging.logger import logger, config
+from app.infra.config import settings
+from app.infra.logging import logger, config
+
+from dependencies import AssistantDependencies
+
 from app.app import AppFactory
-from app.adapters.bot import BotFactory, BotServicesFactory, BotSettings
-from app.infra.database.sql_db import get_db_factory
-from app.infra.database.sql_db.repositories import (
-    SQLBookingRepository,
-    SQLUserRepository,
-    SQLXrayRepository,
-    SQLRepositoryFactory,
-)
-from app.services import (
-    UserServiceFactory,
-    BookingServiceFactory,
-    XrayServiceFactory,
-    BookingAnalysisServiceFactory,
-)
-from app.adapters.output.grpc import BookingClientFactory, XrayClientFactory
+from app.adapters.input.bot import BotAppFactory, BotServicesFactory, BotSettings
 from app.tasks.restart_proxy import RestartProxyTask
 
 
-def create_app() -> FastAPI:
-    # grpc client factories
-    bc_factory = BookingClientFactory(
-        client_addr=settings.booking_host,
-        client_port=settings.booking_port,
-        service_name="booking",
-        reconnection_delay=settings.reconnection_delay,
-    )
-    xc_factory = XrayClientFactory(
-        client_addr=settings.xray_host,
-        client_port=settings.xray_port,
-        service_name="xray",
-        reconnection_delay=settings.reconnection_delay,
-    )
+def run_backend(dependencies: AssistantDependencies):
+    def create_app(dependencies: AssistantDependencies) -> FastAPI:
+        bot_factory = BotAppFactory(
+            bot=dependencies.bot,
+            bot_settings=BotSettings(**settings.model_dump()),
+            bot_services_factory=BotServicesFactory(
+                create_user_service=dependencies.create_user_service,
+                create_booking_service=dependencies.create_booking_service,
+                create_xray_service=dependencies.create_xray_service,
+                create_booking_analysis_service=dependencies.create_booking_analysis_service,
+            ),
+            logger=logger,
+        )
 
-    # db factory
-    async_engine = create_async_engine(settings.psql_dsn)
-    async_session = async_sessionmaker(async_engine)
-    get_db = get_db_factory(async_session)
-    br_factory = SQLRepositoryFactory(get_db, SQLBookingRepository)
-    xr_factory = SQLRepositoryFactory(get_db, SQLXrayRepository)
-    ur_factory = SQLRepositoryFactory(get_db, SQLUserRepository)
+        # Tasks
+        restart_proxy = RestartProxyTask(
+            bot=dependencies.bot,
+            create_user_service=dependencies.create_user_service,
+            create_xray_service=dependencies.create_xray_service,
+            logger=logger,
+            xray_restart_minutes=settings.xray_restart_minutes,
+        )
 
-    # service factories
-    us_factory = UserServiceFactory(ur_factory.create)
-    bs_factory = BookingServiceFactory(br_factory.create, bc_factory.create)
-    xs_factory = XrayServiceFactory(xr_factory.create, xc_factory.create)
-    bas_factory = BookingAnalysisServiceFactory(bs_factory.create, us_factory.create)
+        factory = AppFactory(logger)
+        factory.register_sub_factory(bot_factory)
 
-    # Sub factories
-    bot_factory = BotFactory(
-        bot_settings=BotSettings(**settings.model_dump()),
-        bot_services_factory=BotServicesFactory(
-            create_user_service=us_factory.create,
-            create_booking_service=bs_factory.create,
-            create_xray_service=xs_factory.create,
-            create_booking_analysis_service=bas_factory.create,
-        ),
-        logger=logger,
-    )
+        factory.register_task(restart_proxy)
 
-    # Tasks
-    restart_proxy = RestartProxyTask(
-        bot=bot_factory.bot,
-        create_user_service=us_factory.create,
-        create_xray_service=xs_factory.create,
-        logger=logger,
-        xray_restart_minutes=settings.xray_restart_minutes,
-    )
+        return factory.create_app()
 
-    factory = AppFactory(logger)
-    factory.register_sub_factory(bot_factory)
-
-    factory.register_task(restart_proxy)
-
-    return factory.create_app()
-
-
-def run():
     uvicorn.run(
-        app=create_app(),
+        app=create_app(dependencies),
         host=settings.host,
         port=settings.port,
         log_config=config,
         ssl_keyfile=settings.ssl_keyfile,
         ssl_certfile=settings.ssl_certfile,
     )
+
+
+def run_sheduled_tasks(dependencies: AssistantDependencies):
+    # Example tasks entry point for future.
+    from app.schemas.availability import Service
+
+    async def start():
+        async with dependencies.create_availability_service() as avail_service:
+            await avail_service.check_availability(Service.xray)
+
+    asyncio.run(start())
+
+
+def run():
+    dependencies = AssistantDependencies(settings)
+
+    args = sys.argv
+
+    if "-t" in args:
+        run_sheduled_tasks(dependencies)
+    else:
+        run_backend(dependencies)
+
+    asyncio.run(dependencies.close_dependencies())
 
 
 if __name__ == "__main__":

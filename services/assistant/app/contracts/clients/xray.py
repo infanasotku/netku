@@ -1,7 +1,9 @@
-from abc import ABC, abstractmethod
+from abc import abstractmethod
+
+from app.contracts.clients.base import InternalBaseClient
 
 
-class XrayClient(ABC):
+class XrayClient(InternalBaseClient):
     @abstractmethod
     async def restart(self) -> str | None:
         """Sends request to xray service for restart,

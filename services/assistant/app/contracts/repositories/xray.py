@@ -1,4 +1,4 @@
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 
 from app.schemas.xray import (
     XrayRecordSchema,
@@ -6,8 +6,10 @@ from app.schemas.xray import (
     XrayRecordUpdateSchema,
 )
 
+from app.contracts.repositories.base import BaseRepository
 
-class XrayRepository(ABC):
+
+class XrayRepository(BaseRepository):
     @abstractmethod
     async def get_last_xray_record(self) -> XrayRecordSchema | None:
         """Gets last xray record.

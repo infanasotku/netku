@@ -1,9 +1,11 @@
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 
 from app.schemas.user import UserSchema, UserCreateSchema, UserUpdateSchema
 
+from app.contracts.repositories.base import BaseRepository
 
-class UserRepository(ABC):
+
+class UserRepository(BaseRepository):
     @abstractmethod
     async def get_user_by_id(self, id: int) -> UserSchema | None:
         """Gets user by `id`.
@@ -41,3 +43,13 @@ class UserRepository(ABC):
 
         :return: Updated user.
         """
+
+    @abstractmethod
+    async def get_users_by_active_subscriptions(
+        self, subscriptions: list[str], every: bool = False
+    ) -> list[UserSchema]:
+        """Finds user with active `subscriptions`.
+
+        :param every: If `True` then matches user with all specified `subscriptions`.
+
+        :return: Found users."""
