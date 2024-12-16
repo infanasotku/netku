@@ -8,7 +8,7 @@ from app.infra.logging import logger, config
 from dependencies import AssistantDependencies
 
 from app.app import AppFactory
-from app.adapters.bot import BotAppFactory, BotServicesFactory, BotSettings
+from app.adapters.input.bot import BotAppFactory, BotServicesFactory, BotSettings
 from app.tasks.restart_proxy import RestartProxyTask
 
 

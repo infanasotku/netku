@@ -7,8 +7,8 @@ from aiogram.utils.markdown import hbold
 from app.schemas.user import UserSchema, UserUpdateSchema
 from app.contracts.services import UserService
 
-import app.adapters.bot.kb as kb
-from app.adapters.bot.states import BaseState
+import app.adapters.input.bot.kb as kb
+from app.adapters.input.bot.states import BaseState
 
 
 async def try_delete_message(message: Message) -> bool:

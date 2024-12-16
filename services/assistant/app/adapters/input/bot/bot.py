@@ -15,7 +15,7 @@ from app.contracts.services import (
     XrayService,
     BookingAnalysisService,
 )
-from app.adapters.bot.router import MainRouter
+from app.adapters.input.bot.router import MainRouter
 
 
 class BotServicesFactory(BaseModel):
