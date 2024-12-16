@@ -1,3 +1,4 @@
+import sys
 import asyncio
 from fastapi import FastAPI
 import uvicorn
@@ -53,6 +54,7 @@ def run_backend(dependencies: AssistantDependencies):
 
 
 def run_sheduled_tasks(dependencies: AssistantDependencies):
+    # Example tasks entry point for future.
     from app.schemas.availability import Service
 
     async def start():
@@ -63,11 +65,11 @@ def run_sheduled_tasks(dependencies: AssistantDependencies):
 
 
 def run():
-    param = "shedule"
-
     dependencies = AssistantDependencies(settings)
 
-    if param == "shedule":
+    args = sys.argv
+
+    if "-t" in args:
         run_sheduled_tasks(dependencies)
     else:
         run_backend(dependencies)
