@@ -22,7 +22,6 @@ def run_backend(dependencies: AssistantDependencies):
                 create_booking_service=dependencies.create_booking_service,
                 create_xray_service=dependencies.create_xray_service,
                 create_booking_analysis_service=dependencies.create_booking_analysis_service,
-                create_bot_service=dependencies.create_bot_service,
             ),
             logger=logger,
         )

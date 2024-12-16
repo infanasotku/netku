@@ -158,6 +158,7 @@ class AssistantDependencies:
             self.create_xray_client,
             self.create_assistant_client,
             self.create_availability_repo,
+            self.create_user_service,
         ).create
 
     async def close_dependencies(self):

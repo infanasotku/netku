@@ -14,7 +14,6 @@ from app.contracts.services import (
     UserService,
     XrayService,
     BookingAnalysisService,
-    BotService,
 )
 from app.adapters.bot.router import MainRouter
 
@@ -24,7 +23,6 @@ class BotServicesFactory(BaseModel):
     create_booking_service: CreateService[BookingService]
     create_xray_service: CreateService[XrayService]
     create_booking_analysis_service: CreateService[BookingAnalysisService]
-    create_bot_service: CreateService[BotService]
 
 
 class BotSettings(BaseModel):

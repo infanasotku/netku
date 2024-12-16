@@ -1,4 +1,4 @@
-from app.adapters.output.http.notification import HTTPAiogramClient
+from app.adapters.output.http.notification import AiogramNotificationClient
 from app.adapters.output.http.assistant import HTTPAssistantClient
 
 from app.adapters.output.http.factories import (
@@ -7,7 +7,7 @@ from app.adapters.output.http.factories import (
 )
 
 __all__ = [
-    "HTTPAiogramClient",
+    "AiogramNotificationClient",
     "HTTPAssistantClient",
     "AiogramNotificationClientFactory",
     "HTTPAssistantClientFactory",

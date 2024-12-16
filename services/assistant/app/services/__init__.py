@@ -4,7 +4,6 @@ from app.services.factories import (
     XrayServiceFactory,
     BookingAnalysisServiceFactory,
     AvailabilityServiceFactory,
-    BotServiceFactory,
 )
 
 __all__ = [
@@ -13,5 +12,4 @@ __all__ = [
     "XrayServiceFactory",
     "BookingAnalysisServiceFactory",
     "AvailabilityServiceFactory",
-    "BotServiceFactory",
 ]
