@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Awaitable, Callable
 
 from app.contracts.repositories import AvailabilityRepository
-from app.contracts.services import AvailabilityService, BotService
+from app.contracts.services import AvailabilityService, UserService
 from app.contracts.clients import (
     BookingClient,
     XrayClient,
@@ -23,13 +23,13 @@ class AvailabilityServiceImpl(AvailabilityService):
         booking_client: BookingClient,
         xray_client: XrayClient,
         assistant_client: AssistantClient,
-        bot_service: BotService,
+        user_service: UserService,
     ):
         self._availability_repository = availability_repository
         self._booking_client = booking_client
         self._xray_client = xray_client
         self._assistant_client = assistant_client
-        self._bot_service = bot_service
+        self._user_service = user_service
 
     async def check_availability(
         self,
@@ -77,6 +77,6 @@ class AvailabilityServiceImpl(AvailabilityService):
         await self._availability_repository.log_availability(availability_create)
 
         if availability_factor <= notify_factor_level:
-            await self._bot_service.send_notify_by_subscriptions(
+            await self._user_service.send_notify_by_subscriptions(
                 ["availability_subscription"], f"Service not available: {service.name}"
             )

@@ -4,7 +4,7 @@ from typing import AsyncGenerator
 from aiogram import Bot
 
 from app.adapters.output.http.assistant import HTTPAssistantClient
-from app.adapters.output.http.bot import HTTPAiogramClient
+from app.adapters.output.http.notification import AiogramNotificationClient
 
 
 class HTTPAssistantClientFactory:
@@ -21,15 +21,15 @@ class HTTPAssistantClientFactory:
         yield self.instance
 
 
-class HTTPAiogramClientFactory:
+class AiogramNotificationClientFactory:
     def __init__(self, bot: Bot):
         self.bot = bot
-        self.instance: HTTPAiogramClient = None
+        self.instance: AiogramNotificationClient = None
 
     @asynccontextmanager
-    async def create(self) -> AsyncGenerator[HTTPAiogramClient, None]:
-        """:return: instance of `HTTPTelegramClient`."""
+    async def create(self) -> AsyncGenerator[AiogramNotificationClient, None]:
+        """:return: instance of `AiogramNotificationClient`."""
         if self.instance is None:
-            self.instance = HTTPAiogramClient(self.bot)
+            self.instance = AiogramNotificationClient(self.bot)
 
         yield self.instance

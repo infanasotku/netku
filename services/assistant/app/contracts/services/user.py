@@ -39,3 +39,9 @@ class UserService(BaseService):
         :param every: If `True` then matches user with all specified `subscriptions`.
 
         :return: Found users."""
+
+    @abstractmethod
+    async def send_notify_by_subscriptions(
+        self, subscriptions: list[str], message: str
+    ) -> None:
+        """Sends `message` to all users with active `subscriptions`."""
