@@ -2,8 +2,8 @@ from contextlib import asynccontextmanager
 from typing import AsyncGenerator, Type, TypeVar
 from pymongo.asynchronous.collection import AsyncCollection
 
-from app.infra.database.mongo_db.orm import GetMongoDB
-from app.infra.database.mongo_db.repositories.base import MongoBaseRepository
+from app.adapters.output.database.mongo_db.orm import GetMongoDB
+from app.adapters.output.database.mongo_db.repositories.base import MongoBaseRepository
 
 
 class MongoRepositoryFactory:

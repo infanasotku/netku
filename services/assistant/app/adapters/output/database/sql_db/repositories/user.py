@@ -4,12 +4,12 @@ from sqlalchemy.orm import MappedColumn
 
 from app.contracts.repositories import UserRepository
 
-from app.infra.database.sql_db.repositories.base import SQLBaseRepository
+from app.adapters.output.database.sql_db.repositories.base import SQLBaseRepository
 from app.schemas.user import UserCreateSchema, UserSchema, UserUpdateSchema
 
-from app.infra.database.sql_db import converters
-from app.infra.database.sql_db.models import User
-from app.infra.database.sql_db.orm import selectinload_all
+from app.adapters.output.database.sql_db import converters
+from app.adapters.output.database.sql_db.models import User
+from app.adapters.output.database.sql_db.orm import selectinload_all
 
 
 class SQLUserRepository(UserRepository, SQLBaseRepository):

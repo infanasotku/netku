@@ -2,7 +2,7 @@ from app.schemas.user import UserCreateSchema, UserSchema
 from app.schemas.booking import BookingAccountCreateSchema, BookingAccountSchema
 from app.schemas.xray import XrayRecordCreateSchema, XrayRecordSchema
 
-from app.infra.database.sql_db.models import BookingAccount, User, XrayRecord
+from app.adapters.output.database.sql_db.models import BookingAccount, User, XrayRecord
 
 
 def user_create_schema_to_user(user_create: UserCreateSchema) -> User:

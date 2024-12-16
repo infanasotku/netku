@@ -3,10 +3,10 @@ from aiogram.enums import ParseMode
 from aiogram import Bot
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 
-from app.infra.database.sql_db import get_db_factory as get_sql_db_factory
-from app.infra.database.sql_db.orm import GetSQLDB
-from app.infra.database.mongo_db import get_db_factory as get_mongo_db_factory
-from app.infra.database.mongo_db.orm import GetMongoDB
+from app.adapters.output.database.sql_db import get_db_factory as get_sql_db_factory
+from app.adapters.output.database.sql_db.orm import GetSQLDB
+from app.adapters.output.database.mongo_db import get_db_factory as get_mongo_db_factory
+from app.adapters.output.database.mongo_db.orm import GetMongoDB
 
 from app.contracts.protocols import CreateRepository, CreateClient, CreateService
 
@@ -17,13 +17,13 @@ from app.contracts.repositories import (
     XrayRepository,
 )
 
-from app.infra.database.sql_db.repositories import (
+from app.adapters.output.database.sql_db.repositories import (
     SQLBookingRepository,
     SQLUserRepository,
     SQLXrayRepository,
     SQLRepositoryFactory,
 )
-from app.infra.database.mongo_db.repositories import (
+from app.adapters.output.database.mongo_db.repositories import (
     MongoAvailabilityRepository,
     MongoRepositoryFactory,
 )

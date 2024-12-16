@@ -1,8 +1,8 @@
 from contextlib import asynccontextmanager
 from typing import AsyncGenerator, Type, TypeVar
 
-from app.infra.database.sql_db.orm import GetSQLDB
-from app.infra.database.sql_db.repositories.base import SQLBaseRepository
+from app.adapters.output.database.sql_db.orm import GetSQLDB
+from app.adapters.output.database.sql_db.repositories.base import SQLBaseRepository
 
 
 class SQLRepositoryFactory:

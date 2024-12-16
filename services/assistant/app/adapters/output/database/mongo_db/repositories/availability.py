@@ -5,8 +5,8 @@ from app.schemas.availability import (
     AvailabilitySchema,
 )
 
-from app.infra.database.mongo_db.repositories.base import MongoBaseRepository
-from app.infra.database.mongo_db.orm import result_to_schema
+from app.adapters.output.database.mongo_db.repositories.base import MongoBaseRepository
+from app.adapters.output.database.mongo_db.orm import result_to_schema
 
 
 class MongoAvailabilityRepository(AvailabilityRepository, MongoBaseRepository):

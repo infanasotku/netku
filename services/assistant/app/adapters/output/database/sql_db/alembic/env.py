@@ -8,8 +8,8 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 from alembic import context
 
 from app.infra.config.settings import settings
-from app.infra.database.sql_db.orm import Base
-from app.infra.database.sql_db.models import *  # noqa
+from app.adapters.output.database.sql_db.orm import Base
+from app.adapters.output.database.sql_db.models import *  # noqa
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
