@@ -19,6 +19,9 @@ class _StubXrayClient(XrayClient):
     async def restart(self) -> str | None:
         return self.uid
 
+    async def check_health(self):
+        raise NotImplementedError
+
 
 class _StubRepository(StubXrayRepository):
     def __init__(self):
