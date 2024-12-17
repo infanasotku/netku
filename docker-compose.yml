@@ -40,7 +40,6 @@ services:
 
     env_file:
       - .env
-    # TODO: healthcheck
 
   xray:
     container_name: netku-xray
@@ -86,14 +85,6 @@ services:
 
     env_file:
       - .env
-
-    depends_on:
-      db:
-        condition: service_healthy
-      xray:
-        condition: service_healthy
-      booking:
-        condition: service_healthy
 
   server:
     container_name: netku-server
