@@ -1,10 +1,11 @@
 services:
-  db:
-    container_name: netku-db
+  postgres:
+    container_name: netku-postgres
+    restart: always
     image: postgres
 
     volumes:
-      - db-dir:/var/lib/postgresql/data
+      - postgres-db-dir:/var/lib/postgresql/data
 
     networks:
       - netku-net
@@ -12,7 +13,7 @@ services:
     hostname: postgresql
 
     ports:
-      - 5432:5432
+      - 5430:5432
 
     env_file:
       - .env
@@ -23,8 +24,27 @@ services:
       timeout: 5s
       retries: 10
 
+  mongo:
+    container_name: netku-mongo
+    restart: always
+    image: mongo
+
+    volumes:
+      - mongo-db-dir:/data/db
+
+    networks:
+      - netku-net
+
+    ports:
+      - 27010:27017
+
+    env_file:
+      - .env
+    # TODO: healthcheck
+
   xray:
     container_name: netku-xray
+    restart: always
     build:
       context: services/xray
 
@@ -53,6 +73,7 @@ services:
 
   assistant:
     container_name: netku-assistant
+    restart: always
     build:
       context: services/assistant
 
@@ -76,6 +97,7 @@ services:
 
   server:
     container_name: netku-server
+    restart: always
     build:
       context: services/server
       args:
@@ -99,6 +121,7 @@ services:
 
   landing:
     container_name: netku-landing
+    restart: always
     build:
       context: services/landing
 
@@ -110,6 +133,7 @@ services:
 
   booking:
     container_name: netku-booking
+    restart: always
     build:
       context: services/booking
 
@@ -133,7 +157,9 @@ volumes:
     external: true
   xray-log-dir:
     external: true
-  db-dir:
+  postgres-db-dir:
+    external: true
+  mongo-db-dir:
     external: true
   nginx-html:
   booking-browser-dir:
