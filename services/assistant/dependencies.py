@@ -1,9 +1,8 @@
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
 from aiogram import Bot
-from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 
-from app.adapters.output.database.sql_db import get_db_factory as get_sql_db_factory
+from app.infra.database.postgres_connection import PostgreSQLConnection
 from app.adapters.output.database.sql_db.orm import GetSQLDB
 from app.adapters.output.database.mongo_db import get_db_factory as get_mongo_db_factory
 from app.adapters.output.database.mongo_db.orm import GetMongoDB
@@ -98,9 +97,8 @@ class AssistantDependencies:
         )
 
     def _init_databases(self):
-        async_engine = create_async_engine(self._settings.psql_dsn)
-        async_session = async_sessionmaker(async_engine)
-        self.get_sql_db = get_sql_db_factory(async_session)
+        self.sql_connection = PostgreSQLConnection(self._settings.psql_dsn)
+        self.get_sql_db = self.sql_connection.get_db
 
         self.get_mongo_db = get_mongo_db_factory(
             self._settings.mongo_dsn, self._settings.mongo_db_name
