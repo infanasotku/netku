@@ -1,6 +1,10 @@
+from typing import Callable
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
 from aiogram import Bot
+from pika import BlockingConnection
+
+from app.infra.messaging.rabbitmq_connection import RabbitMQConnector
 
 from app.infra.database.postgres_connection import PostgreSQLConnection
 from app.adapters.output.database.sql_db.orm import GetSQLDB
@@ -64,12 +68,16 @@ from app.infra.config.settings import Settings
 class AssistantDependencies:
     def __init__(self, settings: Settings):
         self._settings = settings
+
         self.bot: Bot = None
         self._create_bot()
 
         self.get_sql_db: GetSQLDB
         self.get_mongo_db: GetMongoDB
         self._init_databases()
+
+        self.get_rabbit_connection: Callable[[], BlockingConnection]
+        self._init_message_broker()
 
         self.create_xray_repo: CreateRepository[XrayRepository]
         self.create_user_repo: CreateRepository[UserRepository]
@@ -90,6 +98,7 @@ class AssistantDependencies:
         self.create_availability_service: CreateService[AvailabilityService]
         self._init_services()
 
+    # External
     def _create_bot(self):
         self.bot = Bot(
             token=self._settings.bot_token,
@@ -105,6 +114,16 @@ class AssistantDependencies:
         )
         self.get_mongo_db = self.mongo_connection.get_db
 
+    def _init_message_broker(self):
+        self.rabbitmq_connector = RabbitMQConnector(
+            self._settings.rabbit_user,
+            self._settings.rabbit_pass,
+            self._settings.rabbit_host,
+            self._settings.rabbit_port,
+        )
+        self.get_rabbit_connection = self.rabbitmq_connector.get_connection
+
+    # Internal
     def _init_repositories(self):
         self.create_xray_repo = SQLRepositoryFactory(
             self.get_sql_db, SQLXrayRepository

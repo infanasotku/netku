@@ -11,10 +11,16 @@ from app.infra.config.bot import BotSettings
 from app.infra.config.postgres import PostgreSQLSettings
 from app.infra.config.xray import XraySettings
 from app.infra.config.mongo import MongoSettings
+from app.infra.config.rabbitmq import RabbitMQSettings
 
 
 class Settings(
-    XraySettings, BookingSettings, BotSettings, PostgreSQLSettings, MongoSettings
+    XraySettings,
+    BookingSettings,
+    BotSettings,
+    PostgreSQLSettings,
+    MongoSettings,
+    RabbitMQSettings,
 ):
     # region Network
     host: str = Field(validation_alias="ASSISTANT_HOST", default="127.0.0.1")
