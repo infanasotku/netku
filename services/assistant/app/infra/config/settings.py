@@ -29,11 +29,6 @@ class Settings(
     ssl_keyfile: str | None = Field(validation_alias="SSL_KEYFILE", default=None)
     ssl_certfile: str | None = Field(validation_alias="SSL_CERTFILE", default=None)
 
-    reconnection_retries: int = Field(
-        validation_alias="RECONNECTION_RETRIES", default=5
-    )
-    reconnection_delay: float = Field(validation_alias="RECONNECTION_DELAY", default=3)
-
     @computed_field
     @property
     def app_directory_path(self) -> str:
