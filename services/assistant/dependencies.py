@@ -1,3 +1,4 @@
+from logging import Logger
 from typing import Callable
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
@@ -5,6 +6,7 @@ from aiogram import Bot
 from pika import BlockingConnection
 
 from app.infra.messaging.rabbitmq_connector import RabbitMQConnector
+from app.infra.tasks.celery_connector import CeleryConnector
 
 from app.infra.database.postgres_connection import PostgreSQLConnection
 from app.adapters.output.database.sql_db.orm import GetSQLDB
@@ -61,13 +63,16 @@ from app.services import (
     AvailabilityServiceFactory,
 )
 
+from app.adapters.tasks.restart_proxy import RestartProxyTask
+
 
 from app.infra.config.settings import Settings
 
 
 class AssistantDependencies:
-    def __init__(self, settings: Settings):
+    def __init__(self, settings: Settings, logger: Logger):
         self._settings = settings
+        self._logger = logger
 
         self.bot: Bot = None
         self._create_bot()
@@ -78,6 +83,9 @@ class AssistantDependencies:
 
         self.get_rabbit_connection: Callable[[], BlockingConnection]
         self._init_message_broker()
+
+        self.celery_connector: CeleryConnector
+        self._init_celery_connector()
 
         self.create_xray_repo: CreateRepository[XrayRepository]
         self.create_user_repo: CreateRepository[UserRepository]
@@ -97,6 +105,9 @@ class AssistantDependencies:
         self.create_xray_service: CreateService[XrayService]
         self.create_availability_service: CreateService[AvailabilityService]
         self._init_services()
+
+        self.restart_proxy: RestartProxyTask
+        self._init_tasks()
 
     # External
     def _create_bot(self):
@@ -122,6 +133,15 @@ class AssistantDependencies:
             self._settings.rabbit_port,
         )
         self.get_rabbit_connection = self.rabbitmq_connector.get_connection
+
+    def _init_celery_connector(self):
+        self.celery_connector = CeleryConnector(
+            self._settings.rabbit_user,
+            self._settings.rabbit_pass,
+            self._settings.rabbit_host,
+            self._settings.rabbit_port,
+            "assistant_tasks",
+        )
 
     # Internal
     def _init_repositories(self):
@@ -181,3 +201,12 @@ class AssistantDependencies:
 
     async def close_dependencies(self):
         await self.bot.session.close()
+
+    def _init_tasks(self):
+        self.restart_proxy = RestartProxyTask(
+            self._logger,
+            self.celery_connector.celery,
+            self.bot,
+            self.create_user_service,
+            self.create_xray_service,
+        )
