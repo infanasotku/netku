@@ -1,5 +1,4 @@
 import sys
-import asyncio
 from fastapi import FastAPI
 import uvicorn
 
@@ -42,22 +41,13 @@ def run_backend(dependencies: AssistantDependencies):
 
 
 def run_worker(dependencies: AssistantDependencies):
-    worker = dependencies.celery_connector.celery.Worker(concurrency=1)
-
-    worker.start()
+    dependencies.register_task_worker()
+    dependencies.worker.start()
 
 
 def run_sheduled_tasks(dependencies: AssistantDependencies):
-    result = dependencies.restart_proxy.task.delay()
-    print(result.id)
-    # Example tasks entry point for future.
-    # from app.schemas.availability import Service
-
-    # async def start():
-    #     async with dependencies.create_availability_service() as avail_service:
-    #         await avail_service.check_availability(Service.xray)
-
-    # asyncio.run(start())
+    dependencies.register_sheduled_tasks()
+    dependencies.beat.run()
 
 
 def run():
@@ -72,7 +62,7 @@ def run():
     else:
         run_backend(dependencies)
 
-    asyncio.run(dependencies.close_dependencies())
+    dependencies.close_dependencies()
 
 
 if __name__ == "__main__":

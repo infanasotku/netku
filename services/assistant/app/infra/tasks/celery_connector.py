@@ -18,3 +18,10 @@ class CeleryConnector:
             broker=conn_string,
             backend="rpc://",
         )
+
+    def beat(self, shedule_conf: dict):
+        self.celery.conf.beat_schedule = shedule_conf
+        return self.celery.Beat()
+
+    def worker(self, /, concurrency: int):
+        return self.celery.Worker(concurrency=concurrency)

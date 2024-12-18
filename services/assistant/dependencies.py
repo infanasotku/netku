@@ -1,8 +1,10 @@
+import asyncio
 from logging import Logger
 from typing import Callable
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
 from aiogram import Bot
+from celery.beat import crontab
 from pika import BlockingConnection
 
 from app.infra.messaging.rabbitmq_connector import RabbitMQConnector
@@ -109,7 +111,7 @@ class AssistantDependencies:
         self.restart_proxy: RestartProxyTask
         self._init_tasks()
 
-    # External
+    # region External
     def _create_bot(self):
         self.bot = Bot(
             token=self._settings.bot_token,
@@ -143,7 +145,9 @@ class AssistantDependencies:
             "assistant_tasks",
         )
 
-    # Internal
+    # endregion
+
+    # region Internal
     def _init_repositories(self):
         self.create_xray_repo = SQLRepositoryFactory(
             self.get_sql_db, SQLXrayRepository
@@ -199,9 +203,6 @@ class AssistantDependencies:
             self.create_user_service,
         ).create
 
-    async def close_dependencies(self):
-        await self.bot.session.close()
-
     def _init_tasks(self):
         self.restart_proxy = RestartProxyTask(
             self._logger,
@@ -210,3 +211,24 @@ class AssistantDependencies:
             self.create_user_service,
             self.create_xray_service,
         )
+
+    # endregion
+
+    def close_dependencies(self):
+        async def close():
+            await self.bot.session.close()
+
+        asyncio.run(close())
+
+    def register_sheduled_tasks(self):
+        self.beat = self.celery_connector.beat(
+            {
+                "restart-proxy-every-week": {
+                    "task": self.restart_proxy.task.name,
+                    "schedule": crontab(),
+                },
+            }
+        )
+
+    def register_task_worker(self):
+        self.worker = self.celery_connector.worker(concurrency=1)
