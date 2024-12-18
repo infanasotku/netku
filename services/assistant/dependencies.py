@@ -4,7 +4,7 @@ from aiogram.enums import ParseMode
 from aiogram import Bot
 from pika import BlockingConnection
 
-from app.infra.messaging.rabbitmq_connection import RabbitMQConnector
+from app.infra.messaging.rabbitmq_connector import RabbitMQConnector
 
 from app.infra.database.postgres_connection import PostgreSQLConnection
 from app.adapters.output.database.sql_db.orm import GetSQLDB
