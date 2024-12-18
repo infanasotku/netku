@@ -143,6 +143,21 @@ services:
       timeout: 5s
       retries: 10
 
+  rabbitmq:
+    container_name: netku-rabbitmq
+    restart: always
+    image: rabbitmq:management
+
+    ports:
+      - 5670:5672
+      - 15670:15672
+
+    env_file:
+      - .env
+
+    networks:
+      - netku-net
+
 volumes:
   cert-dir:
     external: true
