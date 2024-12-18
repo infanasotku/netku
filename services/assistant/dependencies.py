@@ -4,7 +4,7 @@ from aiogram import Bot
 
 from app.infra.database.postgres_connection import PostgreSQLConnection
 from app.adapters.output.database.sql_db.orm import GetSQLDB
-from app.adapters.output.database.mongo_db import get_db_factory as get_mongo_db_factory
+from app.infra.database.mongo_connection import MongoDBConnection
 from app.adapters.output.database.mongo_db.orm import GetMongoDB
 
 from app.contracts.protocols import CreateRepository, CreateClient, CreateService
@@ -100,9 +100,10 @@ class AssistantDependencies:
         self.sql_connection = PostgreSQLConnection(self._settings.psql_dsn)
         self.get_sql_db = self.sql_connection.get_db
 
-        self.get_mongo_db = get_mongo_db_factory(
+        self.mongo_connection = MongoDBConnection(
             self._settings.mongo_dsn, self._settings.mongo_db_name
         )
+        self.get_mongo_db = self.mongo_connection.get_db
 
     def _init_repositories(self):
         self.create_xray_repo = SQLRepositoryFactory(
