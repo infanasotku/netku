@@ -168,12 +168,10 @@ class AssistantDependencies:
         self.create_booking_client = GRPCBookingClientFactory(
             client_addr=settings.booking_host,
             client_port=settings.booking_port,
-            reconnection_delay=settings.reconnection_delay,
         ).create
         self.create_xray_client = GRPCXrayClientFactory(
             client_addr=settings.xray_host,
             client_port=settings.xray_port,
-            reconnection_delay=settings.reconnection_delay,
         ).create
         self.create_assistant_client = HTTPAssistantClientFactory(
             assistant_addr=""

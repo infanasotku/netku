@@ -16,11 +16,9 @@ class GRPCClientFactory(ABC):
         self,
         client_addr: str,
         client_port: int,
-        reconnection_delay: float,
     ):
         self.client_addr = client_addr
         self.client_port = client_port
-        self.reconnection_delay = reconnection_delay
 
     def _create_channel(self) -> Channel:
         """:return: created grpc channel."""
