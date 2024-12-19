@@ -217,6 +217,7 @@ class AssistantDependencies:
             self.celery_connector.celery,
             self.create_availability_service,
             [Service.xray],
+            0.3,
         )
 
     # endregion
