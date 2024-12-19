@@ -20,13 +20,13 @@ flowchart TD
     initializers <-.-> |RabbitMQ| A-W
 
     subgraph db [Databases]
-    P(fa:fa-database Postgres)
-    M(fa:fa-database Mongo)
+    P(fa:fa-database PostgreSQL)
+    M(fa:fa-database MongoDB)
     end
 
     subgraph external [External apps]
     R(fa:fa-message RabbitMQ)
-    E(fa:fa-ellipsis)
+    E(fa:fa-ellipsis Others)
 
     end
 
