@@ -229,4 +229,6 @@ class AssistantDependencies:
         )
 
     def register_task_worker(self):
-        self.worker = self.celery_connector.worker(concurrency=1)
+        self.worker = self.celery_connector.worker(
+            concurrency=self._settings.concurrency
+        )

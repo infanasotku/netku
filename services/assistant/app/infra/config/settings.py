@@ -12,6 +12,7 @@ from app.infra.config.postgres import PostgreSQLSettings
 from app.infra.config.xray import XraySettings
 from app.infra.config.mongo import MongoSettings
 from app.infra.config.rabbitmq import RabbitMQSettings
+from app.infra.config.celery import CelerySettings
 
 
 class Settings(
@@ -21,6 +22,7 @@ class Settings(
     PostgreSQLSettings,
     MongoSettings,
     RabbitMQSettings,
+    CelerySettings,
 ):
     # region Network
     host: str = Field(validation_alias="ASSISTANT_HOST", default="127.0.0.1")
