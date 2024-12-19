@@ -208,7 +208,6 @@ class AssistantDependencies:
         self.restart_proxy = RestartProxyTask(
             self._logger,
             self.celery_connector.celery,
-            self.bot,
             self.create_user_service,
             self.create_xray_service,
         )
@@ -235,10 +234,10 @@ class AssistantDependencies:
                     "task": self.restart_proxy.task.name,
                     "schedule": crontab(),
                 },
-                "check_availability-every-five-minutes": {
-                    "task": self.check_availability.task.name,
-                    "schedule": crontab(),
-                },
+                # "check_availability-every-five-minutes": {
+                #     "task": self.check_availability.task.name,
+                #     "schedule": crontab(),
+                # },
             },
         )
 
