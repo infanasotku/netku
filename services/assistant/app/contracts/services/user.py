@@ -42,6 +42,8 @@ class UserService(BaseService):
 
     @abstractmethod
     async def send_notify_by_subscriptions(
-        self, subscriptions: list[str], message: str
+        self, subscriptions: list[str], message: str, highlight_sep: str = "/"
     ) -> None:
-        """Sends `message` to all users with active `subscriptions`."""
+        """Sends `message` to all users with active `subscriptions`.
+
+        :param highlight_sep: message between separator will be highlighted."""

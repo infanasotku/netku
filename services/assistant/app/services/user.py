@@ -32,10 +32,21 @@ class UserServiceImpl(UserService):
         )
 
     async def send_notify_by_subscriptions(
-        self, subscriptions: list[str], message: str
+        self, subscriptions: list[str], message: str, highlight_sep: str = "/"
     ) -> None:
         users = await self.get_users_by_active_subscriptions(subscriptions, True)
 
         for user in users:
             if user.telegram_id is not None:
-                await self._notification_client.send_message(message, user)
+                msg = self._notification_client.highlight(message, highlight_sep)
+                subscription = ", ".join(
+                    [
+                        subscription.replace("subscription", "")
+                        .replace("_", "")
+                        .capitalize()
+                        for subscription in subscriptions
+                    ]
+                )
+                await self._notification_client.send_subscription_message(
+                    msg, subscription, user
+                )

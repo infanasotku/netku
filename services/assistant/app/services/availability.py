@@ -80,7 +80,8 @@ class AvailabilityServiceImpl(AvailabilityService):
 
         if availability_factor <= notify_factor_level:
             await self._user_service.send_notify_by_subscriptions(
-                ["availability_subscription"], f"Service not available: {service.name}"
+                ["availability_subscription"],
+                f"/{service.name.capitalize()}/ not available.",
             )
 
         return result
