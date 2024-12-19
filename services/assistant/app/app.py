@@ -43,7 +43,11 @@ class AppFactory(AbstractAppFactory):
     def create_lifespan(self) -> Callable[[FastAPI], AsyncGenerator]:
         """Creates core lifespan which handle `lifespans` of all app."""
         sub_lifespans = [
-            sub_factory.create_lifespan() for sub_factory in self._sub_factories
+            lifespan
+            for lifespan in (
+                sub_factory.create_lifespan() for sub_factory in self._sub_factories
+            )
+            if lifespan
         ]
 
         @asynccontextmanager

@@ -9,6 +9,7 @@ from dependencies import AssistantDependencies
 
 from app.app import AppFactory
 from app.adapters.input.bot import BotAppFactory, BotServicesFactory, BotSettings
+from app.adapters.input.api import APIAppFactory
 
 
 def run_backend(dependencies: AssistantDependencies):
@@ -24,9 +25,11 @@ def run_backend(dependencies: AssistantDependencies):
             ),
             logger=logger,
         )
+        api_factory = APIAppFactory(logger=logger)
 
         factory = AppFactory(logger)
         factory.register_sub_factory(bot_factory)
+        factory.register_sub_factory(api_factory)
 
         return factory.create_app()
 
