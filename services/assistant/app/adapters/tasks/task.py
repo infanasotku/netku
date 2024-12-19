@@ -12,7 +12,7 @@ class CeleryTask(ABC):
         self._logger = logger
         self._celery = celery
 
-        @self._celery.task
+        @self._celery.task(name=name)
         def start():
             loop = asyncio.get_event_loop()
             return loop.run_until_complete(self._run())
