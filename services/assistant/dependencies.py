@@ -57,6 +57,7 @@ from app.contracts.services import (
     XrayService,
     AvailabilityService,
 )
+from app.schemas.availability import Service
 from app.services import (
     UserServiceFactory,
     BookingServiceFactory,
@@ -66,6 +67,7 @@ from app.services import (
 )
 
 from app.adapters.tasks.restart_proxy import RestartProxyTask
+from app.adapters.tasks.check_availability import CheckAvailabilityTask
 
 
 from app.infra.config.settings import Settings
@@ -109,6 +111,7 @@ class AssistantDependencies:
         self._init_services()
 
         self.restart_proxy: RestartProxyTask
+        self.check_availability: CheckAvailabilityTask
         self._init_tasks()
 
     # region External
@@ -209,6 +212,12 @@ class AssistantDependencies:
             self.create_user_service,
             self.create_xray_service,
         )
+        self.check_availability = CheckAvailabilityTask(
+            self._logger,
+            self.celery_connector.celery,
+            self.create_availability_service,
+            [Service.xray],
+        )
 
     # endregion
 
@@ -225,7 +234,11 @@ class AssistantDependencies:
                     "task": self.restart_proxy.task.name,
                     "schedule": crontab(),
                 },
-            }
+                "check_availability-every-five-minutes": {
+                    "task": self.check_availability.task.name,
+                    "schedule": crontab(),
+                },
+            },
         )
 
     def register_task_worker(self):
