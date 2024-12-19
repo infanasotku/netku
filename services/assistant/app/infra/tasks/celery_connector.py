@@ -18,6 +18,7 @@ class CeleryConnector:
             broker=conn_string,
             backend="rpc://",
         )
+        self.celery.conf.broker_connection_retry_on_startup = True
 
     def beat(self, shedule_conf: dict):
         self.celery.conf.beat_schedule = shedule_conf
