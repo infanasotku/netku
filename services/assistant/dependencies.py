@@ -215,7 +215,7 @@ class AssistantDependencies:
             self._logger,
             self.celery_connector.celery,
             self.create_availability_service,
-            [Service.assistant],
+            [Service.assistant, Service.booking, Service.xray],
             0.3,
         )
 
