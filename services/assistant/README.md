@@ -8,8 +8,8 @@
 title: Assistant architecture
 ---
 flowchart TD
-    subgraph assistant [Common domain services]
-        subgraph initializers [ ]
+    subgraph assistant [Use common services]
+        subgraph initializers [Tasks initializers]
             A(fa:fa-cloud Assistant)
             A-T(fa:fa-list-check Assistant task sheduler)
             A~~~A-T
