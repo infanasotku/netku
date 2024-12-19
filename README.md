@@ -35,8 +35,7 @@ flowchart TD
     L(fa:fa-eye Landing)
     A(fa:fa-cloud Assistant)
     B(fa:fa-book Booking)
-    P(fa:fa-database Postgres)
-    M(fa:fa-database Mongo)
+    R(fa:fa-message RabbitMQ)
 
     G <-->|https| X
     G <--> |vless| X
@@ -54,12 +53,16 @@ flowchart TD
     NFallback <--> |bot webhook| A
     NFallback <--> |api| A
 
+    A <--> R
+
     A <-.-> |grpc|X
     A <-.-> |grpc|B
 
-    A <--> P
-    A <--> M
+
+
 ```
+
+Also see [Assistant architecture](./services/assistant/README.md)
 
 ---
 
