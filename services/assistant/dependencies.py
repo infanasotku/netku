@@ -177,7 +177,7 @@ class AssistantDependencies:
             client_port=settings.xray_port,
         ).create
         self.create_assistant_client = HTTPAssistantClientFactory(
-            assistant_addr=""
+            assistant_addr=settings.addr
         ).create
         self.create_notification_client = AiogramNotificationClientFactory(
             bot=self.bot

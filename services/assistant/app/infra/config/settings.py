@@ -27,7 +27,7 @@ class Settings(
     # region Network
     host: str = Field(validation_alias="ASSISTANT_HOST", default="127.0.0.1")
     port: int = Field(validation_alias="ASSISTANT_PORT", default=5100)
-    domain: str = Field(validation_alias="DOMAIN", default="127.0.0.1")
+    addr: str = Field(validation_alias="ASSISTANT_ADDR")
     ssl_keyfile: str | None = Field(validation_alias="SSL_KEYFILE", default=None)
     ssl_certfile: str | None = Field(validation_alias="SSL_CERTFILE", default=None)
 
