@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 
 from app.app import AbstractAppFactory
-from app.adapters.input.api.v1.router import MainAPIRouter
+from app.adapters.input.api.info.router import INFORouter
 
 
 class APIAppFactory(AbstractAppFactory):
@@ -12,8 +12,8 @@ class APIAppFactory(AbstractAppFactory):
     def create_app(self):
         api = FastAPI()
 
-        main_router = MainAPIRouter()
+        main_router = INFORouter()
 
-        api.include_router(main_router.router, prefix="/v1")
+        api.include_router(main_router.router, prefix="/info")
 
         return api

@@ -1,7 +1,7 @@
 from fastapi.routing import APIRouter
 
 
-class MainAPIRouter:
+class INFORouter:
     def __init__(self):
         self.router = APIRouter()
 
