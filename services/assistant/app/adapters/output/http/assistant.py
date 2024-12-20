@@ -12,7 +12,9 @@ class HTTPAssistantClient(HTTPClient, AssistantClient):
     async def check_health(self) -> bool:
         async with aiohttp.ClientSession() as session:
             try:
-                async with session.get(f"{self._assistant_addr}/api/v1/health") as resp:
+                async with session.get(
+                    f"{self._assistant_addr}/api/info/health"
+                ) as resp:
                     if resp.status == 200:
                         return True
                     return False
