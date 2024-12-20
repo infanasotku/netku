@@ -1,4 +1,5 @@
 services:
+  # region databases
   postgres:
     container_name: netku-postgres
     restart: always
@@ -23,7 +24,6 @@ services:
       interval: 2s
       timeout: 5s
       retries: 10
-
   mongo:
     container_name: netku-mongo
     restart: always
@@ -40,6 +40,7 @@ services:
 
     env_file:
       - .env
+  # endregion
 
   xray:
     container_name: netku-xray
@@ -70,6 +71,7 @@ services:
       server:
         condition: service_started
 
+  # region Assistant environment
   assistant:
     container_name: netku-assistant
     restart: always
@@ -78,13 +80,45 @@ services:
 
     volumes:
       - cert-dir:/etc/cert:ro
-      - xray-log-dir:/etc/xray/log
 
     networks:
       - netku-net
 
     env_file:
       - .env
+
+  assistant-worker:
+    container_name: netku-assistant-worker
+    restart: always
+    build:
+      context: services/assistant
+    command: [ "python", "manage.py", "-w" ]
+
+    volumes:
+      - cert-dir:/etc/cert:ro
+
+    networks:
+      - netku-net
+
+    env_file:
+      - .env
+
+  assistant-scheduler:
+    container_name: netku-assistant-scheduler
+    restart: always
+    build:
+      context: services/assistant
+    command: [ "python", "manage.py", "-t" ]
+
+    volumes:
+      - cert-dir:/etc/cert:ro
+
+    networks:
+      - netku-net
+
+    env_file:
+      - .env
+  # endregion
 
   server:
     container_name: netku-server
