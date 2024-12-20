@@ -230,13 +230,13 @@ class AssistantDependencies:
     def register_sheduled_tasks(self):
         self.beat = self.celery_connector.beat(
             {
-                # "restart-proxy-every-week": {
-                #     "task": self.restart_proxy.task.name,
-                #     "schedule": crontab(),
-                # },
+                "restart-proxy-every-week": {
+                    "task": self.restart_proxy.task.name,
+                    "schedule": crontab(minute=0, hour=0, day_of_week="0"),
+                },
                 "check_availability-every-five-minutes": {
                     "task": self.check_availability.task.name,
-                    "schedule": crontab(),
+                    "schedule": crontab(minute="*/5"),
                 },
             },
         )
