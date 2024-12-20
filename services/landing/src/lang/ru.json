@@ -101,7 +101,10 @@
             "name": "Pydantic | Ruff | PyTest"
           },
           {
-            "name": "RestAPI | GRPC | OAuth2"
+            "name": "RabbitMQ | Celery"
+          },
+          {
+            "name": "RestAPI | GRPC"
           }
         ]
       },
