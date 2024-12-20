@@ -1,15 +1,10 @@
-import asyncio
 from logging import Logger
 import re
 from aiogram import Dispatcher, Router, F
 from aiogram.types import (
     CallbackQuery,
     Message,
-    KeyboardButton,
-    ReplyKeyboardMarkup,
-    ReplyKeyboardRemove,
     InlineKeyboardButton,
-    ErrorEvent,
 )
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
@@ -20,7 +15,6 @@ from app.contracts.services import (
     BookingAnalysisService,
     BookingService,
     UserService,
-    XrayService,
 )
 
 from app.schemas.booking import BookingAccountCreateSchema
@@ -31,19 +25,19 @@ import app.adapters.input.bot.text as text
 import app.adapters.input.bot.kb as kb
 from app.adapters.input.bot.schemas import BookingCallbackData, BookingAction
 
+from app.adapters.input.bot.routers.base import BaseRouter
 
-class MainRouter:
+
+class BookingRouter(BaseRouter):
     def __init__(
         self,
         create_booking_service: CreateService[BookingService],
         create_user_service: CreateService[UserService],
-        create_xray_service: CreateService[XrayService],
         create_booking_analysis_service: CreateService[BookingAnalysisService],
         logger: Logger,
     ):
         self.create_booking_service = create_booking_service
         self.create_user_service = create_user_service
-        self.create_xray_service = create_xray_service
         self.create_booking_analysis_service = create_booking_analysis_service
         self.router = Router(name="main")
         self.logger = logger
@@ -53,15 +47,6 @@ class MainRouter:
         dp.include_router(self.router)
 
     def _register_handlers(self):
-        self.router.message.register(self._start, Command("start"))
-        self.router.message.register(self._stop, Command("stop"))
-        self.router.message.register(self._stop, BaseState.registration)
-
-        # Proxy
-        self.router.message.register(self._subscribe_for_proxy, Command("proxy"))
-        self.router.message.register(self._get_proxy_uuid, Command("proxy_uid"))
-
-        # Booking
         self.router.callback_query.register(
             self._get_booking_menu, F.data == "get_booking_menu"
         )
@@ -96,94 +81,6 @@ class MainRouter:
             self._apply_booking_password, BookingAccountAdding.password
         )
 
-        # Common
-        self.router.callback_query.register(
-            self._hide_keyboard, F.data == "hide_keyboard"
-        )
-        self.router.message.register(self._delete_extra, BaseState.none)
-        self.router.error.register(self._error_handler)
-
-    async def _start(self, message: Message, state: FSMContext):
-        async with self.create_user_service() as user_service:
-            user = await user_service.get_user_by_telegram_id(message.chat.id)
-
-        if user:
-            await state.set_state(BaseState.none)
-            await message.answer(f"Hello! {message.from_user.first_name}!")
-        else:
-            await state.set_state(BaseState.registration)
-            share_phone = KeyboardButton(text="Share", request_contact=True)
-            keyboard = ReplyKeyboardMarkup(keyboard=[[share_phone]])
-            await message.answer(
-                "Hello! For identification you need to share your phone.",
-                reply_markup=keyboard,
-            )
-
-    async def _stop(self, message: Message):
-        async with self.create_user_service() as user_service:
-            user = await user_service.get_user_by_telegram_id(message.chat.id)
-
-            if not user:
-                return await message.answer(text.please_click_start)
-
-            await utils.unsubscribe_user(user, "all", user_service)
-
-        await message.answer("Subscriptions canceled!")
-
-    async def _registrate(self, message: Message):
-        if not message.contact:
-            return await utils.try_delete_message(message)
-
-        async with self.create_user_service() as user_service:
-            user = await utils.registrate_user(message.contact, user_service)
-        if user:
-            await message.answer(
-                "Registration successful!", reply_markup=ReplyKeyboardRemove()
-            )
-        if not user:
-            await message.answer(
-                "Sorry, you have not enough permissions for registration.",
-                reply_markup=ReplyKeyboardRemove(),
-            )
-
-    # region Services
-
-    # region Proxy
-    async def _subscribe_for_proxy(self, message: Message):
-        async with self.create_user_service() as user_service:
-            user = await user_service.get_user_by_telegram_id(message.chat.id)
-
-            if not user:
-                return await message.answer(text.please_click_start)
-
-            if user.proxy_subscription:
-                return await message.answer("You already subscribeted to proxy!")
-
-            await utils.subscribe_user(user, "proxy", user_service)
-
-        await message.answer("You subscribeted to proxy!")
-
-    async def _get_proxy_uuid(self, message: Message):
-        async with self.create_user_service() as user_service:
-            user = await user_service.get_user_by_telegram_id(message.chat.id)
-
-        if not user:
-            return await message.answer(text.please_click_start)
-
-        if not user.proxy_subscription:
-            return await message.answer("You didn't subscribe to proxy!")
-
-        async with self.create_xray_service() as xray_service:
-            uid = await xray_service.get_current_uid()
-
-        if not uid:
-            return await message.answer(hbold("Proxy inactive"))
-
-        return await message.answer(hbold(uid))
-
-    # endregion
-
-    # region Booking
     async def _get_booking_menu(
         self, message: Message | CallbackQuery, state: FSMContext
     ):
@@ -350,26 +247,3 @@ class MainRouter:
             text.create_booking_account_text,
             kb.generate_booking_account_creating_menu,
         )
-
-    # endregion
-    # endregion
-
-    # region Common
-    async def _hide_keyboard(self, callback: CallbackQuery):
-        if not await utils.try_delete_message(callback.message):
-            await callback.message.answer("Keyboard too old")
-
-    async def _delete_extra(self, message: Message):
-        await utils.try_delete_message(message)
-
-    async def _error_handler(self, event: ErrorEvent):
-        self.logger.error(f"Error occurred: {event.exception}")
-        message = event.update.callback_query.message
-        await utils.try_delete_message(message)
-        msg = await message.answer(
-            "Error occurred! Contact your admin.", reply_markup=ReplyKeyboardRemove()
-        )
-        await asyncio.sleep(3)
-        await msg.delete()
-
-    # endregion

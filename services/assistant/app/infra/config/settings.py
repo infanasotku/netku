@@ -11,22 +11,25 @@ from app.infra.config.bot import BotSettings
 from app.infra.config.postgres import PostgreSQLSettings
 from app.infra.config.xray import XraySettings
 from app.infra.config.mongo import MongoSettings
+from app.infra.config.rabbitmq import RabbitMQSettings
+from app.infra.config.celery import CelerySettings
 
 
 class Settings(
-    XraySettings, BookingSettings, BotSettings, PostgreSQLSettings, MongoSettings
+    XraySettings,
+    BookingSettings,
+    BotSettings,
+    PostgreSQLSettings,
+    MongoSettings,
+    RabbitMQSettings,
+    CelerySettings,
 ):
     # region Network
     host: str = Field(validation_alias="ASSISTANT_HOST", default="127.0.0.1")
     port: int = Field(validation_alias="ASSISTANT_PORT", default=5100)
-    domain: str = Field(validation_alias="DOMAIN", default="127.0.0.1")
+    addr: str = Field(validation_alias="ASSISTANT_ADDR")
     ssl_keyfile: str | None = Field(validation_alias="SSL_KEYFILE", default=None)
     ssl_certfile: str | None = Field(validation_alias="SSL_CERTFILE", default=None)
-
-    reconnection_retries: int = Field(
-        validation_alias="RECONNECTION_RETRIES", default=5
-    )
-    reconnection_delay: float = Field(validation_alias="RECONNECTION_DELAY", default=3)
 
     @computed_field
     @property

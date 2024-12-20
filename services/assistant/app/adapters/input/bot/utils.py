@@ -4,7 +4,7 @@ from aiogram.fsm.state import State
 from aiogram.fsm.context import FSMContext
 from aiogram.utils.markdown import hbold
 
-from app.schemas.user import UserSchema, UserUpdateSchema
+from app.schemas.user import UserSchema, UserUpdateSchema, Subscription
 from app.contracts.services import UserService
 
 import app.adapters.input.bot.kb as kb
@@ -105,26 +105,20 @@ async def registrate_user(
 
 
 async def subscribe_user(
-    user: UserSchema, subscription: str, user_service: UserService
+    user: UserSchema, subscription: Subscription, user_service: UserService
 ):
     """Subscribes user to `subscription`."""
     user_update = UserUpdateSchema()
-    match subscription:
-        case "proxy":
-            user_update.proxy_subscription = True
+    setattr(user_update, subscription.name, True)
 
     await user_service.update_user(user.id, user_update)
 
 
 async def unsubscribe_user(
-    user: UserSchema, subscription: str, user_service: UserService
+    user: UserSchema, subscription: Subscription, user_service: UserService
 ):
     """Unsubscribes user from `subscription`."""
     user_update = UserUpdateSchema()
-    match subscription:
-        case "proxy":
-            user_update.proxy_subscription = False
-        case "all":
-            user_update.proxy_subscription = False
+    setattr(user_update, subscription.name, False)
 
     await user_service.update_user(user.id, user_update)

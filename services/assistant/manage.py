@@ -1,5 +1,4 @@
 import sys
-import asyncio
 from fastapi import FastAPI
 import uvicorn
 
@@ -10,7 +9,7 @@ from dependencies import AssistantDependencies
 
 from app.app import AppFactory
 from app.adapters.input.bot import BotAppFactory, BotServicesFactory, BotSettings
-from app.tasks.restart_proxy import RestartProxyTask
+from app.adapters.input.api import APIAppFactory
 
 
 def run_backend(dependencies: AssistantDependencies):
@@ -26,20 +25,11 @@ def run_backend(dependencies: AssistantDependencies):
             ),
             logger=logger,
         )
-
-        # Tasks
-        restart_proxy = RestartProxyTask(
-            bot=dependencies.bot,
-            create_user_service=dependencies.create_user_service,
-            create_xray_service=dependencies.create_xray_service,
-            logger=logger,
-            xray_restart_minutes=settings.xray_restart_minutes,
-        )
+        api_factory = APIAppFactory(logger=logger)
 
         factory = AppFactory(logger)
         factory.register_sub_factory(bot_factory)
-
-        factory.register_task(restart_proxy)
+        factory.register_sub_factory(api_factory)
 
         return factory.create_app()
 
@@ -53,28 +43,29 @@ def run_backend(dependencies: AssistantDependencies):
     )
 
 
+def run_worker(dependencies: AssistantDependencies):
+    dependencies.register_task_worker()
+    dependencies.worker.start()
+
+
 def run_sheduled_tasks(dependencies: AssistantDependencies):
-    # Example tasks entry point for future.
-    from app.schemas.availability import Service
-
-    async def start():
-        async with dependencies.create_availability_service() as avail_service:
-            await avail_service.check_availability(Service.xray)
-
-    asyncio.run(start())
+    dependencies.register_sheduled_tasks()
+    dependencies.beat.run()
 
 
 def run():
-    dependencies = AssistantDependencies(settings)
+    dependencies = AssistantDependencies(settings, logger)
 
     args = sys.argv
 
     if "-t" in args:
         run_sheduled_tasks(dependencies)
+    elif "-w" in args:
+        run_worker(dependencies)
     else:
         run_backend(dependencies)
 
-    asyncio.run(dependencies.close_dependencies())
+    dependencies.close_dependencies()
 
 
 if __name__ == "__main__":

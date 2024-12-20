@@ -10,3 +10,15 @@ class NotificationClient(BaseClient):
     @abstractmethod
     async def send_message(self, message: str, user: UserSchema):
         """Sends message to user."""
+
+    @abstractmethod
+    async def send_subscription_message(
+        self, message: str, subscription: str, user: UserSchema
+    ):
+        """Sends subscription message to user."""
+
+    @abstractmethod
+    def highlight(self, message: str, sep: str = "/") -> str:
+        """Highlights message between `sep`.
+
+        :return: highlighted message."""

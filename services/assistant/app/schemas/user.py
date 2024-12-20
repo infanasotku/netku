@@ -1,7 +1,13 @@
+from enum import Enum
 from pydantic import field_validator
 
 from app.schemas.base import BaseSchema, BaseSchemaPK
 from app.schemas.booking import BookingAccountSchema
+
+
+class Subscription(Enum):
+    proxy_subscription = 1
+    availability_subscription = 2
 
 
 class UserUpdateSchema(BaseSchema):

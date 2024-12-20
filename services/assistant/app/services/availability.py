@@ -74,9 +74,14 @@ class AvailabilityServiceImpl(AvailabilityService):
             response_time=average_response_time,
         )
 
-        await self._availability_repository.log_availability(availability_create)
+        result = await self._availability_repository.log_availability(
+            availability_create
+        )
 
         if availability_factor <= notify_factor_level:
             await self._user_service.send_notify_by_subscriptions(
-                ["availability_subscription"], f"Service not available: {service.name}"
+                ["availability_subscription"],
+                f"/{service.name.capitalize()}/ not available.",
             )
+
+        return result

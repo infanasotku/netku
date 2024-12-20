@@ -15,7 +15,7 @@ from app.contracts.services import (
     XrayService,
     BookingAnalysisService,
 )
-from app.adapters.input.bot.router import MainRouter
+from app.adapters.input.bot import routers
 
 
 class BotServicesFactory(BaseModel):
@@ -57,13 +57,25 @@ class BotAppFactory(AbstractAppFactory):
     def create_app(self) -> FastAPI:
         app = FastAPI(docs_url=None, redoc_url=None)
         app.add_api_route(path="/webhook", endpoint=self._webhook, methods=["POST"])
-        main_router = MainRouter(
-            create_booking_service=self.bot_service_factory.create_booking_service,
+
+        main_router = routers.MainRouter(
+            create_user_service=self.bot_service_factory.create_user_service,
+            logger=self.logger,
+        )
+        proxy_router = routers.ProxyRouter(
             create_user_service=self.bot_service_factory.create_user_service,
             create_xray_service=self.bot_service_factory.create_xray_service,
+            logger=self.logger,
+        )
+        booking_router = routers.BookingRouter(
+            create_booking_service=self.bot_service_factory.create_booking_service,
+            create_user_service=self.bot_service_factory.create_user_service,
             create_booking_analysis_service=self.bot_service_factory.create_booking_analysis_service,
             logger=self.logger,
         )
+
+        proxy_router.register_router(self.dispatcher)
+        booking_router.register_router(self.dispatcher)
         main_router.register_router(self.dispatcher)
 
         return app
@@ -85,6 +97,9 @@ class BotAppFactory(AbstractAppFactory):
                     BotCommand(command="stop", description="Cancels all subscriptions"),
                     BotCommand(command="proxy", description="Subscribe to proxy"),
                     BotCommand(command="proxy_uid", description="Get proxy uid"),
+                    BotCommand(
+                        command="availability", description="Subscribe to availability"
+                    ),
                     BotCommand(
                         command="machine_booking", description="Machinge booking menu"
                     ),
