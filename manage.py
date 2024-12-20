@@ -33,7 +33,10 @@ def restart_assitant():
 
     exec("docker compose stop server")
     exec("docker compose rm -f")
+
     exec("docker compose build assistant")
+    exec("docker compose build assistant-worker")
+    exec("docker compose build assistant-scheduler")
 
     exec("docker compose up -d assistant")
     exec("docker compose up -d assistant-worker")
