@@ -164,6 +164,7 @@ services:
       context: services/booking
 
     volumes:
+      - cert-dir:/etc/cert:ro
       - booking-browser-dir:/root/.cache/rod/browser
 
     networks:
