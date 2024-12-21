@@ -10,7 +10,9 @@ class BookingRequest(_message.Message):
     PASSWORD_FIELD_NUMBER: _ClassVar[int]
     email: str
     password: str
-    def __init__(self, email: _Optional[str] = ..., password: _Optional[str] = ...) -> None: ...
+    def __init__(
+        self, email: _Optional[str] = ..., password: _Optional[str] = ...
+    ) -> None: ...
 
 class BookingResponse(_message.Message):
     __slots__ = ("booked",)
