@@ -9,9 +9,10 @@ import (
 
 	"github.com/infanasotku/netku/services/xray/gen"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/health"
 	healthgrpc "google.golang.org/grpc/health/grpc_health_v1"
+	"google.golang.org/grpc/reflection"
 )
 
 func main() {
@@ -25,10 +26,25 @@ func main() {
 	serve()
 }
 
+func getCredentials(clientCredentials bool) (credentials.TransportCredentials, error) {
+	keyfile := os.Getenv("SSL_KEYFILE")
+	certfile := os.Getenv("SSL_CERTFILE")
+
+	if clientCredentials {
+		return credentials.NewClientTLSFromFile(certfile, "")
+	}
+	return credentials.NewServerTLSFromFile(certfile, keyfile)
+}
+
 func greet() int {
 	port := os.Getenv("XRAY_PORT")
 
-	conn, err := grpc.NewClient(fmt.Sprintf("localhost:%s", port), grpc.WithTransportCredentials(insecure.NewCredentials()))
+	creds, err := getCredentials(true)
+	if err != nil {
+		return 1
+	}
+
+	conn, err := grpc.NewClient(fmt.Sprintf("localhost:%s", port), grpc.WithTransportCredentials(creds))
 	if err != nil {
 		return 1
 	}
@@ -51,8 +67,14 @@ func serve() {
 		log.Fatalf("Failed to listen on port %s: %v", port, err)
 	}
 
-	grpcServer := grpc.NewServer()
+	creds, err := getCredentials(false)
+	if err != nil {
+		log.Fatalf("Failed to load credentials: %v", err)
+	}
 
+	grpcServer := grpc.NewServer(grpc.Creds(creds))
+
+	reflection.Register(grpcServer)
 	healthcheck := health.NewServer()
 	healthgrpc.RegisterHealthServer(grpcServer, healthcheck)
 
