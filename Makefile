@@ -6,7 +6,7 @@ xray-generate-go:
 	protobuf/xray.proto
 
 xray-generate-py:
-	python -m grpc_tools.protoc -Iapp/infra/grpc/gen=protobuf/ \
+	python -m grpc_tools.protoc -Iapp/adapters/output/grpc/gen=protobuf/ \
 	--python_out=services/assistant \
 	--grpc_python_out=services/assistant \
 	--pyi_out=services/assistant \
@@ -20,7 +20,7 @@ booking-generate-go:
 	protobuf/booking.proto
 
 booking-generate-py:
-	python -m grpc_tools.protoc -Iapp/infra/grpc/gen=protobuf/ \
+	python -m grpc_tools.protoc -Iapp/adapters/output/grpc/gen=protobuf/ \
 	--python_out=services/assistant \
 	--grpc_python_out=services/assistant \
 	--pyi_out=services/assistant \
