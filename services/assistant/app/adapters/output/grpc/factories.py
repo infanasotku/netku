@@ -2,7 +2,8 @@ from abc import ABC, abstractmethod
 from contextlib import asynccontextmanager
 from typing import AsyncGenerator
 
-from grpc.aio import insecure_channel, Channel
+from grpc.aio import Channel, secure_channel
+import grpc
 
 from app.adapters.output.grpc.booking import GRPCBookingClient
 from app.adapters.output.grpc.base import GRPCClient
@@ -12,17 +13,20 @@ from app.adapters.output.grpc.xray import GRPCXrayClient
 class GRPCClientFactory(ABC):
     """Specifies factory for grpc clients."""
 
-    def __init__(
-        self,
-        client_addr: str,
-        client_port: int,
-    ):
+    def __init__(self, client_addr: str, client_port: int, ssl_certfile: str):
         self.client_addr = client_addr
         self.client_port = client_port
+        self.ssl_certfile = ssl_certfile
 
     def _create_channel(self) -> Channel:
         """:return: created grpc channel."""
-        channel = insecure_channel(f"{self.client_addr}:{self.client_port}")
+        with open(self.ssl_certfile, "rb") as f:
+            cert = f.read()
+
+        credentials = grpc.ssl_channel_credentials(cert)
+
+        addr = f"{self.client_addr}:{self.client_port}"
+        channel = secure_channel(addr, credentials)
 
         return channel
 

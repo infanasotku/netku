@@ -57,6 +57,7 @@ services:
 
     ports:
       - 443:443
+      - 9000:9000
 
     env_file:
       - .env
@@ -167,6 +168,9 @@ services:
 
     networks:
       - netku-net
+
+    ports:
+      - 9001:9001
 
     env_file:
       - .env

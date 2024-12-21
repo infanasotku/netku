@@ -4,7 +4,7 @@
 import grpc
 
 from app.adapters.output.grpc.gen import (
-    xray_pb2 as app_dot_infra_dot_grpc_dot_gen_dot_xray__pb2,
+    xray_pb2 as app_dot_adapters_dot_output_dot_grpc_dot_gen_dot_xray__pb2,
 )
 
 GRPC_GENERATED_VERSION = "1.67.0"
@@ -23,7 +23,7 @@ except ImportError:
 if _version_not_supported:
     raise RuntimeError(
         f"The grpc package installed is at version {GRPC_VERSION},"
-        + " but the generated code in app/infra/grpc/gen/xray_pb2_grpc.py depends on"
+        + " but the generated code in app/adapters/output/grpc/gen/xray_pb2_grpc.py depends on"
         + f" grpcio>={GRPC_GENERATED_VERSION}."
         + f" Please upgrade your grpc module to grpcio>={GRPC_GENERATED_VERSION}"
         + f" or downgrade your generated code using grpcio-tools<={GRPC_VERSION}."
@@ -40,9 +40,9 @@ class XrayStub(object):
             channel: A grpc.Channel.
         """
         self.RestartXray = channel.unary_unary(
-            "/xray.Xray/RestartXray",
-            request_serializer=app_dot_infra_dot_grpc_dot_gen_dot_xray__pb2.Null.SerializeToString,
-            response_deserializer=app_dot_infra_dot_grpc_dot_gen_dot_xray__pb2.RestartResponse.FromString,
+            "/Xray/RestartXray",
+            request_serializer=app_dot_adapters_dot_output_dot_grpc_dot_gen_dot_xray__pb2.Null.SerializeToString,
+            response_deserializer=app_dot_adapters_dot_output_dot_grpc_dot_gen_dot_xray__pb2.RestartResponse.FromString,
             _registered_method=True,
         )
 
@@ -61,15 +61,13 @@ def add_XrayServicer_to_server(servicer, server):
     rpc_method_handlers = {
         "RestartXray": grpc.unary_unary_rpc_method_handler(
             servicer.RestartXray,
-            request_deserializer=app_dot_infra_dot_grpc_dot_gen_dot_xray__pb2.Null.FromString,
-            response_serializer=app_dot_infra_dot_grpc_dot_gen_dot_xray__pb2.RestartResponse.SerializeToString,
+            request_deserializer=app_dot_adapters_dot_output_dot_grpc_dot_gen_dot_xray__pb2.Null.FromString,
+            response_serializer=app_dot_adapters_dot_output_dot_grpc_dot_gen_dot_xray__pb2.RestartResponse.SerializeToString,
         ),
     }
-    generic_handler = grpc.method_handlers_generic_handler(
-        "xray.Xray", rpc_method_handlers
-    )
+    generic_handler = grpc.method_handlers_generic_handler("Xray", rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
-    server.add_registered_method_handlers("xray.Xray", rpc_method_handlers)
+    server.add_registered_method_handlers("Xray", rpc_method_handlers)
 
 
 # This class is part of an EXPERIMENTAL API.
@@ -92,9 +90,9 @@ class Xray(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            "/xray.Xray/RestartXray",
-            app_dot_infra_dot_grpc_dot_gen_dot_xray__pb2.Null.SerializeToString,
-            app_dot_infra_dot_grpc_dot_gen_dot_xray__pb2.RestartResponse.FromString,
+            "/Xray/RestartXray",
+            app_dot_adapters_dot_output_dot_grpc_dot_gen_dot_xray__pb2.Null.SerializeToString,
+            app_dot_adapters_dot_output_dot_grpc_dot_gen_dot_xray__pb2.RestartResponse.FromString,
             options,
             channel_credentials,
             insecure,

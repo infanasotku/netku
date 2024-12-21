@@ -1,5 +1,4 @@
 syntax = "proto3";
-package xray;
 
 message RestartResponse {
     string uuid = 1;
