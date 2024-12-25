@@ -2,12 +2,16 @@ import uvicorn
 
 from app.infra.config import settings
 from app.infra.logging import config
+
 import app
+from app.adapters.input import api
 
 
 def run():
+    sub_apps = (app.AppConfig(api.create_api(), "/user"),)
+
     uvicorn.run(
-        app=app.create_app(),
+        app=app.create_app(sub_apps),
         host=settings.host,
         port=settings.port,
         log_config=config,
