@@ -7,7 +7,7 @@ from app.schemas.user import UserSchema, UserUpdateSchema
 
 class UserService(BaseService):
     @abstractmethod
-    async def get_users_by_id(self, ids: Iterable[int]) -> tuple[UserSchema]:
+    async def get_users_by_id(self, ids: Iterable[int]) -> list[UserSchema]:
         """:return: users by their `UserSchema.id`."""
 
     async def get_user_by_id(self, id: int) -> UserSchema | None:
@@ -31,7 +31,7 @@ class UserService(BaseService):
         :return: User as `UserSchema` if it exist in db, `None` otherwise."""
 
     @abstractmethod
-    async def get_users(self) -> tuple[UserSchema]:
+    async def get_users(self) -> list[UserSchema]:
         """:return: All users in db."""
 
     @abstractmethod
