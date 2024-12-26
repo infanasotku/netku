@@ -7,7 +7,7 @@ class PostgreSQLConnection:
         connect_args = {}
 
         if schema is not None:
-            connect_args["options"] = f"-csearch_path={schema}"
+            connect_args["server_settings"] = {"search_path": f"{schema}"}
 
         self._async_engine = create_async_engine(psql_dsn, connect_args=connect_args)
         self._async_session = async_sessionmaker(self._async_engine)

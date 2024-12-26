@@ -37,7 +37,9 @@ class UserDependencies:
         self._init_services()
 
     def _init_databases(self):
-        self.sql_connection = PostgreSQLConnection(self._settings.psql_dsn)
+        self.sql_connection = PostgreSQLConnection(
+            self._settings.psql_dsn, self._settings.psql_schema
+        )
         self.get_sql_db = self.sql_connection.get_db
 
     def _init_repositories(self):
