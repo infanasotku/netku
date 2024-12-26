@@ -2,7 +2,7 @@ from abc import abstractmethod
 from collections.abc import Iterable
 
 from app.contracts.services.base import BaseService
-from app.schemas.user import UserSchema, UserUpdateSchema
+from app.schemas.user import UserCreateSchema, UserSchema, UserUpdateSchema
 
 
 class UserService(BaseService):
@@ -35,9 +35,15 @@ class UserService(BaseService):
         """:return: All users in db."""
 
     @abstractmethod
+    async def create_user(self, user_create: UserCreateSchema) -> UserSchema:
+        """Creates user.
+
+        :return: Created user."""
+
+    @abstractmethod
     async def update_user(
         self, user_id: int, user_update: UserUpdateSchema
     ) -> UserSchema:
         """Updates user.
 
-        :return: `True` if user updated, `False` otherwise."""
+        :return: Updated user."""

@@ -1,7 +1,7 @@
 from app.contracts.repositories import UserRepository
 from app.contracts.services import UserService
 
-from app.schemas.user import UserSchema, UserUpdateSchema
+from app.schemas.user import UserCreateSchema, UserSchema, UserUpdateSchema
 
 
 class UserServiceImpl(UserService):
@@ -22,3 +22,6 @@ class UserServiceImpl(UserService):
 
     async def update_user(self, user_id, user_update: UserUpdateSchema) -> UserSchema:
         return await self._user_repository.update_user(user_id, user_update)
+
+    async def create_user(self, user_create: UserCreateSchema) -> UserSchema:
+        return await self._user_repository.create_user(user_create)
