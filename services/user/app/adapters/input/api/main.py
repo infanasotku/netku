@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from app.contracts.protocols import CreateService
 from app.contracts.services import UserService
 
-from app.adapters.input.api.routers.user import UserRouter
+from app.adapters.input.api.router import UserRouter
 
 
 def create_api(create_user_service: CreateService[UserService]) -> FastAPI:
