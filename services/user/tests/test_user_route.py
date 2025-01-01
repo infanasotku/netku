@@ -22,7 +22,11 @@ class UserServiceStub(UserService):
         raise NotImplementedError
 
     async def create_user(self, user_create):
-        raise NotImplementedError
+        return UserSchema(
+            id=user_create.id,
+            phone_number=user_create.phone_number,
+            telegram_id=user_create.telegram_id,
+        )
 
     async def update_user(self, user_id, user_update):
         raise NotImplementedError
@@ -43,6 +47,19 @@ client = TestClient(api)
 )
 def test_get_user_by_id(id):
     response = client.get(f"/users/{id}")
+
+    assert response.status_code == 200
+    assert response.json()["id"] == id
+
+
+@pytest.mark.parametrize(
+    "id",
+    [1, 2, 3],
+)
+def test_create_user(id):
+    response = client.post(
+        "/users", json={"id": id, "telegram_id": None, "phone_number": None}
+    )
 
     assert response.status_code == 200
     assert response.json()["id"] == id
