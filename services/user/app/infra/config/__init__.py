@@ -1,3 +1,5 @@
-from app.infra.config.settings import settings
+from common.config import PostgreSQLSettings, NetworkSettings
 
-__all__ = ["settings"]
+
+class Settings(PostgreSQLSettings, NetworkSettings):
+    pass

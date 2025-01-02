@@ -1,14 +1,16 @@
 import uvicorn
 
-from app.infra.config import settings
-from app.infra.logging import config, logger
+from common.logging import config, logger
+from common.config import generate
 
 from dependencies import UserDependencies
+from app.infra.config import Settings
 
 from app.adapters.input import api
 
 
 def run():
+    settings = generate(Settings, logger)
     dependencies = UserDependencies(settings, logger)
 
     uvicorn.run(
