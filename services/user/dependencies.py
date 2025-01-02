@@ -19,7 +19,7 @@ from app.adapters.output.database.repositories import (
 )
 from app.services.user import UserServiceImpl
 
-from app.infra.config.settings import Settings
+from app.infra.config import Settings
 
 
 class UserDependencies:
