@@ -3,7 +3,7 @@ _transform: true
 
 services:
   - name: users
-    url: ${USERS_URL}/api/users
+    url: ${USERS_URL}
     routes:
       - name: users-crud
         methods:
