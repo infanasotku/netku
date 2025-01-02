@@ -5,19 +5,14 @@ from app.infra.logging import config, logger
 
 from dependencies import UserDependencies
 
-import app
 from app.adapters.input import api
 
 
 def run():
     dependencies = UserDependencies(settings, logger)
 
-    sub_apps = (
-        app.AppConfig(api.create_api(dependencies.create_user_service), "/api"),
-    )
-
     uvicorn.run(
-        app=app.create_app(sub_apps),
+        app=api.create_api(dependencies.create_user_service),
         host=settings.host,
         port=settings.port,
         log_config=config,

@@ -11,6 +11,6 @@ def create_api(create_user_service: CreateService[UserService]) -> FastAPI:
 
     user = UserRouter(create_user_service)
 
-    api.include_router(user.router, prefix="/users")
+    api.include_router(user.router)
 
     return api
