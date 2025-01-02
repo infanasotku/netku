@@ -2,11 +2,10 @@ from contextlib import asynccontextmanager
 from logging import Logger
 from typing import AsyncGenerator
 
+from common.sql.orm import GetSQLDB
+from common.sql.postgres_connection import PostgreSQLConnection
+from common.contracts.protocols import CreateRepository, CreateService
 
-from app.infra.database.postgres_connection import PostgreSQLConnection
-from app.infra.database.orm import GetSQLDB
-
-from app.contracts.protocols import CreateRepository, CreateService
 from app.contracts.repositories import (
     UserRepository,
 )

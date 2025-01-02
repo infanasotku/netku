@@ -1,7 +1,7 @@
 from typing import Annotated
 from fastapi import APIRouter, Query
 
-from app.contracts.protocols import CreateService
+from common.contracts.protocols import CreateService
 from app.contracts.services import UserService
 from app.schemas.user import UserCreateSchema, UserSchema, UserUpdateSchema
 

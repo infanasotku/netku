@@ -2,15 +2,14 @@ from collections.abc import Iterable
 from sqlalchemy import select
 from sqlalchemy.orm import InstrumentedAttribute
 
+from common.sql.repository import SQLBaseRepository
+from common.sql.orm import selectinload_all
+
 from app.contracts.repositories import UserRepository
 from app.schemas.user import UserCreateSchema, UserSchema, UserUpdateSchema
 from app.infra.database.models import User
 
 from app.adapters.output.database import converters
-from app.adapters.output.database.repositories.base import (
-    SQLBaseRepository,
-    selectinload_all,
-)
 
 
 class SQLUserRepository(UserRepository, SQLBaseRepository):

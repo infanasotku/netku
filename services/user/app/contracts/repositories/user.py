@@ -1,9 +1,9 @@
 from abc import abstractmethod
 from collections.abc import Iterable
 
-from app.schemas.user import UserSchema, UserCreateSchema, UserUpdateSchema
+from common.contracts.repository import BaseRepository
 
-from app.contracts.repositories.base import BaseRepository
+from app.schemas.user import UserSchema, UserCreateSchema, UserUpdateSchema
 
 
 class UserRepository(BaseRepository):
