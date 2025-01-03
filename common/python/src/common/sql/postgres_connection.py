@@ -10,7 +10,7 @@ class PostgreSQLConnection:
             connect_args["server_settings"] = {"search_path": f"{schema}"}
 
         self.async_engine = create_async_engine(psql_dsn, connect_args=connect_args)
-        self._async_session = async_sessionmaker(self._async_engine)
+        self._async_session = async_sessionmaker(self.async_engine)
 
     @asynccontextmanager
     async def get_db(self):
