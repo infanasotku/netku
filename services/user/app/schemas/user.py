@@ -1,4 +1,4 @@
-from app.schemas.base import BaseSchema, BaseSchemaPK
+from common.schemas import BaseSchema, BaseSchemaPK
 
 
 class UserUpdateSchema(BaseSchema):
