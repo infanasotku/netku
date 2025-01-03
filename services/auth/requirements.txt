@@ -4,3 +4,7 @@ pydantic-settings==2.6.0
 asyncpg==0.30.0
 uvicorn==0.32.0
 sqlalchemy[asyncio]
+pyjwt[crypto]
+passlib[bcrypt]
+sqladmin==0.20.1
+itsdangerous==2.2.0
