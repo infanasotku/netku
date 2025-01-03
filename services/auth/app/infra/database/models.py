@@ -11,7 +11,7 @@ class Client(Base):
     hashed_client_secret: Mapped[str] = mapped_column(nullable=False)
 
 
-class Scopes(Base):
+class Scope(Base):
     __tablename__ = "scopes"
 
     name: Mapped[str] = mapped_column(nullable=False, unique=True)
