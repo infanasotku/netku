@@ -1,4 +1,5 @@
 import sys
+import os
 from logging import Logger
 from typing import Type, TypeVar
 from pydantic_settings import BaseSettings
@@ -13,7 +14,7 @@ SettingsT = TypeVar("SettingsT", bound=BaseSettings)
 
 def generate(SettingsClass: Type[SettingsT], logger: Logger) -> SettingsT:
     try:
-        load_dotenv(override=True)
+        load_dotenv(override=True, dotenv_path=os.getcwd() + "/.env")
         return SettingsClass()
     except Exception as e:
         logger.critical(f"Settings generated with error: {e}")
