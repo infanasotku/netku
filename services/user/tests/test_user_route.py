@@ -46,7 +46,7 @@ client = TestClient(api)
     [1, 2, 3],
 )
 def test_get_user_by_id(id):
-    response = client.get(f"/{id}")
+    response = client.get(f"/api/users/{id}")
 
     assert response.status_code == 200
     assert response.json()["id"] == id
@@ -58,7 +58,7 @@ def test_get_user_by_id(id):
 )
 def test_create_user(id):
     response = client.post(
-        "/", json={"id": id, "telegram_id": None, "phone_number": None}
+        "/api/users/", json={"id": id, "telegram_id": None, "phone_number": None}
     )
 
     assert response.status_code == 200
