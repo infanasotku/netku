@@ -2,6 +2,8 @@ from abc import abstractmethod
 
 from common.contracts.client import BaseClient
 
+from app.schemas.client import TokenPayload
+
 
 class SecurityClient(BaseClient):
     @abstractmethod
@@ -15,3 +17,7 @@ class SecurityClient(BaseClient):
     @abstractmethod
     def create_access_token(self, data: dict) -> str:
         """Creates access token with `data`."""
+
+    @abstractmethod
+    def parse_access_token(self, token: str) -> TokenPayload:
+        pass
