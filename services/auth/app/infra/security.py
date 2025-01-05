@@ -17,8 +17,8 @@ class SecurityClientImpl(SecurityClient):
     def get_hash(self, source: str) -> str:
         return self.context.hash(source)
 
-    def verify_password(self, plain_password, hashed_password):
-        return self.context.verify(plain_password, hashed_password)
+    def verify_source(self, plain_source, hashed_source):
+        return self.context.verify(plain_source, hashed_source)
 
     def create_access_token(self, data: dict) -> str:
         expire = datetime.now() + self.expires_delta

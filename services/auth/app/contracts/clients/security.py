@@ -10,9 +10,9 @@ class SecurityClient(BaseClient):
     def get_hash(self, source: str) -> str:
         """:return: Hashed `source`."""
 
-    def verify_password(self, plain_password: str, hashed_password: str) -> bool:
-        """Checks if the password matches the hashed password"""
-        return self.get_hash(plain_password) == hashed_password
+    def verify_source(self, plain_source: str, hashed_source: str) -> bool:
+        """Checks if the source matches the hashed source"""
+        return self.get_hash(plain_source) == hashed_source
 
     @abstractmethod
     def create_access_token(self, data: dict) -> str:
