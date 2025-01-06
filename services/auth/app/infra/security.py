@@ -7,7 +7,7 @@ from app.schemas.client import TokenPayload
 
 
 class SecurityClientImpl(SecurityClient):
-    algorithm = "RS256"
+    algorithm = "HS256"
 
     def __init__(self, secret: str, *, expires_delta: timedelta | None = None):
         self.context = CryptContext(schemes=["bcrypt"])
@@ -31,5 +31,5 @@ class SecurityClientImpl(SecurityClient):
         client_id = payload.get("sub")
         if client_id is None:
             raise KeyError("Missing sub in the token.")
-        scopes = payload.get("scopes", [])
-        return TokenPayload(client_id=client_id, scopes=scopes)
+        scopes: str = payload.get("scopes", "")
+        return TokenPayload(client_id=client_id, scopes=scopes.split())
