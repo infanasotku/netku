@@ -19,6 +19,16 @@ class ClientFullSchema(ClientSchema):
     scopes: list[str]
 
 
+class ClientOutSchema(BaseSchemaPK):
+    client_id: str
+    scopes: list[str]
+
+
 class TokenPayload(BaseSchema):
     client_id: str
     scopes: list[str]
+
+
+class TokenSchema(BaseSchema):
+    access_token: str
+    token_type: str
