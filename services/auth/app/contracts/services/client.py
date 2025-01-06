@@ -1,17 +1,38 @@
 from abc import abstractmethod
+from collections.abc import Iterable
 
 from common.contracts.service import BaseService
 
-from app.schemas.client import ClientSchema
+from app.schemas.client import ClientSchema, TokenSchema, ClientFullSchema
 
 
 class ClientService(BaseService):
     @abstractmethod
-    async def authenticate(client_id: str, client_secret: str) -> ClientSchema | None:
-        """Authenticates client
-        :return: Client if it authenticated, `None` otherwise."""
+    async def get_client_with_scopes_by_client_id(
+        self,
+        client_id: int,
+    ) -> ClientFullSchema | None:
+        """Gets client with scopes by `ClientSchema.client_id`.
+
+        Returns:
+            Client if it exist in db, `None` otherwise.
+
+        """
 
     @abstractmethod
-    async def authorize(token: str, needed_scopes: list[str]) -> ClientSchema | None:
+    async def authenticate(
+        self, client_id: str, client_secret: str
+    ) -> TokenSchema | None:
         """Authenticates client
-        :return: Client if it authenticated, `None` otherwise."""
+
+        Returns:
+            Token with client scopes if client authenticated, `None` otherwise."""
+
+    @abstractmethod
+    async def authorize(
+        self, token: str, needed_scopes: Iterable[str]
+    ) -> ClientSchema | None:
+        """Authenticates client
+
+        Returns:
+            Client if it authenticated, `None` otherwise."""
