@@ -47,10 +47,18 @@ class ClientServiceImpl(ClientService):
         )
         return TokenSchema(access_token=access_token, token_type=self.token_type)
 
-    async def authorize(self, token):
+    async def authorize(self, token, needed_scopes):
         try:
             payload = self.security_client.parse_access_token(token)
         except Exception:
             return
 
-        return payload
+        if "admin" not in payload.scopes and not all(
+            scope in payload.scopes for scope in needed_scopes
+        ):
+            return
+
+        return await self.get_client_with_scopes_by_client_id(payload.client_id)
+
+    async def introspect(self, token):
+        return self.security_client.parse_access_token(token)

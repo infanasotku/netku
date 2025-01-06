@@ -17,7 +17,6 @@ class ClientService(BaseService):
 
         Returns:
             Client if it exist in db, `None` otherwise.
-
         """
 
     @abstractmethod
@@ -28,14 +27,24 @@ class ClientService(BaseService):
 
         Returns:
             Token with client scopes if client authenticated,
-            `None` otherwise."""
+            `None` otherwise.
+        """
 
     @abstractmethod
     async def authorize(
         self, token: str, needed_scopes: Iterable[str]
-    ) -> TokenPayload | None:
-        """Authenticates client
+    ) -> ClientFullSchema | None:
+        """Authorizes client
+
+        Returns:
+            Client info if client authenticated, `None` otherwise.
+        """
+
+    @abstractmethod
+    async def introspect(self, token: str) -> TokenPayload | None:
+        """Introspects `token`.
 
         Returns:
             Token payload with token introspection
-            if client authenticated, `None` otherwise."""
+            if client authenticated, `None` otherwise.
+        """

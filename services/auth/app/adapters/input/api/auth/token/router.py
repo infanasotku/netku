@@ -1,3 +1,5 @@
+from typing import Annotated
+
 from fastapi import APIRouter, Body, HTTPException, status
 from fastapi.security import HTTPBearer
 
@@ -20,7 +22,9 @@ class TokenRouter:
         )
 
     async def create_token(
-        self, client_id: str = Body(), client_secret: str = Body()
+        self,
+        client_id: Annotated[str, Body(examples=["johndoe"])],
+        client_secret: Annotated[str, Body(examples=["johndoe_secret"])],
     ) -> TokenSchema:
         """Creates token for specified `client_id` and `client_secret`.
 
@@ -41,12 +45,12 @@ class TokenRouter:
                 )
             return token
 
-    async def introspect_token(self, token: str) -> TokenPayload:
+    async def introspect_token(self, token: str) -> TokenPayload | None:
         """Introspects `token`.
 
         Returns:
             Token payload with token introspection
-            if client authenticated.
+            if client authenticated, `null` otherwise.
         """
         async with self._create_client_service() as service:
-            return await service.authorize(token)
+            return await service.introspect(token)

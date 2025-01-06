@@ -22,9 +22,9 @@ class SecurityClient(BaseClient):
         """Creates access token with `data`."""
 
     @abstractmethod
-    def parse_access_token(self, token: str) -> TokenPayload:
+    def parse_access_token(self, token: str) -> TokenPayload | None:
         """Parses access token.
 
-        Raises:
-            KeyError: If required key missing in token.
+        Returns:
+            Token payload if it parse success, `None` otherwise.
         """
