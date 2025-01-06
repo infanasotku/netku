@@ -8,6 +8,7 @@ from dependencies import AuthDependencies
 from app.infra.config import Settings
 
 from app.adapters.input.admin import register_admin
+from app.adapters.input.api import create_api
 
 
 def run():
@@ -21,6 +22,7 @@ def run():
         username=settings.admin_username,
         password=settings.admin_password,
     )
+    app.mount("/api", create_api(dependencies.create_client_service))
 
     uvicorn.run(
         app=app,
