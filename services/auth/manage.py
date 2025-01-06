@@ -15,7 +15,7 @@ def run():
     settings = generate(Settings, logger)
     dependencies = AuthDependencies(settings, logger)
 
-    app = FastAPI()
+    app = FastAPI(redoc_url=None, docs_url=None)
     register_admin(
         app,
         engine=dependencies.sql_connection.async_engine,
