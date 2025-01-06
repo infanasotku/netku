@@ -3,7 +3,7 @@ from passlib.context import CryptContext
 import jwt
 
 from app.contracts.clients import SecurityClient
-from app.schemas.client import TokenPayload
+from app.schemas.token import TokenPayload
 
 
 class SecurityClientImpl(SecurityClient):
@@ -29,7 +29,10 @@ class SecurityClientImpl(SecurityClient):
     def parse_access_token(self, token: str) -> TokenPayload:
         payload: dict = jwt.decode(token, self.secret, algorithms=self.algorithm)
         client_id = payload.get("sub")
+        expire = payload.get("exp")
         if client_id is None:
             raise KeyError("Missing sub in the token.")
+        if expire is None:
+            raise KeyError("Missing expire in the token.")
         scopes: str = payload.get("scopes", "")
-        return TokenPayload(client_id=client_id, scopes=scopes.split())
+        return TokenPayload(client_id=client_id, scopes=scopes.split(), expire=expire)

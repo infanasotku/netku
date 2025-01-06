@@ -2,7 +2,8 @@ from app.contracts.clients import SecurityClient
 from app.contracts.repositories import ClientScopeRepository, ClientRepository
 from app.contracts.services import ClientService
 
-from app.schemas.client import ClientFullSchema, TokenSchema
+from app.schemas.client import ClientFullSchema
+from app.schemas.token import TokenSchema
 
 
 class ClientServiceImpl(ClientService):
@@ -46,15 +47,10 @@ class ClientServiceImpl(ClientService):
         )
         return TokenSchema(access_token=access_token, token_type=self.token_type)
 
-    async def authorize(self, token, needed_scopes):
+    async def authorize(self, token):
         try:
             payload = self.security_client.parse_access_token(token)
         except Exception:
             return
 
-        if "admin" not in payload.scopes and not all(
-            scope in payload.scopes for scope in needed_scopes
-        ):
-            return
-
-        return await self.get_client_with_scopes_by_client_id(payload.client_id)
+        return payload

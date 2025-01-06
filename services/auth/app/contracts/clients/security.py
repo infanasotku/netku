@@ -2,7 +2,7 @@ from abc import abstractmethod
 
 from common.contracts.client import BaseClient
 
-from app.schemas.client import TokenPayload
+from app.schemas.token import TokenPayload
 
 
 class SecurityClient(BaseClient):

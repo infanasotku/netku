@@ -3,7 +3,8 @@ from collections.abc import Iterable
 
 from common.contracts.service import BaseService
 
-from app.schemas.client import ClientSchema, TokenSchema, ClientFullSchema
+from app.schemas.client import ClientFullSchema
+from app.schemas.token import TokenPayload, TokenSchema
 
 
 class ClientService(BaseService):
@@ -26,13 +27,15 @@ class ClientService(BaseService):
         """Authenticates client
 
         Returns:
-            Token with client scopes if client authenticated, `None` otherwise."""
+            Token with client scopes if client authenticated,
+            `None` otherwise."""
 
     @abstractmethod
     async def authorize(
         self, token: str, needed_scopes: Iterable[str]
-    ) -> ClientSchema | None:
+    ) -> TokenPayload | None:
         """Authenticates client
 
         Returns:
-            Client if it authenticated, `None` otherwise."""
+            Token payload with token introspection
+            if client authenticated, `None` otherwise."""
