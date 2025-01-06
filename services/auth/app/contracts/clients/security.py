@@ -8,7 +8,9 @@ from app.schemas.client import TokenPayload
 class SecurityClient(BaseClient):
     @abstractmethod
     def get_hash(self, source: str) -> str:
-        """:return: Hashed `source`."""
+        """
+        Returns:
+            Hashed `source`."""
 
     def verify_source(self, plain_source: str, hashed_source: str) -> bool:
         """Checks if the source matches the hashed source"""
