@@ -9,12 +9,15 @@ from app.schemas.user import UserCreateSchema, UserSchema, UserUpdateSchema
 class UserService(BaseService):
     @abstractmethod
     async def get_users_by_id(self, ids: Iterable[int]) -> list[UserSchema]:
-        """:return: users by their `UserSchema.id`."""
+        """
+        Returns:
+            Users by their `UserSchema.id`."""
 
     async def get_user_by_id(self, id: int) -> UserSchema | None:
         """Gets user by `UserSchema.id`.
 
-        :return: User as `UserSchema` if it exist in db, `None` otherwise."""
+        Returns:
+            User as `UserSchema` if it exist in db, `None` otherwise."""
         users = await self.get_users_by_id((id,))
 
         return users[0] if len(users) > 0 else None
@@ -23,13 +26,15 @@ class UserService(BaseService):
     async def get_user_by_telegram_id(self, id: int) -> UserSchema | None:
         """Gets user by `UserSchema.telegram_id`.
 
-        :return: User as `UserSchema` if it exist in db, `None` otherwise."""
+        Returns:
+            User as `UserSchema` if it exist in db, `None` otherwise."""
 
     @abstractmethod
     async def get_user_by_phone(self, phone: str) -> UserSchema | None:
         """Gets user by `UserSchema.phone_number`.
 
-        :return: User as `UserSchema` if it exist in db, `None` otherwise."""
+        Returns:
+            User as `UserSchema` if it exist in db, `None` otherwise."""
 
     @abstractmethod
     async def get_users(self) -> list[UserSchema]:
@@ -39,7 +44,8 @@ class UserService(BaseService):
     async def create_user(self, user_create: UserCreateSchema) -> UserSchema:
         """Creates user.
 
-        :return: Created user."""
+        Returns:
+            Created user."""
 
     @abstractmethod
     async def update_user(
@@ -47,4 +53,5 @@ class UserService(BaseService):
     ) -> UserSchema:
         """Updates user.
 
-        :return: Updated user."""
+        Returns:
+            Updated user."""
