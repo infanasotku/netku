@@ -23,7 +23,7 @@ class ClientServiceImpl(ClientService):
         if client is None:
             return
 
-        scopes = await self.client_scope_repo.get_scopes_by_client_id(client_id)
+        scopes = await self.client_scope_repo.get_scopes_by_client_id(client.id)
 
         return ClientFullSchema(
             id=client.id,
