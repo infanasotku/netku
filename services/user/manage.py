@@ -1,3 +1,4 @@
+from fastapi import FastAPI
 import uvicorn
 
 from common.logging import config, logger
@@ -13,8 +14,11 @@ def run():
     settings = generate(Settings, logger)
     dependencies = UserDependencies(settings, logger)
 
+    app = FastAPI()
+    app.mount("/api", api.create_api(dependencies.create_user_service))
+
     uvicorn.run(
-        app=api.create_api(dependencies.create_user_service),
+        app=app,
         host=settings.host,
         port=settings.port,
         log_config=config,

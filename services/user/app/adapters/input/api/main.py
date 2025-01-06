@@ -7,7 +7,7 @@ from app.adapters.input.api.router import UserRouter
 
 
 def create_api(create_user_service: CreateService[UserService]) -> FastAPI:
-    api = FastAPI(root_path="/api")
+    api = FastAPI()
 
     user = UserRouter(create_user_service)
 
