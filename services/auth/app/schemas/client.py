@@ -12,6 +12,10 @@ class ClientCreateSchema(BaseSchemaPK):
 
 
 class ClientSchema(ClientCreateSchema):
+    pass
+
+
+class ClientFullSchema(ClientSchema):
     scopes: list[str]
 
 
