@@ -15,6 +15,6 @@ class SQLClientRepository(ClientRepository, SQLBaseRepository):
 
         client = (await self._session.execute(s)).scalars().first()
         if client is None:
-            return None
+            return
 
         return converters.client_to_client_schema(client)
