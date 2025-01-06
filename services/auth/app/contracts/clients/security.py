@@ -10,7 +10,8 @@ class SecurityClient(BaseClient):
     def get_hash(self, source: str) -> str:
         """
         Returns:
-            Hashed `source`."""
+            Hashed `source`.
+        """
 
     def verify_source(self, plain_source: str, hashed_source: str) -> bool:
         """Checks if the source matches the hashed source"""
@@ -22,4 +23,8 @@ class SecurityClient(BaseClient):
 
     @abstractmethod
     def parse_access_token(self, token: str) -> TokenPayload:
-        pass
+        """Parses access token.
+
+        Raises:
+            KeyError: If required key missing in token.
+        """
