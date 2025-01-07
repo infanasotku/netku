@@ -7,7 +7,7 @@ from app.adapters.input.api.auth import AuthRouter
 
 
 def create_api(create_client_service: CreateService[ClientService]) -> FastAPI:
-    api = FastAPI(root_path="/api")
+    api = FastAPI()
 
     auth = AuthRouter(create_client_service)
 
