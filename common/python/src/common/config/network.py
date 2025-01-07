@@ -8,4 +8,4 @@ class NetworkSettings(BaseSettings):
     ssl_keyfile: str | None = Field(validation_alias="SSL_KEYFILE", default=None)
     ssl_certfile: str | None = Field(validation_alias="SSL_CERTFILE", default=None)
 
-    root_path: str | None = Field(validation_alias="ROOT_PATH", default=None)
+    root_path: str | None = Field(validation_alias="ROOT_PATH", default="")
