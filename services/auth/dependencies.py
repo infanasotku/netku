@@ -65,7 +65,7 @@ class AuthDependencies:
     def _init_clients(self):
         @asynccontextmanager
         async def create_security_client() -> AsyncGenerator[SecurityClientImpl, None]:
-            yield SecurityClientImpl(self._settings.secret)
+            yield SecurityClientImpl(self._settings.jwt_secret)
 
         self.create_security_client = create_security_client
 

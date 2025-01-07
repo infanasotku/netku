@@ -3,4 +3,4 @@ from common.config import PostgreSQLSettings, NetworkSettings, AdminSettings
 
 
 class Settings(PostgreSQLSettings, NetworkSettings, AdminSettings):
-    secret: str = Field(validation_alias="SECRET")
+    jwt_secret: str = Field(validation_alias="JWT_SECRET")
