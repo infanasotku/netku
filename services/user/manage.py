@@ -1,21 +1,14 @@
-from fastapi import FastAPI
 import uvicorn
 
 from common.logging import config, logger
 from common.config import generate
 
-from dependencies import UserDependencies
 from app.infra.config import Settings
-
-from app.adapters.input import api
+from app import app
 
 
 def run():
     settings = generate(Settings, logger)
-    dependencies = UserDependencies(settings, logger)
-
-    app = FastAPI()
-    app.mount("/api", api.create_api(dependencies.create_user_service))
 
     uvicorn.run(
         app=app,

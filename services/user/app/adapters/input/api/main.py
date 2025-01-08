@@ -1,16 +1,11 @@
 from fastapi import FastAPI
 
-from common.contracts.protocols import CreateService
-from app.contracts.services import UserService
-
-from app.adapters.input.api.router import UserRouter
+from app.adapters.input.api.router import router
 
 
-def create_api(create_user_service: CreateService[UserService]) -> FastAPI:
+def create_api() -> FastAPI:
     api = FastAPI()
 
-    user = UserRouter(create_user_service)
-
-    api.include_router(user.router, prefix="/users")
+    api.include_router(router, prefix="/users")
 
     return api
