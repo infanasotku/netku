@@ -1,12 +1,10 @@
 from fastapi import FastAPI
 
-from app.adapters.input.api.auth import AuthRouter
+from app.adapters.input.api import auth
 
 
 def create_api() -> FastAPI:
     api = FastAPI()
-
-    auth = AuthRouter()
 
     api.include_router(auth.router, prefix="/auth")
 

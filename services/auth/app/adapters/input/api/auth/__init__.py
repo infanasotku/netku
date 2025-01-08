@@ -1,3 +1,3 @@
-from app.adapters.input.api.auth.router import AuthRouter
+from app.adapters.input.api.auth.router import router
 
-__all__ = ["AuthRouter"]
+__all__ = ["router"]
