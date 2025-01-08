@@ -18,7 +18,7 @@ def create_app() -> FastAPI:
         ]
     )
 
-    app = FastAPI()
+    app = FastAPI(redoc_url=None, docs_url=None)
     app.container = container
     app.mount("/api", api.create_api())
 
