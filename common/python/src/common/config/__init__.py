@@ -1,5 +1,6 @@
 import sys
 import os
+from functools import cache
 from logging import Logger
 from typing import Type, TypeVar
 from pydantic_settings import BaseSettings
@@ -13,6 +14,7 @@ from common.config.admin import AdminSettings
 SettingsT = TypeVar("SettingsT", bound=BaseSettings)
 
 
+@cache
 def generate(SettingsClass: Type[SettingsT], logger: Logger) -> SettingsT:
     try:
         load_dotenv(override=True, dotenv_path=os.getcwd() + "/.env")
