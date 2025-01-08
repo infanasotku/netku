@@ -2,13 +2,23 @@ _format_version: "3.0"
 _transform: true
 
 services:
-  - name: users
-    url: ${USERS_URL}/api/users
+  - name: user
+    url: ${USER_URL}/api
     routes:
-      - name: users-crud
+      - name: users-api
         methods:
           - GET
           - POST
           - PATCH
         paths:
-          - /api/users
+          - /user/api
+
+  - name: auth
+    url: ${AUTH_URL}/api
+    routes:
+      - name: auth-api
+        methods:
+          - GET
+          - POST
+        paths:
+          - /auth/api
