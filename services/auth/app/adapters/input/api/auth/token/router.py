@@ -1,30 +1,27 @@
 from typing import Annotated
+from fastapi import APIRouter, Body, HTTPException, status, Depends
+from dependency_injector.wiring import Provide, inject
 
-from fastapi import APIRouter, Body, HTTPException, status
-from fastapi.security import HTTPBearer
-
-from common.contracts.protocols import CreateService
+from app.container import Container
 from app.contracts.services import ClientService
-
 from app.schemas.token import TokenPayload, TokenSchema
 
 
 class TokenRouter:
-    def __init__(self, create_client_service: CreateService[ClientService]):
-        self._create_client_service = create_client_service
-
+    def __init__(self):
         self.router = APIRouter()
-        self.security = HTTPBearer()
 
         self.router.add_api_route("/", self.create_token, methods=["POST"])
         self.router.add_api_route(
             "/introspect", self.introspect_token, methods=["POST"]
         )
 
+    @inject
     async def create_token(
         self,
         client_id: Annotated[str, Body(examples=["johndoe"])],
         client_secret: Annotated[str, Body(examples=["johndoe_secret"])],
+        client_service: ClientService = Depends(Provide[Container.client_service]),
     ) -> TokenSchema:
         """Creates token for specified `client_id` and `client_secret`.
 
@@ -35,22 +32,25 @@ class TokenRouter:
             HTTPException(status_code=status.HTTP_401_UNAUTHORIZED):
                 If error occured with client credentials.
         """
-        async with self._create_client_service() as service:
-            token = await service.authenticate(client_id, client_secret)
-            if token is None:
-                raise HTTPException(
-                    status_code=status.HTTP_401_UNAUTHORIZED,
-                    detail="Incorrect username or password",
-                    headers={"WWW-Authenticate": "Bearer"},
-                )
-            return token
+        token = await client_service.authenticate(client_id, client_secret)
+        if token is None:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Incorrect username or password",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+        return token
 
-    async def introspect_token(self, token: str) -> TokenPayload | None:
+    @inject
+    async def introspect_token(
+        self,
+        token: str,
+        client_service: ClientService = Depends(Provide[Container.client_service]),
+    ) -> TokenPayload | None:
         """Introspects `token`.
 
         Returns:
             Token payload with token introspection
             if client authenticated, `null` otherwise.
         """
-        async with self._create_client_service() as service:
-            return await service.introspect(token)
+        return await client_service.introspect(token)

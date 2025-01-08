@@ -1,8 +1,9 @@
 from sqladmin import ModelView
+from dependency_injector.wiring import Provide, inject
 
+
+from app.container import Container
 from app.contracts.clients import SecurityClient
-from common.contracts.protocols import CreateClient
-
 import app.infra.database.models as models
 
 
@@ -38,22 +39,25 @@ class ScopeView(ModelView, model=models.Scope):
 
 
 class ClientView(ModelView, model=models.Client):
-    create_security_client: CreateClient[SecurityClient]
-
     can_export = False
     can_edit = False
     column_searchable_list = [models.Client.client_id]
 
     column_list = [models.Client.id, models.Client.client_id]
 
+    @inject
     async def on_model_change(
-        self, data: dict, model: models.Client, is_created, request
+        self,
+        data: dict,
+        model: models.Client,
+        is_created,
+        request,
+        security_client: SecurityClient = Provide[Container.security_client],
     ):
-        async with ClientView.create_security_client() as security:
-            if (
-                "hashed_client_secret" in data
-                and data["hashed_client_secret"] != model.hashed_client_secret
-            ):
-                data["hashed_client_secret"] = security.get_hash(
-                    data["hashed_client_secret"]
-                )
+        if (
+            "hashed_client_secret" in data
+            and data["hashed_client_secret"] != model.hashed_client_secret
+        ):
+            data["hashed_client_secret"] = security_client.get_hash(
+                data["hashed_client_secret"]
+            )

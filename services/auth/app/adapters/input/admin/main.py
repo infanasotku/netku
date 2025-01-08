@@ -1,21 +1,20 @@
 from fastapi import FastAPI
 from sqladmin import Admin
 from sqlalchemy.ext.asyncio import AsyncEngine
+from dependency_injector.wiring import Provide, inject
 
-from app.contracts.clients import SecurityClient
-from common.contracts.protocols import CreateClient
-
+from app.container import Container
 from app.adapters.input.admin.auth import AdminAuthenticationBackend
 import app.adapters.input.admin.views as views
 
 
+@inject
 def register_admin(
     app: FastAPI,
     *,
-    engine: AsyncEngine,
     username: str,
     password: str,
-    create_security_client: CreateClient[SecurityClient],
+    engine: AsyncEngine = Provide[Container.async_engine],
 ):
     authentication_backend = AdminAuthenticationBackend(
         username=username, password=password
@@ -26,7 +25,6 @@ def register_admin(
         title="Auth admin panel",
         authentication_backend=authentication_backend,
     )
-    views.ClientView.create_security_client = create_security_client
     admin.add_view(views.ClientScopeView)
     admin.add_view(views.ScopeView)
     admin.add_view(views.ClientView)

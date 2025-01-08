@@ -1,15 +1,12 @@
 from fastapi import FastAPI
 
-from common.contracts.protocols import CreateService
-from app.contracts.services import ClientService
-
 from app.adapters.input.api.auth import AuthRouter
 
 
-def create_api(create_client_service: CreateService[ClientService]) -> FastAPI:
+def create_api() -> FastAPI:
     api = FastAPI()
 
-    auth = AuthRouter(create_client_service)
+    auth = AuthRouter()
 
     api.include_router(auth.router, prefix="/auth")
 
