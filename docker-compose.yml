@@ -42,98 +42,34 @@ services:
       - .env
   # endregion
 
-  xray:
-    container_name: netku-xray
-    restart: always
+  api_gateway:
+    container_name: netku-api_gateway
     build:
-      context: services/xray
-
-    volumes:
-      - cert-dir:/etc/cert:ro
-      - xray-log-dir:/etc/xray/log
-
-    networks:
-      - netku-net
-
-    ports:
-      - 443:443
-      - 9000:9000
-
-    env_file:
-      - .env
-
-    healthcheck:
-      test: [ "CMD-SHELL", "/app/xray --greet" ]
-      interval: 2s
-      timeout: 5s
-      retries: 10
-
-    depends_on:
-      server:
-        condition: service_started
-
-  # region Assistant environment
-  assistant:
-    container_name: netku-assistant
-    restart: always
-    build:
-      context: services/assistant
-
-    volumes:
-      - cert-dir:/etc/cert:ro
-
-    networks:
-      - netku-net
-
-    env_file:
-      - .env
-
-  assistant-worker:
-    container_name: netku-assistant-worker
-    restart: always
-    build:
-      context: services/assistant
-    command: [ "python", "manage.py", "-w" ]
-
-    volumes:
-      - cert-dir:/etc/cert:ro
-
-    networks:
-      - netku-net
-
-    env_file:
-      - .env
-
-  assistant-scheduler:
-    container_name: netku-assistant-scheduler
-    restart: always
-    build:
-      context: services/assistant
-    command: [ "python", "manage.py", "-t" ]
-
-    volumes:
-      - cert-dir:/etc/cert:ro
-
-    networks:
-      - netku-net
-
-    env_file:
-      - .env
-  # endregion
-
-  server:
-    container_name: netku-server
-    restart: always
-    build:
-      context: services/server
+      context: services/api_gateway
       args:
-        ASSISTANT_PORT:
+        USER_URL:
+        AUTH_URL:
+
+
+    networks:
+      - netku-net
+
+    env_file:
+      - ./services/api_gateway/.env
+
+  gateway:
+    container_name: netku-gateway
+    restart: always
+    build:
+      context: services/gateway
+      args:
+        API_GATEWAY_ADDR:
         DOMAIN:
         XRAY_FALLBACK_PORT:
+        AUTH_ADDR:
 
 
     volumes:
-      - cert-dir:/etc/cert:ro
       - nginx-html:/usr/share/nginx/html
 
     networks:
@@ -141,6 +77,7 @@ services:
 
     ports:
       - 80:80
+      - 444:444
 
     env_file:
       - .env
@@ -156,31 +93,6 @@ services:
 
     volumes:
       - nginx-html:/app/dist
-
-  booking:
-    container_name: netku-booking
-    restart: always
-    build:
-      context: services/booking
-
-    volumes:
-      - cert-dir:/etc/cert:ro
-      - booking-browser-dir:/root/.cache/rod/browser
-
-    networks:
-      - netku-net
-
-    ports:
-      - 9001:9001
-
-    env_file:
-      - .env
-
-    healthcheck:
-      test: [ "CMD-SHELL", "/app/booking --greet" ]
-      interval: 2s
-      timeout: 5s
-      retries: 10
 
   rabbitmq:
     container_name: netku-rabbitmq
