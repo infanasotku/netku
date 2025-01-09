@@ -25,7 +25,7 @@ class _AuthClient:
         async with aiohttp.ClientSession() as session:
             try:
                 async with session.post(
-                    f"{self._auth_url}/api/auth/token/introspect/",
+                    f"{self._auth_url}/api/auth/token/introspect",
                     data=token,
                     headers={"Authorization": f"Bearer {access_token}"},
                     ssl=self._with_ssl,
