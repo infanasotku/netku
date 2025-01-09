@@ -5,7 +5,7 @@ from app.adapters.output.database.repositories import (
     SQLClientRepository,
     SQLClientScopeRepository,
 )
-from app.infra.security import SecurityClientImpl
+from app.adapters.output.security import SecurityClientImpl
 from app.services.client import ClientServiceImpl
 
 
