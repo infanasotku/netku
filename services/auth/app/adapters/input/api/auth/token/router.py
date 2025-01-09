@@ -42,7 +42,7 @@ async def create_token(
 @router.post("/introspect")
 @inject
 async def introspect_token(
-    token: str,
+    token: str = Body(examples=["jwt.token.example"]),
     client_service: ClientService = Depends(Provide[Container.client_service]),
     _: ClientCredentials = Security(
         Authorization,
