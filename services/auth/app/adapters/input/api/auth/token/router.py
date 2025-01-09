@@ -46,7 +46,7 @@ async def introspect_token(
     client_service: ClientService = Depends(Provide[Container.client_service]),
     _: ClientCredentials = Security(
         Authorization,
-        scopes=["users:write"],
+        scopes=["auth:read"],
     ),
 ) -> TokenPayload | None:
     """Introspects `token`.
