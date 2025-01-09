@@ -1,10 +1,13 @@
 from typing import Annotated
-from fastapi import APIRouter, Body, HTTPException, status, Depends
+from fastapi import APIRouter, Body, HTTPException, Security, status, Depends
 from dependency_injector.wiring import Provide, inject
 
 from app.container import Container
+from common.schemas import ClientCredentials
 from app.contracts.services import ClientService
 from app.schemas.token import TokenPayload, TokenSchema
+
+from app.adapters.input.api.dependencies import Authorization
 
 
 router = APIRouter()
@@ -41,6 +44,10 @@ async def create_token(
 async def introspect_token(
     token: str,
     client_service: ClientService = Depends(Provide[Container.client_service]),
+    _: ClientCredentials = Security(
+        Authorization,
+        scopes=["users:write"],
+    ),
 ) -> TokenPayload | None:
     """Introspects `token`.
 

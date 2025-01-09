@@ -18,6 +18,7 @@ def create_app() -> FastAPI:
             "app.adapters.input.api.auth.token.router",
             "app.adapters.input.admin.views",
             "app.adapters.input.admin.main",
+            "app.adapters.input.api.dependencies",
         ]
     )
 
