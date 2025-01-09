@@ -1,7 +1,7 @@
 from abc import abstractmethod
 from collections.abc import Iterable
 
-from common.contracts.service import BaseService
+from common.contracts.services import BaseService
 
 from app.schemas.user import UserCreateSchema, UserSchema, UserUpdateSchema
 
