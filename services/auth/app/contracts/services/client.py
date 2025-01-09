@@ -3,7 +3,7 @@ from abc import abstractmethod
 from common.contracts.services import AuthService, BaseService
 
 from app.schemas.client import ClientFullSchema
-from app.schemas.token import TokenPayload, TokenSchema
+from app.schemas.token import TokenSchema
 
 
 class ClientService(BaseService, AuthService):
@@ -27,13 +27,4 @@ class ClientService(BaseService, AuthService):
         Returns:
             Token with client scopes if client authenticated,
             `None` otherwise.
-        """
-
-    @abstractmethod
-    async def introspect(self, token: str) -> TokenPayload | None:
-        """Introspects `token`.
-
-        Returns:
-            Token payload with token introspection
-            if client authenticated, `None` otherwise.
         """

@@ -1,6 +1,7 @@
 from datetime import datetime
 from pydantic import ConfigDict
-from common.schemas import TokenPayload, BaseSchema
+from common.schemas import BaseSchema
+from common.schemas.token import TokenPayload
 
 
 class TokenPayload(TokenPayload):

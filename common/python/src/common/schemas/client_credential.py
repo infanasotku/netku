@@ -1,4 +1,4 @@
-from common.schemas import BaseSchema
+from common.schemas.base import BaseSchema
 
 
 class ClientCredentials(BaseSchema):

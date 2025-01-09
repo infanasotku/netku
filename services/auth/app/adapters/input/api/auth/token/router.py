@@ -3,7 +3,7 @@ from fastapi import APIRouter, Body, HTTPException, Security, status, Depends
 from dependency_injector.wiring import Provide, inject
 
 from app.container import Container
-from common.schemas import ClientCredentials
+from common.schemas.client_credential import ClientCredentials
 from app.contracts.services import ClientService
 from app.schemas.token import TokenPayload, TokenSchema
 

@@ -9,6 +9,10 @@ class Authorization:
     def __init__(self, auth_service: AuthService):
         self._auth_service = auth_service
 
+    def _verify_scopes(self, scopes: list[str], *, needed_scopes: list[str]) -> bool:
+        """Verifies that `scopes` enough for access with `needed_scopes`."""
+        return "admin" in scopes or all(scope in scopes for scope in needed_scopes)
+
     async def __call__(
         self,
         scopes: SecurityScopes,
@@ -30,17 +34,23 @@ class Authorization:
         if scheme != "Bearer":
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Incorrect scheme of token",
+                detail="Invalid scheme of token",
                 headers={"WWW-Authenticate": "Bearer"},
             )
 
-        client_credential = await self._auth_service.authorize(token, scopes.scopes)
-
-        if client_credential is None:
+        payload = await self._auth_service.introspect(token)
+        if payload is None:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Incorrect credentials",
+                detail="Invalid credentials",
                 headers={"WWW-Authenticate": "Bearer"},
             )
 
-        return client_credential
+        if not self._verify_scopes(payload.scopes, needed_scopes=scopes.scopes):
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Not enough rights",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+
+        return ClientCredentials.model_validate(payload)

@@ -4,7 +4,7 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer, SecurityS
 from dependency_injector.wiring import Provide, inject
 
 from common import auth
-from common.schemas import ClientCredentials
+from common.schemas.client_credential import ClientCredentials
 from app.contracts.services.client import ClientService
 from app.container import Container
 
