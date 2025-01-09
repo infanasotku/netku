@@ -1,13 +1,9 @@
 from datetime import datetime
 from pydantic import ConfigDict
-from common.schemas import BaseSchema
+from common.schemas import TokenPayload, BaseSchema
 
 
-class TokenPayload(BaseSchema):
-    client_id: str
-    scopes: list[str]
-    expire: datetime
-
+class TokenPayload(TokenPayload):
     model_config = ConfigDict(
         from_attributes=True,
         json_schema_extra={
