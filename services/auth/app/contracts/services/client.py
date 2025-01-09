@@ -1,13 +1,12 @@
 from abc import abstractmethod
-from collections.abc import Iterable
 
-from common.contracts.service import BaseService
+from common.contracts.services import AuthService, BaseService
 
 from app.schemas.client import ClientFullSchema
 from app.schemas.token import TokenPayload, TokenSchema
 
 
-class ClientService(BaseService):
+class ClientService(BaseService, AuthService):
     @abstractmethod
     async def get_client_with_scopes_by_client_id(
         self,
@@ -28,16 +27,6 @@ class ClientService(BaseService):
         Returns:
             Token with client scopes if client authenticated,
             `None` otherwise.
-        """
-
-    @abstractmethod
-    async def authorize(
-        self, token: str, needed_scopes: Iterable[str]
-    ) -> ClientFullSchema | None:
-        """Authorizes client
-
-        Returns:
-            Client info if client authenticated, `None` otherwise.
         """
 
     @abstractmethod
