@@ -1,8 +1,12 @@
 from datetime import datetime
-from common.schemas import BaseSchema
+from common.schemas.client_credential import ClientCredentials
+from common.schemas.base import BaseSchema
 
 
-class TokenPayload(BaseSchema):
-    client_id: str
-    scopes: list[str]
+class TokenPayload(ClientCredentials):
     expire: datetime
+
+
+class TokenPayloadShort(BaseSchema):
+    expire: datetime
+    token: str
