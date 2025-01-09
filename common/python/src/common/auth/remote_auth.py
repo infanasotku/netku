@@ -1,4 +1,5 @@
 from datetime import datetime
+import pytz
 import aiohttp
 import aiohttp.client_exceptions
 
@@ -74,6 +75,13 @@ class RemoteAuthService(AuthService):
         self._token_payload: TokenPayloadShort | None = None
         self._auth_client = _AuthClient(auth_url, with_ssl=with_ssl)
 
+    def _compare_time(self, first: datetime, second: datetime) -> bool:
+        utc = pytz.UTC
+        first = first.replace(tzinfo=utc)
+        second = second.replace(tzinfo=utc)
+
+        return first < second
+
     def _check_token(self) -> bool:
         """Checks token for expiration.
 
@@ -84,7 +92,8 @@ class RemoteAuthService(AuthService):
             return False
 
         now = datetime.now()
-        return self._token_payload.expire < now
+
+        return self._compare_time(now, self._token_payload.expire)
 
     async def _update_token(self) -> bool:
         """Updates token.
