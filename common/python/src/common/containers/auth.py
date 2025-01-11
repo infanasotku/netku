@@ -11,5 +11,5 @@ class AuthContainer(BaseContainer):
         BaseContainer.config.auth_url,
         cliend_id=BaseContainer.config.client_id,
         client_secret=BaseContainer.config.client_secret,
-        with_ssl=BaseContainer.config.with_ssl,
+        with_ssl=BaseContainer.config.with_auth_ssl,
     )
