@@ -1,5 +1,6 @@
-from dependency_injector import containers, providers
-from common.sql.postgres_containter import PostgresContainer
+from dependency_injector import providers, containers
+from common.containers.auth import AuthContainer
+from common.containers.postgres import PostgresContainer
 
 from app.adapters.output.database.repositories import (
     SQLUserRepository,
@@ -7,8 +8,13 @@ from app.adapters.output.database.repositories import (
 from app.services.user import UserServiceImpl
 
 
-@containers.copy(PostgresContainer)
-class Container(PostgresContainer):
-    user_repository = providers.Factory(SQLUserRepository, PostgresContainer.session)
+class Container(containers.DeclarativeContainer):
+    config = providers.Configuration()
 
+    postgres_container = providers.Container(PostgresContainer, config=config)
+    auth_container = providers.Container(AuthContainer, config=config)
+
+    user_repository = providers.Factory(
+        SQLUserRepository, postgres_container.container.session
+    )
     user_service = providers.Factory(UserServiceImpl, user_repository)

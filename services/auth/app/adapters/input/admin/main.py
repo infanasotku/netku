@@ -14,7 +14,7 @@ def register_admin(
     *,
     username: str,
     password: str,
-    engine: AsyncEngine = Provide[Container.async_engine],
+    engine: AsyncEngine = Provide[Container.postgres_container.container.async_engine],
 ):
     authentication_backend = AdminAuthenticationBackend(
         username=username, password=password
