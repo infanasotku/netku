@@ -1,11 +1,18 @@
 from typing import Annotated
-from fastapi import APIRouter, Depends, Query
+from fastapi import (
+    APIRouter,
+    Depends,
+    Query,
+    Security,
+)
 from dependency_injector.wiring import Provide, inject
 
 from app.container import Container
+from common.schemas.client_credential import ClientCredentials
 from app.contracts.services import UserService
 from app.schemas.user import UserCreateSchema, UserSchema, UserUpdateSchema
 
+from app.adapters.input.api.dependencies import Authorization
 
 router = APIRouter()
 
@@ -15,6 +22,10 @@ router = APIRouter()
 async def get_users_by_id(
     ids: Annotated[list[int], Query()],
     user_service: UserService = Depends(Provide[Container.user_service]),
+    _: ClientCredentials = Security(
+        Authorization,
+        scopes=["users:read"],
+    ),
 ) -> list[UserSchema]:
     return await user_service.get_users_by_id(ids)
 
@@ -22,7 +33,14 @@ async def get_users_by_id(
 @router.get("/{id}")
 @inject
 async def get_user_by_id(
-    id: int, user_service: UserService = Depends(Provide[Container.user_service])
+    id: int,
+    user_service: UserService = Depends(
+        Provide[Container.user_service],
+    ),
+    _: ClientCredentials = Security(
+        Authorization,
+        scopes=["users:read"],
+    ),
 ) -> UserSchema | None:
     return await user_service.get_user_by_id(id)
 
@@ -32,6 +50,10 @@ async def get_user_by_id(
 async def create_user(
     user_create: UserCreateSchema,
     user_service: UserService = Depends(Provide[Container.user_service]),
+    _: ClientCredentials = Security(
+        Authorization,
+        scopes=["users:write"],
+    ),
 ) -> UserSchema:
     return await user_service.create_user(user_create)
 
@@ -39,7 +61,12 @@ async def create_user(
 @router.patch("/{id}")
 @inject
 async def update_user(
+    id: int,
     user_update: UserUpdateSchema,
     user_service: UserService = Depends(Provide[Container.user_service]),
+    _: ClientCredentials = Security(
+        Authorization,
+        scopes=["users:write"],
+    ),
 ) -> UserSchema:
-    return await user_service.update_user(user_update)
+    return await user_service.update_user(id, user_update)
