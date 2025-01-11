@@ -5,4 +5,3 @@ asyncpg==0.30.0
 uvicorn==0.32.0
 sqlalchemy[asyncio]
 dependency_injector==4.45.0
--e ../../common/python
