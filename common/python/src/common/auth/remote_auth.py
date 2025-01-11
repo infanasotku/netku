@@ -8,6 +8,7 @@ from common.schemas.token import (
     TokenPayloadShort,
 )
 from common.contracts.services import AuthService
+from common.http.retry import retry
 
 
 class _AuthClient:
@@ -15,6 +16,7 @@ class _AuthClient:
         self._auth_url = auth_url
         self._with_ssl = with_ssl
 
+    @retry
     async def introspect_token(
         self, token: str, *, access_token: str
     ) -> TokenPayload | None:
@@ -24,22 +26,20 @@ class _AuthClient:
             Token payload if introspection successful, `None` otherwise.
         """
         async with aiohttp.ClientSession() as session:
-            try:
-                async with session.post(
-                    f"{self._auth_url}/api/auth/token/introspect",
-                    data=token,
-                    headers={"Authorization": f"Bearer {access_token}"},
-                    ssl=self._with_ssl,
-                ) as resp:
-                    if resp.status != 200:
-                        return
-                    body = await resp.text()
-                    if body == "null":
-                        return
-                    return TokenPayload.model_validate_json(body)
-            except aiohttp.client_exceptions.ClientError:
-                return
+            async with session.post(
+                f"{self._auth_url}/api/auth/token/introspect",
+                data=token,
+                headers={"Authorization": f"Bearer {access_token}"},
+                ssl=self._with_ssl,
+            ) as resp:
+                if resp.status != 200:
+                    return
+                body = await resp.text()
+                if body == "null":
+                    return
+                return TokenPayload.model_validate_json(body)
 
+    @retry
     async def create_token(self, client_id: str, client_secret: str) -> str | None:
         """Sends request for create token to auth service.
 
@@ -47,18 +47,15 @@ class _AuthClient:
             Token if token created, `None` otherwise.
         """
         async with aiohttp.ClientSession() as session:
-            try:
-                async with session.post(
-                    f"{self._auth_url}/api/auth/token/",
-                    json={"client_id": client_id, "client_secret": client_secret},
-                    ssl=self._with_ssl,
-                ) as resp:
-                    if resp.status != 200:
-                        return
-                    body: dict = await resp.json()
-                    return body.get("access_token")
-            except aiohttp.client_exceptions.ClientError:
-                return
+            async with session.post(
+                f"{self._auth_url}/api/auth/token/",
+                json={"client_id": client_id, "client_secret": client_secret},
+                ssl=self._with_ssl,
+            ) as resp:
+                if resp.status != 200:
+                    return
+                body: dict = await resp.json()
+                return body.get("access_token")
 
 
 class RemoteAuthService(AuthService):
