@@ -3,3 +3,11 @@ target-version = "py311"
 
 [tool.pytest.ini_options]
 asyncio_default_fixture_loop_scope = "function"
+
+[project]
+name = "netku-auth"
+version = "1.0.0"
+license = { text = "MIT" }
+authors = [
+    { name = "Maxim Gerasimov", email = "infanasotku@gmail.com" }
+]
