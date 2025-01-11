@@ -14,13 +14,11 @@ async def _get_session(
 
 @containers.copy(BaseContainer)
 class PostgresContainer(BaseContainer):
-    config = BaseContainer.config
-
     async_engine = providers.Singleton(
         create_async_engine,
-        config.psql_dsn,
+        BaseContainer.config.psql_dsn,
         connect_args=providers.Dict(
-            server_settings=providers.Dict(search_path=config.psql_schema)
+            server_settings=providers.Dict(search_path=BaseContainer.config.psql_schema)
         ),
     )
     async_sessionmaker = providers.Singleton(async_sessionmaker, async_engine)
