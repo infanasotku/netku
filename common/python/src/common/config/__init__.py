@@ -9,6 +9,7 @@ from dotenv import load_dotenv
 from common.config.postgres import PostgreSQLSettings
 from common.config.network import NetworkSettings
 from common.config.admin import AdminSettings
+from common.config.auth import AuthSettings
 
 
 SettingsT = TypeVar("SettingsT", bound=BaseSettings)
@@ -24,4 +25,4 @@ def generate(SettingsClass: Type[SettingsT], logger: Logger) -> SettingsT:
         sys.exit(1)
 
 
-__all__ = ["NetworkSettings", "PostgreSQLSettings", "AdminSettings"]
+__all__ = ["NetworkSettings", "PostgreSQLSettings", "AdminSettings", "AuthSettings"]
