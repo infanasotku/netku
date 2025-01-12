@@ -11,7 +11,7 @@ requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "netku-common"
+name = "netku_common"
 version = "0.1.0"
 license = { text = "MIT" }
 authors = [
