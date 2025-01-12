@@ -1,4 +1,5 @@
 from common.auth.authorization import Authorization
+from common.auth.backend import AdminAuthenticationBackend
 from common.auth.remote_auth import RemoteAuthService
 
-__all__ = ["Authorization", "RemoteAuthService"]
+__all__ = ["Authorization", "RemoteAuthService", "AdminAuthenticationBackend"]
