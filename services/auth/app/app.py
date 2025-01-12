@@ -23,6 +23,7 @@ def create_app() -> FastAPI:
     )
 
     app = FastAPI(redoc_url=None, docs_url=None)
+    app.container = container
     register_admin(
         app,
         username=settings.admin_username,
