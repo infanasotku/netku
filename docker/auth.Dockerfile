@@ -37,4 +37,3 @@ RUN pip install --no-cache-dir /tmp/wheels/*.whl
 COPY ./services/auth .
 
 CMD ["python", "manage.py"]
-# CMD ["sleep", "infinity"]
