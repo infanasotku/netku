@@ -1,17 +1,12 @@
 FROM nginx:stable-alpine
 
-ADD nginx.conf /etc/nginx/conf.d/nginx.conf
+ADD nginx.conf /etc/nginx/conf.d/default.conf
 ADD install.sh /etc/install.sh
-ADD run.sh /etc/run.sh
 
 ARG DOMAIN
 ARG AUTH_ADDR
 ARG KONG_ADDR
 ARG XRAY_FALLBACK_PORT
-ENV DOMAIN $DOMAIN
-ENV AUTH_ADDR $AUTH_ADDR
-ENV KONG_ADDR $KONG_ADDR
-ENV XRAY_FALLBACK_PORT $XRAY_FALLBACK_PORT
 
 RUN /etc/install.sh
 
