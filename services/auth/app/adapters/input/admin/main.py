@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncEngine
 from dependency_injector.wiring import Provide, inject
 
 from app.container import Container
-from app.adapters.input.admin.auth import AdminAuthenticationBackend
+from common.auth import AdminAuthenticationBackend
 import app.adapters.input.admin.views as views
 
 
@@ -22,7 +22,7 @@ def register_admin(
     admin = Admin(
         app,
         engine,
-        title="Auth admin panel",
+        title="Auth panel",
         authentication_backend=authentication_backend,
     )
     admin.add_view(views.ClientScopeView)
