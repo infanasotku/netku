@@ -1,8 +1,13 @@
+from datetime import datetime, timedelta
 from fastapi.testclient import TestClient
 import pytest
 
 from app import app
+from app.container import Container
+from app.adapters.input.api.router import router
 
+from common.contracts.services import AuthService
+from common.schemas.token import TokenPayload
 from app.contracts.services import UserService
 from app.schemas.user import UserSchema
 
@@ -31,7 +36,19 @@ class UserServiceStub(UserService):
         raise NotImplementedError
 
 
-client = TestClient(app)
+class AuthServiceStub(AuthService):
+    async def introspect(self, token):
+        return TokenPayload(
+            client_id="test",
+            scopes=["admin"],
+            expire=datetime.now() + timedelta(days=1),
+        )
+
+
+client = TestClient(router)
+auth_service = AuthServiceStub()
+user_service = UserServiceStub()
+container: Container = app.container
 
 
 @pytest.mark.parametrize(
@@ -39,9 +56,11 @@ client = TestClient(app)
     [1, 2, 3],
 )
 def test_get_user_by_id(id):
-    user_service = UserServiceStub()
-    with app.container.user_service.override(user_service):
-        response = client.get(f"/api/users/{id}")
+    with (
+        container.user_service.override(user_service),
+        container.auth_container.container.auth_service.override(auth_service),
+    ):
+        response = client.get(f"/{id}", headers={"Authorization": "Bearer test"})
 
     assert response.status_code == 200
     assert response.json()["id"] == id
@@ -52,10 +71,14 @@ def test_get_user_by_id(id):
     [1, 2, 3],
 )
 def test_create_user(id):
-    user_service = UserServiceStub()
-    with app.container.user_service.override(user_service):
+    with (
+        container.user_service.override(user_service),
+        container.auth_container.container.auth_service.override(auth_service),
+    ):
         response = client.post(
-            "/api/users/", json={"id": id, "telegram_id": None, "phone_number": None}
+            "/",
+            json={"id": id, "telegram_id": None, "phone_number": None},
+            headers={"Authorization": "Bearer test"},
         )
 
     assert response.status_code == 200
