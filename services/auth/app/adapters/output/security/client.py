@@ -1,5 +1,5 @@
 from datetime import timedelta, datetime
-from passlib.context import CryptContext
+import bcrypt
 import jwt
 
 from app.contracts.clients import SecurityClient
@@ -10,15 +10,16 @@ class SecurityClientImpl(SecurityClient):
     algorithm = "HS256"
 
     def __init__(self, secret: str, *, expires_delta: timedelta | None = None):
-        self.context = CryptContext(schemes=["bcrypt"])
         self.expires_delta = expires_delta or timedelta(minutes=15)
         self.secret = secret
 
     def get_hash(self, source):
-        return self.context.hash(source)
+        encoded_source = source.encode()
+        ecnoded_hash = bcrypt.hashpw(encoded_source, bcrypt.gensalt())
+        return ecnoded_hash.decode()
 
     def verify_source(self, plain_source, hashed_source):
-        return self.context.verify(plain_source, hashed_source)
+        return bcrypt.checkpw(plain_source.encode(), hashed_source.encode())
 
     def create_access_token(self, data):
         expire = datetime.now() + self.expires_delta
