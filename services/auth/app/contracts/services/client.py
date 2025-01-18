@@ -1,12 +1,12 @@
 from abc import abstractmethod
 
-from common.contracts.services import AuthService, BaseService
+from common.contracts.services import AuthService
 
 from app.schemas.client import ClientFullSchema
 from app.schemas.token import TokenSchema
 
 
-class ClientService(BaseService, AuthService):
+class ClientService(AuthService):
     @abstractmethod
     async def get_client_with_scopes_by_client_id(
         self,

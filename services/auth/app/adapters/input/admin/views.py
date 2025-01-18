@@ -2,8 +2,8 @@ from sqladmin import ModelView
 from dependency_injector.wiring import Provide, inject
 
 
+from common.auth.security import PyJWTSecurityClient
 from app.container import Container
-from app.contracts.clients import SecurityClient
 import app.infra.database.models as models
 
 
@@ -52,7 +52,7 @@ class ClientView(ModelView, model=models.Client):
         model: models.Client,
         is_created,
         request,
-        security_client: SecurityClient = Provide[Container.security_client],
+        security_client: PyJWTSecurityClient = Provide[Container.security_client],
     ):
         if (
             "hashed_client_secret" in data

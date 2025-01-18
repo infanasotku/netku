@@ -1,6 +1,10 @@
-from pydantic import Field
-from common.config import PostgreSQLSettings, NetworkSettings, AdminSettings
+from common.config import (
+    PostgreSQLSettings,
+    NetworkSettings,
+    AdminSettings,
+    LocalAuthSettings,
+)
 
 
-class Settings(PostgreSQLSettings, NetworkSettings, AdminSettings):
-    jwt_secret: str = Field(validation_alias="JWT_SECRET")
+class Settings(PostgreSQLSettings, NetworkSettings, AdminSettings, LocalAuthSettings):
+    pass

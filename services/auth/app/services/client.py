@@ -1,4 +1,5 @@
-from app.contracts.clients import SecurityClient
+from common.contracts.clients import SecurityClient
+
 from app.contracts.repositories import ClientScopeRepository, ClientRepository
 from app.contracts.services import ClientService
 
