@@ -1,10 +1,10 @@
 from common.config import (
     PostgreSQLSettings,
     NetworkSettings,
-    AuthSettings,
+    LocalAuthSettings,
     AdminSettings,
 )
 
 
-class Settings(PostgreSQLSettings, NetworkSettings, AuthSettings, AdminSettings):
+class Settings(PostgreSQLSettings, NetworkSettings, LocalAuthSettings, AdminSettings):
     pass
