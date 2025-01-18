@@ -1,10 +1,10 @@
 from abc import abstractmethod
 
-from common.contracts.client import BaseClient
+from common.contracts.services.base import BaseService
 from common.schemas.token import TokenPayload
 
 
-class AuthService(BaseClient):
+class AuthService(BaseService):
     @abstractmethod
     async def introspect(self, token: str) -> TokenPayload | None:
         """Introspects `token`.
