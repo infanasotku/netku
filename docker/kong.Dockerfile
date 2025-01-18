@@ -5,15 +5,11 @@ RUN apt-get update && apt-get install -y gettext-base
 
 WORKDIR /app
 
-ADD install.sh /etc/install.sh
-ADD kong.yml /kong/kong.yml
-
-ARG USER_URL
-ARG AUTH_URL
+ADD ./gateways/kong/run.sh /etc/run.sh
+ADD ./gateways/kong/kong.yml /kong/kong.yml
 
 ENV KONG_DATABASE=off
 ENV KONG_DECLARATIVE_CONFIG=/kong/kong.yml
+ENV KONG_LOG_LEVEL=notice
 
-RUN /etc/install.sh
-
-CMD ["kong", "docker-start"]
+CMD ["/etc/run.sh"]
