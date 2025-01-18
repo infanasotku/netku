@@ -5,4 +5,4 @@ envsubst '${USER_URL},${AUTH_URL}' \
 cat temp > /kong/kong.yml
 rm temp
 
-kong start --v
+kong restart --v
