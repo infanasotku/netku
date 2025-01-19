@@ -5,7 +5,7 @@ from app.adapters.output.database.repositories import (
     SQLClientRepository,
     SQLClientScopeRepository,
 )
-from common.auth.security import PyJWTSecurityClient
+from common.auth import PyJWTSecurityClient
 from app.services.client import ClientServiceImpl
 
 

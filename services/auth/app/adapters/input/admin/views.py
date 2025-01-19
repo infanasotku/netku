@@ -2,7 +2,7 @@ from sqladmin import ModelView
 from dependency_injector.wiring import Provide, inject
 
 
-from common.auth.security import PyJWTSecurityClient
+from common.auth import PyJWTSecurityClient
 from app.container import Container
 import app.infra.database.models as models
 
