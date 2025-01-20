@@ -1,3 +1,4 @@
+from contextlib import AbstractAsyncContextManager
 from fastapi import Depends
 from fastapi import Security
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer, SecurityScopes
@@ -13,6 +14,9 @@ from app.container import Container
 async def Authorization(
     scopes: SecurityScopes,
     credentials: HTTPAuthorizationCredentials = Security(HTTPBearer()),
-    client_service: ClientService = Depends(Provide[Container.client_service]),
+    client_service_context: AbstractAsyncContextManager[ClientService] = Depends(
+        Provide[Container.client_service]
+    ),
 ) -> ClientCredentials:
-    return await auth.Authorization(client_service)(scopes, credentials)
+    async with client_service_context as client_service:
+        return await auth.Authorization(client_service)(scopes, credentials)

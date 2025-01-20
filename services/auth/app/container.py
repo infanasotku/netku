@@ -1,5 +1,6 @@
 from dependency_injector import containers, providers
 from common.containers.postgres import PostgresContainer
+from common.containers.utils import with_context
 
 from app.adapters.output.database.repositories import (
     SQLClientRepository,
@@ -15,10 +16,10 @@ class Container(containers.DeclarativeContainer):
     postgres_container = providers.Container(PostgresContainer, config=config)
 
     client_repository = providers.Factory(
-        SQLClientRepository, postgres_container.container.session
+        with_context(SQLClientRepository), postgres_container.container.session
     )
     client_scope_repository = providers.Factory(
-        SQLClientScopeRepository, postgres_container.container.session
+        with_context(SQLClientScopeRepository), postgres_container.container.session
     )
 
     security_client = providers.Singleton(
@@ -26,5 +27,8 @@ class Container(containers.DeclarativeContainer):
     )
 
     client_service = providers.Factory(
-        ClientServiceImpl, security_client, client_scope_repository, client_repository
+        with_context(ClientServiceImpl),
+        security_client,
+        client_scope_repository,
+        client_repository,
     )

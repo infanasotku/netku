@@ -1,13 +1,12 @@
 from dependency_injector import containers, providers
-from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
-from typing import AsyncGenerator
+from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
+from contextlib import asynccontextmanager
 
 from common.containers.base import BaseContainer
 
 
-async def _get_session(
-    async_sessionmaker: async_sessionmaker,
-) -> AsyncGenerator[AsyncSession, None]:
+@asynccontextmanager
+async def get_session(async_sessionmaker: async_sessionmaker):
     async with async_sessionmaker.begin() as session:
         yield session
 
@@ -23,4 +22,4 @@ class PostgresContainer(BaseContainer):
     )
     async_sessionmaker = providers.Singleton(async_sessionmaker, async_engine)
 
-    session = providers.Resource(_get_session, async_sessionmaker)
+    session = providers.Factory(get_session, async_sessionmaker)
