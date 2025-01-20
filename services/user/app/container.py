@@ -1,6 +1,7 @@
 from dependency_injector import providers, containers
 from common.containers.auth import LocalAuthContainer
 from common.containers.postgres import PostgresContainer
+from common.containers.utils import with_context
 
 from app.adapters.output.database.repositories import (
     SQLUserRepository,
@@ -15,6 +16,6 @@ class Container(containers.DeclarativeContainer):
     auth_container = providers.Container(LocalAuthContainer, config=config)
 
     user_repository = providers.Factory(
-        SQLUserRepository, postgres_container.container.session
+        with_context(SQLUserRepository), postgres_container.container.session
     )
-    user_service = providers.Factory(UserServiceImpl, user_repository)
+    user_service = providers.Factory(with_context(UserServiceImpl), user_repository)
