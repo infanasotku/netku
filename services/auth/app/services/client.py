@@ -1,7 +1,10 @@
+import json
+
 from common.contracts.clients import SecurityClient
 
 from app.contracts.repositories import ClientScopeRepository, ClientRepository
 from app.contracts.services import ClientService
+from common.contracts.clients import MessageOutClient
 
 from app.schemas.client import ClientFullSchema
 from app.schemas.token import TokenSchema
@@ -15,10 +18,12 @@ class ClientServiceImpl(ClientService):
         security_client: SecurityClient,
         client_scope_repo: ClientScopeRepository,
         client_repo: ClientRepository,
+        message_out_client: MessageOutClient,
     ):
         self.security_client = security_client
         self.client_scope_repo = client_scope_repo
         self.client_repo = client_repo
+        self.message_out_client = message_out_client
 
     async def get_client_with_scopes_by_client_id(self, client_id):
         client = await self.client_repo.get_client_by_client_id(client_id)
@@ -50,3 +55,12 @@ class ClientServiceImpl(ClientService):
 
     async def introspect(self, token):
         return self.security_client.parse_access_token(token)
+
+    async def remove_client_scope(self, client_scope_id: int):
+        client_id = await self.client_scope_repo.get_client_id_by_client_scope_id(
+            client_scope_id
+        )
+        scopes = await self.client_scope_repo.remove_client_scope(client_scope_id)
+        data = {"client_id": client_id, "scopes": scopes}
+
+        await self.message_out_client.send(json.dumps(data))
