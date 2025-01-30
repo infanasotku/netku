@@ -33,7 +33,7 @@ class ClientScopeView(ModelView, model=models.ClientScope):
 
     async def delete_model(
         self,
-        request,
+        _,
         pk,
         client_service_context: AbstractAsyncContextManager[ClientService] = Provide[
             Container.client_service
@@ -44,7 +44,7 @@ class ClientScopeView(ModelView, model=models.ClientScope):
 
     async def insert_model(
         self,
-        request,
+        _,
         data,
         client_service_context: AbstractAsyncContextManager[ClientService] = Provide[
             Container.client_service
@@ -78,8 +78,7 @@ class ClientView(ModelView, model=models.Client):
         self,
         data: dict,
         model: models.Client,
-        is_created,
-        request,
+        *_,
         security_client: SecurityClient = Provide[Container.security_client],
     ):
         if (
