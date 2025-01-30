@@ -10,6 +10,7 @@ from common.config.postgres import PostgreSQLSettings
 from common.config.network import NetworkSettings
 from common.config.admin import AdminSettings
 from common.config.auth import RemoteAuthSettings, LocalAuthSettings
+from common.config.rabbitmq import RabbitMQSettings
 
 
 SettingsT = TypeVar("SettingsT", bound=BaseSettings)
@@ -31,4 +32,5 @@ __all__ = [
     "AdminSettings",
     "RemoteAuthSettings",
     "LocalAuthSettings",
+    "RabbitMQSettings",
 ]
