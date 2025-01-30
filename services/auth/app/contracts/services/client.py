@@ -20,7 +20,7 @@ class ClientService(AuthService):
 
     @abstractmethod
     async def authenticate(
-        self, client_id: str, client_secret: str
+        self, client_id: int, client_secret: str
     ) -> TokenSchema | None:
         """Authenticates client
 
@@ -28,3 +28,7 @@ class ClientService(AuthService):
             Token with client scopes if client authenticated,
             `None` otherwise.
         """
+
+    @abstractmethod
+    async def remove_client_scope(self, client_scope_id: int):
+        pass
