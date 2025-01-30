@@ -56,7 +56,7 @@ class ClientServiceImpl(ClientService):
     async def introspect(self, token):
         return self.security_client.parse_access_token(token)
 
-    async def remove_client_scope(self, client_scope_id: int):
+    async def remove_client_scope(self, client_scope_id):
         client_id = await self.client_scope_repo.get_client_id_by_client_scope_id(
             client_scope_id
         )
@@ -64,3 +64,11 @@ class ClientServiceImpl(ClientService):
         data = {"client_id": client_id, "scopes": scopes}
 
         await self.message_out_client.send(json.dumps(data))
+        return scopes
+
+    async def create_client_scope(self, client_id, scope_id):
+        scopes = await self.client_scope_repo.create_client_scope(client_id, scope_id)
+        data = {"client_id": client_id, "scopes": scopes}
+
+        await self.message_out_client.send(json.dumps(data))
+        return scopes
