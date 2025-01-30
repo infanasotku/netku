@@ -42,6 +42,21 @@ class ClientScopeView(ModelView, model=models.ClientScope):
         async with client_service_context as client_service:
             await client_service.remove_client_scope(int(pk))
 
+    async def insert_model(
+        self,
+        request,
+        data,
+        client_service_context: AbstractAsyncContextManager[ClientService] = Provide[
+            Container.client_service
+        ],
+    ):
+        async with client_service_context as client_service:
+            client_id = int(data["client"])
+            scope_id = int(data["scope"])
+            await client_service.create_client_scope(client_id, scope_id)
+            # Workarround for custom creating.
+            return models.ClientScope(client_id=client_id, scope_id=scope_id)
+
 
 class ScopeView(ModelView, model=models.Scope):
     can_export = False
