@@ -13,11 +13,17 @@ class ClientScopeRepository(BaseRepository):
         pass
 
     @abstractmethod
-    async def remove_client_scope(self, client_scope_id: int):
-        pass
+    async def remove_client_scope(self, client_scope_id: int) -> list[str]:
         """Removes client scope.
 
         Returns:
             Relevant client scopes.
         """
-        pass
+
+    @abstractmethod
+    async def create_client_scope(self, client_id: int, scope_id: int) -> list[str]:
+        """Creates client scope.
+
+        Returns:
+             Relevant client scopes.
+        """

@@ -32,3 +32,11 @@ class SQLClientScopeRepository(ClientScopeRepository, SQLBaseRepository):
         await self._session.delete(client_scope)
 
         return await self.get_scopes_by_client_id(client_id)
+
+    async def create_client_scope(self, client_id, scope_id):
+        cs = ClientScope(client_id=client_id, scope_id=scope_id)
+        self._session.add(cs)
+        await self._session.flush()
+        await self._session.refresh(cs)
+
+        return await self.get_scopes_by_client_id(client_id)
