@@ -1,8 +1,10 @@
+from contextlib import AbstractAsyncContextManager
 from sqladmin import ModelView
 from dependency_injector.wiring import Provide, inject
 
 
-from common.auth import PyJWTSecurityClient
+from app.contracts.services import ClientService
+from common.contracts.clients import SecurityClient
 from app.container import Container
 import app.infra.database.models as models
 
@@ -29,6 +31,17 @@ class ClientScopeView(ModelView, model=models.ClientScope):
         },
     }
 
+    async def delete_model(
+        self,
+        request,
+        pk,
+        client_service_context: AbstractAsyncContextManager[ClientService] = Provide[
+            Container.client_service
+        ],
+    ):
+        async with client_service_context as client_service:
+            await client_service.remove_client_scope(int(pk))
+
 
 class ScopeView(ModelView, model=models.Scope):
     can_export = False
@@ -52,7 +65,7 @@ class ClientView(ModelView, model=models.Client):
         model: models.Client,
         is_created,
         request,
-        security_client: PyJWTSecurityClient = Provide[Container.security_client],
+        security_client: SecurityClient = Provide[Container.security_client],
     ):
         if (
             "hashed_client_secret" in data

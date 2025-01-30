@@ -1,3 +1,4 @@
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from common.logging import logger
@@ -7,6 +8,16 @@ from app.container import Container
 from app.infra.config import Settings
 from app.adapters.input import api
 from app.adapters.input import admin
+
+
+def create_lifespan(container: Container):
+    @asynccontextmanager
+    async def init_resources(_):
+        await container.init_resources()
+        yield
+        await container.shutdown_resources()
+
+    return init_resources
 
 
 def create_app() -> FastAPI:
@@ -22,7 +33,7 @@ def create_app() -> FastAPI:
         ]
     )
 
-    app = FastAPI(redoc_url=None, docs_url=None)
+    app = FastAPI(redoc_url=None, docs_url=None, lifespan=create_lifespan(container))
     app.container = container
 
     admin.register_admin(
