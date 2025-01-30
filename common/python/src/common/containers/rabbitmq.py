@@ -18,6 +18,12 @@ async def _get_connection(
     yield connection
 
 
+async def _get_channel(
+    connection: aio_pika.abc.AbstractRobustConnection,
+) -> aio_pika.abc.AbstractChannel:
+    return await connection.channel()
+
+
 @containers.copy(BaseContainer)
 class RabbitMQContainer(BaseContainer):
     connection = providers.Resource(
@@ -29,4 +35,4 @@ class RabbitMQContainer(BaseContainer):
         virtualhost=BaseContainer.config.rabbit_vhost,
     )  # Do not use with Closing marker!
 
-    channel = providers.Singleton(connection.provided.channel)
+    channel = providers.Singleton(_get_channel, connection)
