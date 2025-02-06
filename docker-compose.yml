@@ -1,127 +1,47 @@
 services:
-  # region databases
-  postgres:
-    container_name: netku-postgres
-    restart: always
-    image: postgres
-
-    volumes:
-      - postgres-db-dir:/var/lib/postgresql/data
-
-    networks:
-      - netku-net
-
-    hostname: postgresql
-
-    ports:
-      - 5430:5432
-
-    env_file:
-      - .env
-
-    healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
-      interval: 2s
-      timeout: 5s
-      retries: 10
-  mongo:
-    container_name: netku-mongo
-    restart: always
-    image: mongo
-
-    volumes:
-      - mongo-db-dir:/data/db
-
-    networks:
-      - netku-net
-
-    ports:
-      - 27010:27017
-
-    env_file:
-      - .env
-  # endregion
-
-  api_gateway:
-    container_name: netku-api_gateway
-    build:
-      context: services/api_gateway
-      args:
-        USER_URL:
-        AUTH_URL:
-
-
-    networks:
-      - netku-net
-
-    env_file:
-      - ./services/api_gateway/.env
-
-  gateway:
-    container_name: netku-gateway
-    restart: always
-    build:
-      context: services/gateway
-      args:
-        API_GATEWAY_ADDR:
-        DOMAIN:
-        XRAY_FALLBACK_PORT:
-        AUTH_ADDR:
-
-
-    volumes:
-      - nginx-html:/usr/share/nginx/html
-
-    networks:
-      - netku-net
-
-    ports:
-      - 80:80
-      - 444:444
-
-    env_file:
-      - .env
-
   landing:
     container_name: netku-landing
     restart: always
     build:
-      context: services/landing
-
-    networks:
-      - netku-net
+      context: clients/landing
 
     volumes:
       - nginx-html:/app/dist
 
-  rabbitmq:
-    container_name: netku-rabbitmq
+  # region services
+  auth:
+    container_name: netku-auth
     restart: always
-    image: rabbitmq:management
+    build:
+      context: .
+      dockerfile: docker/auth.Dockerfile
 
-    ports:
-      - 5670:5672
-      - 15670:15672
-
-    env_file:
-      - .env
+    volumes:
+      - cert-dir:/etc/cert:ro
 
     networks:
-      - netku-net
+      - netku-network
+
+  user:
+    container_name: netku-user
+    restart: always
+    build:
+      context: .
+      dockerfile: docker/user.Dockerfile
+
+    volumes:
+      - cert-dir:/etc/cert:ro
+
+    networks:
+      - netku-network
+  # endregion
 
 volumes:
   cert-dir:
     external: true
   xray-log-dir:
     external: true
-  postgres-db-dir:
-    external: true
-  mongo-db-dir:
-    external: true
-  nginx-html:
-  booking-browser-dir:
-
 
 networks:
-  netku-net:
-    name: netku-net
+  netku-network:
+    name: netku-network
