@@ -1,7 +1,7 @@
 from dependency_injector import containers, providers
 
 from common.containers.postgres import PostgresContainer
-from common.containers.rabbitmq import RabbitMQContainer
+from common.containers.rabbitmq import RabbitMQContainer, get_exchange
 from common.containers.utils import with_context
 
 from app.adapters.output.database.repositories import (
@@ -30,10 +30,15 @@ class Container(containers.DeclarativeContainer):
         PyJWTSecurityClient, config.public_key, config.private_key
     )
 
+    scope_exchange = providers.Singleton(
+        get_exchange,
+        rabbit_container.container.channel,
+        exchange_name=config.scope_exchange_name,
+    )
     scope_message_client = providers.Factory(
         RabbitMQOutClient,
-        rabbit_container.container.channel,
-        routing_key=config.scopes_routing_key,
+        scope_exchange,
+        routing_key=config.scope_routing_key,
     )
     client_service = providers.Factory(
         with_context(ClientServiceImpl),

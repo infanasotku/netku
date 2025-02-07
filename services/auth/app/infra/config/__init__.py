@@ -16,4 +16,5 @@ class Settings(
     LocalAuthSettings,
     RabbitMQSettings,
 ):
-    scopes_routing_key: str = Field(validation_alias="SCOPES_ROUTING_KEY")
+    scope_routing_key: str = Field(validation_alias="SCOPE_ROUTING_KEY")
+    scope_exchange_name: str = Field(validation_alias="SCOPE_EXCHANGE_NAME")
