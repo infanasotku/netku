@@ -24,6 +24,25 @@ async def _get_channel(
     return await connection.channel()
 
 
+async def get_exchange(
+    channel: aio_pika.abc.AbstractChannel, *, exchange_name: str
+) -> aio_pika.abc.AbstractExchange:
+    return await channel.get_exchange(exchange_name)
+
+
+async def create_queue(
+    channel: aio_pika.abc.AbstractChannel,
+    exchange: aio_pika.abc.AbstractExchange,
+    *,
+    queue_name: str,
+    routing_key: str,
+) -> aio_pika.abc.AbstractQueue:
+    queue = await channel.declare_queue(queue_name, auto_delete=True)
+
+    await queue.bind(exchange, routing_key)
+    return queue
+
+
 @containers.copy(BaseContainer)
 class RabbitMQContainer(BaseContainer):
     connection = providers.Resource(
