@@ -9,6 +9,7 @@ from app.contracts.services import ClientService
 from app.schemas.token import TokenPayload, TokenSchema
 
 from app.adapters.input.api.dependencies import Authorization
+from app.infra.config.scopes import Scopes
 
 
 router = APIRouter()
@@ -52,7 +53,7 @@ async def introspect_token(
     ),
     _: ClientCredentials = Security(
         Authorization,
-        scopes=["auth:read"],
+        scopes=[Scopes.AuthRead.value],
     ),
 ) -> TokenPayload | None:
     """Introspects `token`.
