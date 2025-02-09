@@ -1,3 +1,5 @@
+from contextlib import asynccontextmanager
+from dependency_injector import providers
 from datetime import datetime, timedelta
 from fastapi.testclient import TestClient
 import pytest
@@ -25,10 +27,21 @@ class ClientServiceStub(ClientService):
     async def authenticate(self, external_client_id, client_secret):
         return TokenSchema(access_token=external_client_id, token_type="Bearer")
 
+    async def remove_client_scope(self, client_scope_id):
+        raise NotImplementedError
+
+    async def create_client_scope(self, external_client_id, scope_id):
+        raise NotImplementedError
+
 
 client = TestClient(router)
 client_service = ClientServiceStub()
 container: Container = app.container
+
+
+@asynccontextmanager
+async def get_client_service():
+    yield client_service
 
 
 @pytest.mark.parametrize(
@@ -37,7 +50,7 @@ container: Container = app.container
 )
 def test_introspect_token(external_client_id: str):
     with (
-        container.client_service.override(client_service),
+        container.client_service.override(providers.Factory(get_client_service)),
     ):
         response = client.post(
             "/introspect",
@@ -55,7 +68,7 @@ def test_introspect_token(external_client_id: str):
 )
 def test_create_token(external_client_id: str):
     with (
-        container.client_service.override(client_service),
+        container.client_service.override(providers.Factory(get_client_service)),
     ):
         response = client.post(
             "/",
