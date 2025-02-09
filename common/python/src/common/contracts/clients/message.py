@@ -14,3 +14,7 @@ class MessageInClient(BaseClient):
     @abstractmethod
     def register(self, func: Callable[[str], None]):
         """Registers callback for handling messages."""
+
+    @abstractmethod
+    async def run(self):
+        """Runs receiving messages."""
