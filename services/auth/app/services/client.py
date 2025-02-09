@@ -25,8 +25,10 @@ class ClientServiceImpl(ClientService):
         self.client_repo = client_repo
         self.message_out_client = message_out_client
 
-    async def get_client_with_scopes_by_client_id(self, client_id):
-        client = await self.client_repo.get_client_by_client_id(client_id)
+    async def get_client_with_scopes_by_external_client_id(self, external_client_id):
+        client = await self.client_repo.get_client_by_external_client_id(
+            external_client_id
+        )
         if client is None:
             return
 
@@ -34,13 +36,15 @@ class ClientServiceImpl(ClientService):
 
         return ClientFullSchema(
             id=client.id,
-            client_id=client.client_id,
+            external_client_id=client.external_client_id,
             hashed_client_secret=client.hashed_client_secret,
             scopes=scopes,
         )
 
-    async def authenticate(self, client_id, client_secret):
-        client = await self.get_client_with_scopes_by_client_id(client_id)
+    async def authenticate(self, external_client_id, client_secret):
+        client = await self.get_client_with_scopes_by_external_client_id(
+            external_client_id
+        )
         if client is None:
             return
         if not self.security_client.verify_source(
@@ -49,7 +53,7 @@ class ClientServiceImpl(ClientService):
             return
 
         access_token = self.security_client.create_access_token(
-            {"sub": client_id, "scopes": " ".join(client.scopes)}
+            {"sub": external_client_id, "scopes": " ".join(client.scopes)}
         )
         return TokenSchema(access_token=access_token, token_type=self.token_type)
 

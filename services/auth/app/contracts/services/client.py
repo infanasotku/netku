@@ -8,11 +8,11 @@ from app.schemas.token import TokenSchema
 
 class ClientService(AuthService):
     @abstractmethod
-    async def get_client_with_scopes_by_client_id(
+    async def get_client_with_scopes_by_external_client_id(
         self,
-        client_id: int,
+        external_client_id: int,
     ) -> ClientFullSchema | None:
-        """Gets client with scopes by `ClientSchema.client_id`.
+        """Gets client with scopes by `ClientSchema.external_client_id`.
 
         Returns:
             Client if it exist in db, `None` otherwise.
@@ -20,7 +20,7 @@ class ClientService(AuthService):
 
     @abstractmethod
     async def authenticate(
-        self, client_id: int, client_secret: str
+        self, external_client_id: int, client_secret: str
     ) -> TokenSchema | None:
         """Authenticates client
 
@@ -38,7 +38,9 @@ class ClientService(AuthService):
         """
 
     @abstractmethod
-    async def create_client_scope(self, client_id: int, scope_id: int) -> list[str]:
+    async def create_client_scope(
+        self, external_client_id: int, scope_id: int
+    ) -> list[str]:
         """Creates client scope.
 
         Returns:

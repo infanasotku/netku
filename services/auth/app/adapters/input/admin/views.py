@@ -26,7 +26,7 @@ class ClientScopeView(ModelView, model=models.ClientScope):
             "order_by": "id",
         },
         "client": {
-            "fields": ("client_id",),
+            "fields": ("external_client_id",),
             "order_by": "id",
         },
     }
@@ -69,9 +69,9 @@ class ScopeView(ModelView, model=models.Scope):
 class ClientView(ModelView, model=models.Client):
     can_export = False
     can_edit = False
-    column_searchable_list = [models.Client.client_id]
+    column_searchable_list = [models.Client.external_client_id]
 
-    column_list = [models.Client.id, models.Client.client_id]
+    column_list = [models.Client.id, models.Client.external_client_id]
 
     @inject
     async def on_model_change(

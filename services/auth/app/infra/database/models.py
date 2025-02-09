@@ -8,9 +8,11 @@ class Client(Base):
     __tablename__ = "clients"
 
     def __str__(self):
-        return f"[Client] {self.client_id}"
+        return f"[Client] {self.external_client_id}"
 
-    client_id: Mapped[str] = mapped_column(nullable=False, unique=True, index=True)
+    external_client_id: Mapped[str] = mapped_column(
+        nullable=False, unique=True, index=True
+    )
     hashed_client_secret: Mapped[str] = mapped_column(nullable=False)
 
 

@@ -1,7 +1,6 @@
-import json
-
 from common.contracts.services import AuthService
 from common.contracts.clients import SecurityClient, MessageInClient
+from common.schemas.client_credential import ClientCredentials
 
 
 class LocalAuthService(AuthService):
@@ -14,12 +13,12 @@ class LocalAuthService(AuthService):
         """
         self.security_client = security_client
         if message_client is not None:
-            message_client.register(self._prpcess_update)
+            message_client.register(self._process_update)
 
     async def _process_update(self, msg: str):
         """Processes scopes updates."""
-        data = json.loads(msg)
-        print("Hello world!", data)
+        creds = ClientCredentials.model_validate_json(msg)
+        print("Credentials", creds)
 
     async def introspect(self, token):
         return self.security_client.parse_access_token(token)

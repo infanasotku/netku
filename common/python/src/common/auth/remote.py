@@ -40,7 +40,9 @@ class _AuthClient:
                 return TokenPayload.model_validate_json(body)
 
     @retry
-    async def create_token(self, client_id: str, client_secret: str) -> str | None:
+    async def create_token(
+        self, external_client_id: str, client_secret: str
+    ) -> str | None:
         """Sends request for create token to auth service.
 
         Returns:
@@ -49,7 +51,10 @@ class _AuthClient:
         async with aiohttp.ClientSession() as session:
             async with session.post(
                 f"{self._auth_url}/api/auth/token/",
-                json={"client_id": client_id, "client_secret": client_secret},
+                json={
+                    "external_client_id": external_client_id,
+                    "client_secret": client_secret,
+                },
                 ssl=self._with_ssl,
             ) as resp:
                 if resp.status != 200:

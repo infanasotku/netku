@@ -2,12 +2,12 @@ from common.schemas import BaseSchema, BaseSchemaPK
 
 
 class ClientUpdateSchema(BaseSchema):
-    client_id: str | None = None
+    external_client_id: str | None = None
     hashed_client_secret: str | None = None
 
 
 class ClientCreateSchema(BaseSchemaPK):
-    client_id: str
+    external_client_id: str
     hashed_client_secret: str
 
 

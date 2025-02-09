@@ -43,11 +43,13 @@ class PyJWTSecurityClient(SecurityClient):
             )
         except Exception:
             return
-        client_id = payload.get("sub")
+        external_client_id = payload.get("sub")
         expire = payload.get("exp")
-        if client_id is None:
+        if external_client_id is None:
             return
         if expire is None:
             return
         scopes: str = payload.get("scopes", "")
-        return TokenPayload(client_id=client_id, scopes=scopes.split(), expire=expire)
+        return TokenPayload(
+            external_client_id=external_client_id, scopes=scopes.split(), expire=expire
+        )

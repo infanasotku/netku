@@ -5,7 +5,7 @@ from common.contracts.repository import BaseRepository
 
 class ClientScopeRepository(BaseRepository):
     @abstractmethod
-    async def get_client_id_by_client_scope_id(self, client_scope_id: int) -> int:
+    async def get_client_id_by_client_scope_id(self, client_scope_id: int) -> str:
         pass
 
     @abstractmethod

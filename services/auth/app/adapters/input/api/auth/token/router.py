@@ -17,13 +17,13 @@ router = APIRouter()
 @router.post("/")
 @inject
 async def create_token(
-    client_id: Annotated[str, Body(examples=["johndoe"])],
+    external_client_id: Annotated[str, Body(examples=["johndoe"])],
     client_secret: Annotated[str, Body(examples=["johndoe_secret"])],
     client_service_context: AbstractAsyncContextManager[ClientService] = Depends(
         Provide[Container.client_service]
     ),
 ) -> TokenSchema:
-    """Creates token for specified `client_id` and `client_secret`.
+    """Creates token for specified `external_client_id` and `client_secret`.
 
     Returns:
         Token with type if client authenticated.
@@ -33,7 +33,7 @@ async def create_token(
             If error occured with client credentials.
     """
     async with client_service_context as client_service:
-        token = await client_service.authenticate(client_id, client_secret)
+        token = await client_service.authenticate(external_client_id, client_secret)
     if token is None:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,

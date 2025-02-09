@@ -10,7 +10,7 @@ class TokenPayload(TokenPayload):
         json_schema_extra={
             "examples": [
                 {
-                    "client_id": "johndoe",
+                    "external_client_id": "johndoe",
                     "scopes": "users:read users:write",
                     "expire": datetime.now(),
                 },

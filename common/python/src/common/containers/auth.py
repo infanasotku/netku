@@ -10,7 +10,7 @@ class RemoteAuthContainer(BaseContainer):
     auth_service = providers.Singleton(
         RemoteAuthService,
         BaseContainer.config.auth_url,
-        cliend_id=BaseContainer.config.client_id,
+        external_client_id=BaseContainer.config.external_client_id,
         client_secret=BaseContainer.config.client_secret,
         with_ssl=BaseContainer.config.with_auth_ssl,
     )
