@@ -12,8 +12,6 @@ from app.container import Container
 async def Authorization(
     scopes: SecurityScopes,
     credentials: HTTPAuthorizationCredentials = Security(HTTPBearer()),
-    auth_service: auth.RemoteAuthService = Depends(
-        Provide[Container.auth_container.container.auth_service]
-    ),
+    auth_service: auth.RemoteAuthService = Depends(Provide[Container.auth_service]),
 ) -> ClientCredentials:
     return await auth.Authorization(auth_service)(scopes, credentials)

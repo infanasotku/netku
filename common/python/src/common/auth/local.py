@@ -1,13 +1,25 @@
+import json
+
 from common.contracts.services import AuthService
-from common.contracts.clients import SecurityClient
+from common.contracts.clients import SecurityClient, MessageInClient
 
 
 class LocalAuthService(AuthService):
     def __init__(
-        self,
-        security_client: SecurityClient,
+        self, security_client: SecurityClient, message_client: MessageInClient | None
     ):
+        """
+        Args:
+            message_client: Client for receiving scopes updates.
+        """
         self.security_client = security_client
+        if message_client is not None:
+            message_client.register(self._prpcess_update)
+
+    async def _process_update(self, msg: str):
+        """Processes scopes updates."""
+        data = json.loads(msg)
+        print("Hello world!", data)
 
     async def introspect(self, token):
         return self.security_client.parse_access_token(token)

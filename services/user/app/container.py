@@ -3,6 +3,7 @@ from common.containers.auth import LocalAuthContainer
 from common.containers.postgres import PostgresContainer
 from common.containers.rabbitmq import RabbitMQContainer, create_queue, get_exchange
 from common.containers.utils import with_context
+from common.auth import LocalAuthService
 
 from app.adapters.output.database.repositories import (
     SQLUserRepository,
@@ -39,3 +40,7 @@ class Container(containers.DeclarativeContainer):
         with_context(SQLUserRepository), postgres_container.container.session
     )
     user_service = providers.Factory(with_context(UserServiceImpl), user_repository)
+
+    auth_service = providers.Resource(
+        LocalAuthService, auth_container.container.security_client, scope_message_client
+    )

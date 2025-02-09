@@ -2,7 +2,7 @@ from dependency_injector import containers, providers
 
 from common.auth.security import PyJWTSecurityClient
 from common.containers.base import BaseContainer
-from common.auth import RemoteAuthService, LocalAuthService
+from common.auth import RemoteAuthService
 
 
 @containers.copy(BaseContainer)
@@ -23,4 +23,3 @@ class LocalAuthContainer(BaseContainer):
         BaseContainer.config.public_key,
         BaseContainer.config.private_key,
     )
-    auth_service = providers.Singleton(LocalAuthService, security_client)
