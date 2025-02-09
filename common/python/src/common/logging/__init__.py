@@ -1,3 +1,12 @@
+from typing import Callable
+import traceback
 from common.logging.logger import logger, config
 
 __all__ = ["logger", "config"]
+
+
+async def with_logging(func: Callable, *args, **kwargs):
+    try:
+        await func(*args, **kwargs)
+    except Exception as e:
+        logger.error("\n".join([str(e), traceback.format_exc()]))
