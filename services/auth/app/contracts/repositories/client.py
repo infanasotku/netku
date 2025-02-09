@@ -11,3 +11,7 @@ class ClientRepository(BaseRepository):
         self, external_client_id: int
     ) -> ClientSchema | None:
         pass
+
+    @abstractmethod
+    async def get_client_external_id_by_id(self, id: int) -> str | None:
+        pass
