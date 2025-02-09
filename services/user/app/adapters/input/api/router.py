@@ -14,6 +14,7 @@ from app.contracts.services import UserService
 from app.schemas.user import UserCreateSchema, UserSchema, UserUpdateSchema
 
 from app.adapters.input.api.dependencies import Authorization
+from app.infra.config.scopes import Scopes
 
 router = APIRouter()
 
@@ -27,7 +28,7 @@ async def get_users_by_id(
     ),
     _: ClientCredentials = Security(
         Authorization,
-        scopes=["users:read"],
+        scopes=[Scopes.UsersRead.value],
     ),
 ) -> list[UserSchema]:
     async with user_service_context as user_service:
@@ -43,7 +44,7 @@ async def get_user_by_id(
     ),
     _: ClientCredentials = Security(
         Authorization,
-        scopes=["users:read"],
+        scopes=[Scopes.UsersRead.value],
     ),
 ) -> UserSchema | None:
     async with user_service_context as user_service:
@@ -59,7 +60,7 @@ async def create_user(
     ),
     _: ClientCredentials = Security(
         Authorization,
-        scopes=["users:write"],
+        scopes=[Scopes.UsersWrite.value],
     ),
 ) -> UserSchema:
     async with user_service_context as user_service:
@@ -76,7 +77,7 @@ async def update_user(
     ),
     _: ClientCredentials = Security(
         Authorization,
-        scopes=["users:write"],
+        scopes=[Scopes.UsersWrite.value],
     ),
 ) -> UserSchema:
     async with user_service_context as user_service:
