@@ -65,14 +65,14 @@ class ClientServiceImpl(ClientService):
             client_scope_id
         )
         scopes = await self.client_scope_repo.remove_client_scope(client_scope_id)
-        data = {"client_id": client_id, "scopes": scopes}
+        data = {"external_client_id": client_id, "scopes": scopes}
 
         await self.message_out_client.send(json.dumps(data))
         return scopes
 
     async def create_client_scope(self, client_id, scope_id):
         scopes = await self.client_scope_repo.create_client_scope(client_id, scope_id)
-        data = {"client_id": client_id, "scopes": scopes}
+        data = {"external_client_id": client_id, "scopes": scopes}
 
         await self.message_out_client.send(json.dumps(data))
         return scopes

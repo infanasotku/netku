@@ -7,9 +7,9 @@ from app.infra.database.models import ClientScope, Scope
 
 
 class SQLClientScopeRepository(ClientScopeRepository, SQLBaseRepository):
-    async def get_scopes_by_client_id(self, id: int) -> list[str]:
+    async def get_scopes_by_client_id(self, client_id: int) -> list[str]:
         client_scope_select = select(ClientScope.scope_id).filter(
-            ClientScope.client_id == id
+            ClientScope.client_id == client_id
         )
         s = select(Scope.name).filter(Scope.id.in_(client_scope_select))
 
