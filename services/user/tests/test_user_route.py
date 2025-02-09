@@ -1,3 +1,5 @@
+from contextlib import asynccontextmanager
+from dependency_injector import providers
 from datetime import datetime, timedelta
 from fastapi.testclient import TestClient
 import pytest
@@ -39,7 +41,7 @@ class UserServiceStub(UserService):
 class AuthServiceStub(AuthService):
     async def introspect(self, token):
         return TokenPayload(
-            client_id="test",
+            external_client_id="test",
             scopes=["admin"],
             expire=datetime.now() + timedelta(days=1),
         )
@@ -51,14 +53,23 @@ user_service = UserServiceStub()
 container: Container = app.container
 
 
+@asynccontextmanager
+async def get_user_service():
+    yield user_service
+
+
+async def get_auth_service():
+    return auth_service
+
+
 @pytest.mark.parametrize(
     "id",
     [1, 2, 3],
 )
 def test_get_user_by_id(id):
     with (
-        container.user_service.override(user_service),
-        container.auth_container.container.auth_service.override(auth_service),
+        container.user_service.override(providers.Factory(get_user_service)),
+        container.auth_service.override(providers.Factory(get_auth_service)),
     ):
         response = client.get(f"/{id}", headers={"Authorization": "Bearer test"})
 
@@ -72,8 +83,8 @@ def test_get_user_by_id(id):
 )
 def test_create_user(id):
     with (
-        container.user_service.override(user_service),
-        container.auth_container.container.auth_service.override(auth_service),
+        container.user_service.override(providers.Factory(get_user_service)),
+        container.auth_service.override(providers.Factory(get_auth_service)),
     ):
         response = client.post(
             "/",
