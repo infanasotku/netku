@@ -6,7 +6,6 @@ from fastapi import (
     Security,
 )
 from dependency_injector.wiring import Provide, inject
-from contextlib import AbstractAsyncContextManager
 
 from app.container import Container
 from common.schemas.client_credential import ClientCredentials
@@ -23,48 +22,39 @@ router = APIRouter()
 @inject
 async def get_users_by_id(
     ids: Annotated[list[int], Query()],
-    user_service_context: AbstractAsyncContextManager[UserService] = Depends(
-        Provide[Container.user_service]
-    ),
+    user_service: UserService = Depends(Provide[Container.user_service]),
     _: ClientCredentials = Security(
         Authorization,
         scopes=[Scopes.UsersRead.value],
     ),
 ) -> list[UserSchema]:
-    async with user_service_context as user_service:
-        return await user_service.get_users_by_id(ids)
+    return await user_service.get_users_by_id(ids)
 
 
 @router.get("/{id}")
 @inject
 async def get_user_by_id(
     id: int,
-    user_service_context: AbstractAsyncContextManager[UserService] = Depends(
-        Provide[Container.user_service]
-    ),
+    user_service: UserService = Depends(Provide[Container.user_service]),
     _: ClientCredentials = Security(
         Authorization,
         scopes=[Scopes.UsersRead.value],
     ),
 ) -> UserSchema | None:
-    async with user_service_context as user_service:
-        return await user_service.get_user_by_id(id)
+    return await user_service.get_user_by_id(id)
 
 
 @router.post("/")
 @inject
 async def create_user(
     user_create: UserCreateSchema,
-    user_service_context: AbstractAsyncContextManager[UserService] = Depends(
-        Provide[Container.user_service]
-    ),
+    user_service: UserService = Depends(Provide[Container.user_service]),
     _: ClientCredentials = Security(
         Authorization,
         scopes=[Scopes.UsersWrite.value],
     ),
 ) -> UserSchema:
-    async with user_service_context as user_service:
-        return await user_service.create_user(user_create)
+    return await user_service.create_user(user_create)
 
 
 @router.patch("/{id}")
@@ -72,13 +62,10 @@ async def create_user(
 async def update_user(
     id: int,
     user_update: UserUpdateSchema,
-    user_service_context: AbstractAsyncContextManager[UserService] = Depends(
-        Provide[Container.user_service]
-    ),
+    user_service: UserService = Depends(Provide[Container.user_service]),
     _: ClientCredentials = Security(
         Authorization,
         scopes=[Scopes.UsersWrite.value],
     ),
 ) -> UserSchema:
-    async with user_service_context as user_service:
-        return await user_service.update_user(id, user_update)
+    return await user_service.update_user(id, user_update)

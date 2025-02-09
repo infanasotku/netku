@@ -2,12 +2,9 @@ from dependency_injector import providers, containers
 from common.containers.auth import LocalAuthContainer
 from common.containers.postgres import PostgresContainer
 from common.containers.rabbitmq import RabbitMQContainer, create_queue, get_exchange
-from common.containers.utils import with_context
 from common.auth import LocalAuthService
 
-from app.adapters.output.database.repositories import (
-    SQLUserRepository,
-)
+from app.adapters.output.database.uow import SQLUserUnitOfWork
 from app.services.user import UserServiceImpl
 from common.messaging.clients import RabbitMQInClient
 
@@ -36,11 +33,11 @@ class Container(containers.DeclarativeContainer):
         scope_queue,
     )
 
-    user_repository = providers.Factory(
-        with_context(SQLUserRepository), postgres_container.container.session
+    cs_uow = providers.Factory(
+        SQLUserUnitOfWork, postgres_container.container.async_sessionmaker
     )
-    user_service = providers.Factory(with_context(UserServiceImpl), user_repository)
 
+    user_service = providers.Factory(UserServiceImpl, cs_uow)
     auth_service = providers.Resource(
         LocalAuthService, auth_container.container.security_client, scope_message_client
     )
