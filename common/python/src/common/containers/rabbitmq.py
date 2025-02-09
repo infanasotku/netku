@@ -16,6 +16,7 @@ async def _get_connection(
         virtualhost=virtualhost,
     )
     yield connection
+    await connection.close()
 
 
 async def _get_channel(
@@ -37,7 +38,9 @@ async def create_queue(
     queue_name: str,
     routing_key: str,
 ) -> aio_pika.abc.AbstractQueue:
-    queue = await channel.declare_queue(queue_name, auto_delete=True)
+    queue = await channel.declare_queue(
+        queue_name, auto_delete=True, arguments={"x-message-ttl": 60000}
+    )
 
     await queue.bind(exchange, routing_key)
     return queue
