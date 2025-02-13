@@ -1,8 +1,10 @@
+from logging import Logger
 from dependency_injector import providers, containers
 from common.containers.auth import LocalAuthContainer
 from common.containers.postgres import PostgresContainer
 from common.containers.rabbitmq import RabbitMQContainer, create_queue, get_exchange
 from common.auth import LocalAuthService
+from common.messaging.bus import MessageBus
 
 from app.infra.database.uow import SQLUserUnitOfWork
 from app.services.user import UserServiceImpl
@@ -11,6 +13,7 @@ from common.messaging.clients import RabbitMQInClient
 
 class Container(containers.DeclarativeContainer):
     config = providers.Configuration()
+    logger = providers.Dependency(Logger)
 
     rabbit_container = providers.Container(RabbitMQContainer, config=config)
     postgres_container = providers.Container(PostgresContainer, config=config)
@@ -31,6 +34,9 @@ class Container(containers.DeclarativeContainer):
     scope_message_client = providers.Singleton(
         RabbitMQInClient,
         scope_queue,
+    )
+    message_bus = providers.Singleton(
+        MessageBus, logger, client_in=scope_message_client
     )
 
     cs_uow = providers.Factory(

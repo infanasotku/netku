@@ -1,3 +1,4 @@
+from logging import Logger
 from typing import Callable
 import traceback
 from common.logging.logger import logger, config
@@ -5,7 +6,7 @@ from common.logging.logger import logger, config
 __all__ = ["logger", "config"]
 
 
-async def with_logging(func: Callable, *args, **kwargs):
+async def with_logging(func: Callable, logger: Logger = logger, *args, **kwargs):
     try:
         await func(*args, **kwargs)
     except Exception as e:
