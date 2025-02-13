@@ -12,7 +12,7 @@ from common.schemas.client_credential import ClientCredentials
 from app.contracts.services import UserService
 from app.schemas.user import UserCreateSchema, UserSchema, UserUpdateSchema
 
-from app.adapters.input.api.dependencies import Authorization
+from app.controllers.api.dependencies import Authorization
 from app.infra.config.scopes import Scopes
 
 router = APIRouter()

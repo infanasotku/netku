@@ -5,7 +5,7 @@ from dependency_injector.wiring import Provide, inject
 
 from app.container import Container
 from common.auth import AdminAuthenticationBackend
-import app.adapters.input.admin.views as views
+import app.controllers.admin.views as views
 
 
 @inject

@@ -4,7 +4,7 @@ from common.containers.postgres import PostgresContainer
 from common.containers.rabbitmq import RabbitMQContainer, create_queue, get_exchange
 from common.auth import LocalAuthService
 
-from app.adapters.output.database.uow import SQLUserUnitOfWork
+from app.infra.database.uow import SQLUserUnitOfWork
 from app.services.user import UserServiceImpl
 from common.messaging.clients import RabbitMQInClient
 

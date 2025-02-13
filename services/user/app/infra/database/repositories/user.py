@@ -9,7 +9,7 @@ from app.contracts.repositories import UserRepository
 from app.schemas.user import UserCreateSchema, UserSchema, UserUpdateSchema
 from app.infra.database.models import User
 
-from app.adapters.output.database import converters
+from app.infra.database import converters
 
 
 class SQLUserRepository(UserRepository, SQLBaseRepository):

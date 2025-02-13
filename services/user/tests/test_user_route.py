@@ -6,7 +6,7 @@ import pytest
 
 from app import app
 from app.container import Container
-from app.adapters.input.api.router import router
+from app.controllers.api.router import router
 
 from common.contracts.services import AuthService
 from common.schemas.token import TokenPayload

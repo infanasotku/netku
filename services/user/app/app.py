@@ -8,8 +8,8 @@ from common.config import generate
 
 from app.container import Container
 from app.infra.config import Settings
-from app.adapters.input import api
-from app.adapters.input import admin
+from app.controllers import api
+from app.controllers import admin
 
 
 def create_lifespan(container: Container):
@@ -39,8 +39,8 @@ def create_app() -> FastAPI:
     container.config.from_pydantic(settings)
     container.wire(
         modules=[
-            "app.adapters.input.admin.main",
-            "app.adapters.input.api.router",
+            "app.controllers.admin.main",
+            "app.controllers.api.router",
         ]
     )
 

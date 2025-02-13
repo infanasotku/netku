@@ -5,7 +5,7 @@ from app.contracts.uow import UserUnitOfWork
 
 from app.contracts.repositories import UserRepository
 
-from app.adapters.output.database.repositories import (
+from app.infra.database.repositories import (
     SQLUserRepository,
 )
 
