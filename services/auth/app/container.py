@@ -3,7 +3,7 @@ from dependency_injector import containers, providers
 from common.containers.postgres import PostgresContainer
 from common.containers.rabbitmq import RabbitMQContainer, get_exchange
 
-from app.adapters.output.database.uow import SQLClientScopeUnitOfWork
+from app.infra.database.uow import SQLClientScopeUnitOfWork
 from common.auth import PyJWTSecurityClient
 from app.services.client import ClientServiceImpl
 from common.messaging.clients import RabbitMQOutClient

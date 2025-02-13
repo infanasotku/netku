@@ -5,7 +5,7 @@ from app.contracts.uow import ClientScopeUnitOfWork
 
 from app.contracts.repositories import ClientRepository, ClientScopeRepository
 
-from app.adapters.output.database.repositories import (
+from app.infra.database.repositories import (
     SQLClientRepository,
     SQLClientScopeRepository,
 )

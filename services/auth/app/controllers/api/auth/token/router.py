@@ -7,7 +7,7 @@ from common.schemas.client_credential import ClientCredentials
 from app.contracts.services import ClientService
 from app.schemas.token import TokenPayload, TokenSchema
 
-from app.adapters.input.api.dependencies import Authorization
+from app.controllers.api.dependencies import Authorization
 from app.infra.config.scopes import Scopes
 
 

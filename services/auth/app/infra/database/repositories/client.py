@@ -6,7 +6,7 @@ from app.contracts.repositories import ClientRepository
 from app.schemas.client import ClientSchema
 from app.infra.database.models import Client
 
-from app.adapters.output.database import converters
+from app.infra.database import converters
 
 
 class SQLClientRepository(ClientRepository, SQLBaseRepository):

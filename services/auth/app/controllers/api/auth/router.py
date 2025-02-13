@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from app.adapters.input.api.auth import token
+from app.controllers.api.auth import token
 
 
 router = APIRouter()

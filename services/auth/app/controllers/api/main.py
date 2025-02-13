@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from app.adapters.input.api import auth
+from app.controllers.api import auth
 
 
 def create_api() -> FastAPI:
