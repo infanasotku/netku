@@ -1,5 +1,4 @@
 import asyncio
-from typing import Callable
 from aio_pika.abc import AbstractQueue, AbstractExchange
 import aio_pika
 
@@ -15,7 +14,7 @@ def _is_async_callable(obj) -> bool:
 class RabbitMQInClient(MessageInClient):
     def __init__(self, queue: AbstractQueue):
         self._queue = queue
-        self._handler: Callable[[str]] = None
+        self._handler = None
 
     def register(self, handler):
         if not _is_async_callable(handler):
@@ -28,7 +27,7 @@ class RabbitMQInClient(MessageInClient):
         async with self._queue.iterator() as queue_iter:
             async for message in queue_iter:
                 async with message.process():
-                    await self._handler(message.body.decode())
+                    await self._handler(message.body.decode(), headers=message.headers)
 
 
 class RabbitMQOutClient(MessageOutClient):

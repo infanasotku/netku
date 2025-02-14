@@ -1,7 +1,11 @@
 from abc import abstractmethod
-from typing import Callable
+from typing import Protocol, Any
 
 from common.contracts.clients.base import BaseClient
+
+
+class MessageHandler(Protocol):
+    def __call__(self, message: str, *, headers: dict[str, Any]): ...
 
 
 class MessageOutClient(BaseClient):
@@ -12,7 +16,7 @@ class MessageOutClient(BaseClient):
 
 class MessageInClient(BaseClient):
     @abstractmethod
-    def register(self, func: Callable[[str], None]):
+    def register(self, handler: MessageHandler):
         """Registers callback for handling messages."""
 
     @abstractmethod
