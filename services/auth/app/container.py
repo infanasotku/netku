@@ -1,16 +1,20 @@
+from logging import Logger
 from dependency_injector import containers, providers
 
 from common.containers.postgres import PostgresContainer
 from common.containers.rabbitmq import RabbitMQContainer, get_exchange
+from common.messaging.clients import RabbitMQOutClient
+from common.messaging.bus import MessageBus
+from common.auth import PyJWTSecurityClient
+from common.events.scope import ScopeChangedEvent
 
 from app.infra.database.uow import SQLClientScopeUnitOfWork
-from common.auth import PyJWTSecurityClient
 from app.services.client import ClientServiceImpl
-from common.messaging.clients import RabbitMQOutClient
 
 
 class Container(containers.DeclarativeContainer):
     config = providers.Configuration()
+    logger = providers.Dependency(Logger)
 
     rabbit_container = providers.Container(RabbitMQContainer, config=config)
     postgres_container = providers.Container(PostgresContainer, config=config)
@@ -33,9 +37,15 @@ class Container(containers.DeclarativeContainer):
         scope_exchange,
         routing_key=config.scope_routing_key,
     )
+    message_bus = providers.Singleton(
+        MessageBus, logger, client_out=scope_message_client
+    )
+
+    scope_event = providers.Singleton(ScopeChangedEvent)
+
     client_service = providers.Factory(
         ClientServiceImpl,
         cs_uow,
         security_client,
-        scope_message_client,
+        scope_event,
     )

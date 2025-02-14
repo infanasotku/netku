@@ -1,11 +1,9 @@
-import json
-
 from common.contracts.clients import SecurityClient
+from common.events.scope import ScopeChangedEvent
+from common.schemas.client_credential import ClientCredentials
 
 from app.contracts.uow import ClientScopeUnitOfWork
 from app.contracts.services import ClientService
-from common.contracts.clients import MessageOutClient
-
 from app.schemas.client import ClientFullSchema
 from app.schemas.token import TokenSchema
 
@@ -17,10 +15,10 @@ class ClientServiceImpl(ClientService):
         self,
         cs_uow: ClientScopeUnitOfWork,
         security_client: SecurityClient,
-        message_out_client: MessageOutClient,
+        scope_event: ScopeChangedEvent,
     ):
         self._security_client = security_client
-        self._message_out_client = message_out_client
+        self._scope_event = scope_event
         self._cs_uow = cs_uow
 
     async def get_client_with_scopes_by_external_client_id(self, external_client_id):
@@ -68,9 +66,11 @@ class ClientServiceImpl(ClientService):
                 client_id
             )
             scopes = await uow.client_scope.remove_client_scope(client_scope_id)
-            data = {"external_client_id": client_external_id, "scopes": scopes}
+            creds = ClientCredentials(
+                external_client_id=client_external_id, scopes=scopes
+            )
+            await self._scope_event.send(creds)
 
-            await self._message_out_client.send(json.dumps(data))
             return scopes
 
     async def create_client_scope(self, client_id, scope_id):
@@ -79,7 +79,9 @@ class ClientServiceImpl(ClientService):
             client_external_id = await uow.client.get_client_external_id_by_id(
                 client_id
             )
-            data = {"external_client_id": client_external_id, "scopes": scopes}
+            creds = ClientCredentials(
+                external_client_id=client_external_id, scopes=scopes
+            )
+            await self._scope_event.send(creds)
 
-            await self._message_out_client.send(json.dumps(data))
             return scopes

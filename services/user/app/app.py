@@ -1,11 +1,9 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
-from common.messaging.bus import MessageBus
 from common.logging import logger
 from common.config import generate
-from common.events.scope import ScopeChangedEvent
-from common.schemas.client_credential import ClientCredentials
+from common.messaging.bus import MessageBus
 
 from app.container import Container
 from app.infra.config import Settings
@@ -13,16 +11,18 @@ from app.controllers import api
 from app.controllers import admin
 
 
-# {"event": "scope_changed", "payload":в {"external_client_id": "test", "scopes": ["kek", "lol"]}}
+from common.schemas.client_credential import ClientCredentials
+
+
 async def init_bus(container: Container) -> MessageBus:
     bus: MessageBus = await container.message_bus()
+    scope_event = container.scope_event()
 
     def test(creds: ClientCredentials):
         print("--------------------")
         print(creds)
         print("--------------------")
 
-    scope_event = ScopeChangedEvent()
     scope_event.register_handler(test)
     bus.register_event(scope_event)
 
@@ -36,7 +36,6 @@ def create_lifespan(container: Container):
             await container.init_resources()
             bus = await init_bus(container)
             await bus.run()
-
             yield
         finally:
             await bus.stop()

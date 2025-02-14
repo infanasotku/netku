@@ -1,8 +1,8 @@
 from typing import Callable, AsyncContextManager, TypeVar
 
 from common.contracts.repository import BaseRepository
-from common.contracts.service import BaseService
-from common.contracts.client import BaseClient
+from common.contracts.services import BaseService
+from common.contracts.clients import BaseClient
 
 
 RepositoryT = TypeVar("RepositoryT", bound=BaseRepository)

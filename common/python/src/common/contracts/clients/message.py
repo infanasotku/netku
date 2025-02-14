@@ -10,7 +10,7 @@ class MessageHandler(Protocol):
 
 class MessageOutClient(BaseClient):
     @abstractmethod
-    async def send(self, message: str):
+    async def send(self, message: str, *, headers: dict[str, Any]):
         """Sends `message` to broker."""
 
 

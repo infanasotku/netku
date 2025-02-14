@@ -2,7 +2,6 @@ from enum import Enum
 from functools import partial
 from logging import Logger
 import asyncio
-import json
 import logging
 import traceback
 import uuid
@@ -80,9 +79,7 @@ class MessageBus(BaseMessageBus):
         info = partial(log, level=logging.INFO)
 
         info(f"Sending [{name}] event.")
-        data = {"event": name, "payload": payload}
-        dump = json.dumps(data)
-        await self._client_out.send(dump)
+        await self._client_out.send(payload, headers={"x-event-name": name})
         info(f"Event [{name}] sended.")
 
     async def run(self):

@@ -35,10 +35,8 @@ class RabbitMQOutClient(MessageOutClient):
         self._exchange = exchange
         self._routing_key = routing_key
 
-    async def send(self, message):
+    async def send(self, message, *, headers):
         await self._exchange.publish(
-            aio_pika.Message(
-                message.encode(),
-            ),
+            aio_pika.Message(message.encode(), headers=headers),
             routing_key=self._routing_key,
         )
