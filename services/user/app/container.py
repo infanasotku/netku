@@ -49,5 +49,5 @@ class Container(containers.DeclarativeContainer):
 
     user_service = providers.Factory(UserServiceImpl, cs_uow)
     auth_service = providers.Resource(
-        LocalAuthService, auth_container.container.security_client, scope_message_client
+        LocalAuthService, auth_container.container.security_client
     )

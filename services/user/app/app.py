@@ -11,19 +11,12 @@ from app.controllers import api
 from app.controllers import admin
 
 
-from common.schemas.client_credential import ClientCredentials
-
-
 async def init_bus(container: Container) -> MessageBus:
     bus: MessageBus = await container.message_bus()
     scope_event = container.scope_event()
+    auth_service = container.auth_service()
 
-    def test(creds: ClientCredentials):
-        print("--------------------")
-        print(creds)
-        print("--------------------")
-
-    scope_event.register_handler(test)
+    scope_event.register_handler(auth_service.process_update)
     bus.register_event(scope_event)
 
     return bus
