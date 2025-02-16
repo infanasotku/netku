@@ -12,7 +12,9 @@ class RemoteAuthSettings(BaseSettings):
 
 class LocalAuthSettings(BaseSettings):
     public_key_path: str = Field(validation_alias="PUBLIC_KEY_PATH")
-    private_key_path: str = Field(validation_alias="PRIVATE_KEY_PATH")
+    private_key_path: str | None = Field(
+        validation_alias="PRIVATE_KEY_PATH", default=None
+    )
 
     @computed_field
     @property
@@ -27,7 +29,9 @@ class LocalAuthSettings(BaseSettings):
 
     @computed_field
     @property
-    def private_key(self) -> str:
+    def private_key(self) -> str | None:
+        if self.private_key_path is None:
+            return None
         with open(self.private_key_path, "r") as f:
             key = f.read()
             try:
