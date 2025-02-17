@@ -1,5 +1,5 @@
 from datetime import datetime
-from sqlalchemy import UUID
+from uuid import UUID
 from sqlalchemy.orm import mapped_column, Mapped
 
 from common.sql.orm import Base
