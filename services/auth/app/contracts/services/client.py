@@ -33,6 +33,8 @@ class ClientService(AuthService):
     async def remove_client_scope(self, client_scope_id: int) -> list[str]:
         """Removes client scope.
 
+        Sends corresponding change event.
+
         Returns:
             Relevant client scopes.
         """
@@ -42,6 +44,8 @@ class ClientService(AuthService):
         self, external_client_id: int, scope_id: int
     ) -> list[str]:
         """Creates client scope.
+
+        Sends corresponding change event.
 
         Returns:
              Relevant client scopes.
