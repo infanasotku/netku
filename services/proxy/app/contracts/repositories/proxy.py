@@ -1,5 +1,4 @@
 from abc import abstractmethod
-from typing import NoReturn
 
 from common.contracts.repository import BaseRepository
 
@@ -21,7 +20,7 @@ class ProxyInfoRepository(BaseRepository):
     @abstractmethod
     async def create_proxy_info(
         self, proxy_create: ProxyInfoCreateSchema
-    ) -> ProxyInfoSchema | NoReturn:
+    ) -> ProxyInfoSchema:
         """Creates proxy info if it not exist in db.
         Raises:
             ValueError: If info already exist.
