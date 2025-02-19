@@ -1,5 +1,6 @@
 from app.contracts.services import ProxyService
 from app.contracts.uow import ProxyUnitOfWork
+from app.schemas.proxy import ProxyInfoUpdateSchema
 
 
 class ProxyServiceImpl(ProxyService):
@@ -27,3 +28,7 @@ class ProxyServiceImpl(ProxyService):
 
             if info.synced_with_xray:
                 raise ValueError("Info already synced.")
+
+            info_update = ProxyInfoUpdateSchema(synced_with_xray=True)
+            await uow.proxy.update_proxy_info(info_update)
+            # TODO: Complete restart xray with new uuid

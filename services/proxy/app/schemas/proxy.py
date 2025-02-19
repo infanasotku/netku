@@ -7,16 +7,19 @@ from common import now
 from common.schemas import BaseSchema
 
 
-class ProxyInfoCreateSchema(BaseSchema):
-    uuid: UUID
+class ProxyInfoBaseSchema(BaseSchema):
     last_update: datetime = Field(
         default_factory=now,
     )
     synced_with_xray: bool = Field(default=False)
 
 
-class ProxyInfoUpdateSchema(ProxyInfoCreateSchema):
-    pass
+class ProxyInfoCreateSchema(ProxyInfoBaseSchema):
+    uuid: UUID
+
+
+class ProxyInfoUpdateSchema(ProxyInfoBaseSchema):
+    uuid: UUID | None = None
 
 
 class ProxyInfoSchema(ProxyInfoCreateSchema):
