@@ -11,7 +11,7 @@ class SQLProxyInfoRepository(ProxyInfoRepository, SQLBaseRepository):
     async def get_proxy_info(self):
         s = select(ProxyInfo)
 
-        info = (await self._session.execute(s)).one_or_none()
+        info = (await self._session.execute(s)).scalars().first()
 
         if info is None:
             return None
@@ -31,7 +31,8 @@ class SQLProxyInfoRepository(ProxyInfoRepository, SQLBaseRepository):
         return converters.proxy_to_proxy_info_schema(info)
 
     async def update_proxy_info(self, proxy_update):
-        info = await self.get_proxy_info()
+        s = select(ProxyInfo)
+        info = (await self._session.execute(s)).scalars().first()
 
         if info is None:
             raise ValueError("Proxy info not exist.")
