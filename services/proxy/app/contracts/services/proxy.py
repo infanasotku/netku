@@ -10,6 +10,7 @@ from app.schemas.proxy import (
 
 
 class ProxyService(BaseService):
+    @abstractmethod
     async def get_proxy_info(self) -> ProxyInfoSchema | None:
         """
         Returns:
