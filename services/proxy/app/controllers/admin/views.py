@@ -14,6 +14,7 @@ from app.schemas.proxy import ProxyInfoCreateSchema, ProxyInfoUpdateSchema
 class ProxyInfoView(ModelView, model=models.ProxyInfo):
     can_export = False
     can_edit = True
+    can_delete = False
     name_plural = "Proxy info"
 
     column_list = [models.ProxyInfo.uuid, models.ProxyInfo.last_update]
