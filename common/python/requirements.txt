@@ -13,3 +13,5 @@ itsdangerous==2.2.0
 pyjwt[crypto]
 bcrypt==4.2.1
 aio_pika==9.5.4
+grpcio-health-checking==1.70.0
+grpcio==1.70.0
