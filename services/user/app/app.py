@@ -44,6 +44,7 @@ def create_app() -> FastAPI:
     container.wire(
         modules=[
             "app.controllers.admin.main",
+            "app.controllers.admin.views",
             "app.controllers.api.router",
         ]
     )
