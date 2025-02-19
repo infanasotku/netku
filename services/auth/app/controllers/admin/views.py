@@ -2,8 +2,8 @@ from sqladmin import ModelView
 from dependency_injector.wiring import Provide, inject
 
 
-from app.contracts.services import ClientService
 from common.contracts.clients import SecurityClient
+from app.contracts.services import ClientService
 from app.container import Container
 import app.infra.database.models as models
 
@@ -30,6 +30,7 @@ class ClientScopeView(ModelView, model=models.ClientScope):
         },
     }
 
+    @inject
     async def delete_model(
         self,
         _,
@@ -38,6 +39,7 @@ class ClientScopeView(ModelView, model=models.ClientScope):
     ):
         await client_service.remove_client_scope(int(pk))
 
+    @inject
     async def insert_model(
         self,
         _,

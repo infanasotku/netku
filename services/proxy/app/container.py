@@ -9,7 +9,8 @@ from common.messaging.bus import MessageBus
 from common.events.scope import ScopeChangedEvent
 from common.messaging.clients import RabbitMQInClient
 
-from app.infra.database.uow import SQLProxyInfoRepository
+from app.infra.database.uow import SQLProxyUnitOfWork
+from app.services.proxy import ProxyServiceImpl
 
 
 class Container(containers.DeclarativeContainer):
@@ -42,10 +43,12 @@ class Container(containers.DeclarativeContainer):
 
     scope_event = providers.Singleton(ScopeChangedEvent)
 
-    cs_uow = providers.Factory(
-        SQLProxyInfoRepository, postgres_container.container.async_sessionmaker
+    proxy_uow = providers.Factory(
+        SQLProxyUnitOfWork, postgres_container.container.async_sessionmaker
     )
 
     auth_service = providers.Resource(
         LocalAuthService, auth_container.container.security_client
     )
+
+    proxy_service = providers.Factory(ProxyServiceImpl, proxy_uow)
