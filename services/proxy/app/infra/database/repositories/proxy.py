@@ -37,6 +37,9 @@ class SQLProxyInfoRepository(ProxyInfoRepository, SQLBaseRepository):
         if info is None:
             raise ValueError("Proxy info not exist.")
 
+        for field in ["last_update", "synced_with_xray"]:
+            setattr(proxy_update, field, getattr(proxy_update, field))
+
         for field, value in proxy_update.model_dump(exclude_unset=True).items():
             setattr(info, field, value)
 

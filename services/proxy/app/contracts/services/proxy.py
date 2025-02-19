@@ -47,6 +47,8 @@ class ProxyService(BaseService):
 
         Sends corresponding event about info changing.
 
+        Raises:
+            ValueError: If info already synced or not exist.
         Returns:
             Synced proxy info.
         """

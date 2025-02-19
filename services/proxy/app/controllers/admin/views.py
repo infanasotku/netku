@@ -1,4 +1,3 @@
-from datetime import datetime
 from uuid import UUID
 from fastapi import Request
 from fastapi.responses import RedirectResponse
@@ -17,7 +16,11 @@ class ProxyInfoView(ModelView, model=models.ProxyInfo):
     can_delete = False
     name_plural = "Proxy info"
 
-    column_list = [models.ProxyInfo.uuid, models.ProxyInfo.last_update]
+    column_list = [
+        models.ProxyInfo.uuid,
+        models.ProxyInfo.synced_with_xray,
+        models.ProxyInfo.last_update,
+    ]
 
     form_columns = [models.ProxyInfo.uuid]
 
@@ -26,8 +29,16 @@ class ProxyInfoView(ModelView, model=models.ProxyInfo):
         label="Sync with xray",
         add_in_detail=False,
     )
-    async def sync_with_xray(self, request: Request):
-        print("Hello!")
+    @inject
+    async def sync_with_xray(
+        self,
+        request: Request,
+        proxy_service: ProxyService = Provide[Container.proxy_service],
+    ):
+        try:
+            await proxy_service.sync_with_xray()
+        except ValueError:
+            pass
 
         return RedirectResponse(request.url_for("admin:list", identity=self.identity))
 
@@ -39,10 +50,14 @@ class ProxyInfoView(ModelView, model=models.ProxyInfo):
         proxy_service: ProxyService = Provide[Container.proxy_service],
     ):
         uuid = UUID(data["uuid"])
-        info = ProxyInfoCreateSchema(last_update=datetime.now(), uuid=uuid)
+        info = ProxyInfoCreateSchema(uuid=uuid)
         await proxy_service.create_proxy_info(info)
         # Workarround for custom creating.
-        return models.ProxyInfo(last_update=info.last_update, uuid=info.uuid)
+        return models.ProxyInfo(
+            uuid=info.uuid,
+            last_update=info.last_update,
+            synced_with_xray=info.synced_with_xray,
+        )
 
     @inject
     async def update_model(
@@ -53,7 +68,11 @@ class ProxyInfoView(ModelView, model=models.ProxyInfo):
         proxy_service: ProxyService = Provide[Container.proxy_service],
     ):
         uuid = UUID(data["uuid"])
-        info = ProxyInfoUpdateSchema(last_update=datetime.now(), uuid=uuid)
+        info = ProxyInfoUpdateSchema(uuid=uuid)
         await proxy_service.update_proxy_info(info)
         # Workarround for custom updating.
-        return models.ProxyInfo(last_update=info.last_update, uuid=info.uuid)
+        return models.ProxyInfo(
+            uuid=info.uuid,
+            last_update=info.last_update,
+            synced_with_xray=info.synced_with_xray,
+        )
