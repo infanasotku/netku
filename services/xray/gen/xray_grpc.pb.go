@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.5.1
 // - protoc             v5.29.3
-// source: xray.proto
+// source: proto/xray.proto
 
 package gen
 
@@ -117,5 +117,5 @@ var Xray_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "xray.proto",
+	Metadata: "proto/xray.proto",
 }
