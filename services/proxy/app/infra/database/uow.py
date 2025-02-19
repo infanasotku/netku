@@ -8,7 +8,7 @@ from app.infra.database.repositories import (
 )
 
 
-class SQLUserUnitOfWork(SQLUnitOfWork, ProxyUnitOfWork):
+class SQLProxyUnitOfWork(SQLUnitOfWork, ProxyUnitOfWork):
     async def __aenter__(self) -> Self:
         uow = await super().__aenter__()
         self.proxy = SQLProxyInfoRepository(self._session)
