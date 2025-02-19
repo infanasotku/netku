@@ -8,6 +8,7 @@ import (
 	"os"
 
 	"github.com/infanasotku/netku/services/xray/gen"
+	"github.com/infanasotku/netku/services/xray/infra"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/health"
@@ -16,7 +17,7 @@ import (
 )
 
 func main() {
-	ConfigureEnvs()
+	infra.ConfigureEnvs()
 
 	// Health check mode.
 	if len(os.Args) > 1 && os.Args[1] == "--greet" {
@@ -78,8 +79,8 @@ func serve() {
 	healthcheck := health.NewServer()
 	healthgrpc.RegisterHealthServer(grpcServer, healthcheck)
 
-	server := Server{}
-	ConfigureServer(&server)
+	server := infra.Server{}
+	infra.ConfigureServer(&server)
 	gen.RegisterXrayServer(grpcServer, &server)
 	healthcheck.SetServingStatus("xray", healthgrpc.HealthCheckResponse_SERVING)
 

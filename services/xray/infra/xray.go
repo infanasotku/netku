@@ -1,4 +1,4 @@
-package main
+package infra
 
 import (
 	"bytes"
@@ -7,9 +7,9 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"regexp"
 
 	"github.com/infanasotku/netku/services/xray/gen"
-	"github.com/xtls/xray-core/common/uuid"
 	"github.com/xtls/xray-core/core"
 )
 
@@ -19,13 +19,21 @@ type Server struct {
 	xrayConfig *core.Config
 }
 
-func (s *Server) RestartXray(context.Context, *gen.Null) (*gen.RestartResponse, error) {
+func IsValidUUID(uuid string) bool {
+	r := regexp.MustCompile("^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-4[a-fA-F0-9]{3}-[8|9|aA|bB][a-fA-F0-9]{3}-[a-fA-F0-9]{12}$")
+	return r.MatchString(uuid)
+}
+
+func (s *Server) RestartXray(_ context.Context, req *gen.RestartRequest) (*gen.RestartResponse, error) {
+	if !IsValidUUID((req.Uuid)) {
+		return nil, errors.New("specified uuid not valid")
+	}
+
 	if s.xrayServer != nil {
 		s.xrayServer.Close()
 	}
 
-	id := uuid.New()
-	convertedId := id.String()
+	convertedId := req.Uuid
 	idStart := bytes.IndexByte(s.xrayConfig.Inbound[0].ProxySettings.Value, '$') + 1
 	for i := 0; i < len(convertedId); i++ {
 		s.xrayConfig.Inbound[0].ProxySettings.Value[idStart+i] = convertedId[i]

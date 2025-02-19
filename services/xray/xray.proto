@@ -4,8 +4,10 @@ message RestartResponse {
     string uuid = 1;
 }
 
-message Null {}
+message RestartRequest {
+    string uuid = 1;
+}
 
 service Xray {
-    rpc RestartXray(Null) returns (RestartResponse) {}
+    rpc RestartXray(RestartRequest) returns (RestartResponse) {}
 }
