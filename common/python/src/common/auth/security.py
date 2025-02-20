@@ -1,9 +1,10 @@
-from datetime import timedelta, datetime
+from datetime import timedelta
 import bcrypt
 import jwt
 
 from common.contracts.clients import SecurityClient
 from common.schemas.token import TokenPayload
+from common import now
 
 
 class PyJWTSecurityClient(SecurityClient):
@@ -31,7 +32,7 @@ class PyJWTSecurityClient(SecurityClient):
     def create_access_token(self, data):
         if self._private_key is None:
             raise ValueError("Private key not specified for creating token.")
-        expire = datetime.now() + self.expires_delta
+        expire = now() + self.expires_delta
         return jwt.encode(
             {"exp": expire, **data}, self._private_key, algorithm=self.algorithm
         )

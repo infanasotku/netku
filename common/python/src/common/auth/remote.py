@@ -9,6 +9,7 @@ from common.schemas.token import (
 )
 from common.contracts.services import AuthService
 from common.http.retry import retry
+import common
 
 
 class _AuthClient:
@@ -93,7 +94,7 @@ class RemoteAuthService(AuthService):
         if self._token_payload is None:
             return False
 
-        now = datetime.now()
+        now = common.now()
 
         return self._compare_time(now, self._token_payload.expire)
 
