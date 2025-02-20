@@ -8,8 +8,10 @@ from common.auth import LocalAuthService
 from common.messaging.bus import MessageBus
 from common.events.scope import ScopeChangedEvent
 from common.messaging.clients import RabbitMQInClient
+from common.containers.grpc import get_channel
 
 from app.infra.database.uow import SQLProxyUnitOfWork
+from app.infra.grpc import GRPCXrayClient
 from app.services.proxy import ProxyServiceImpl
 
 
@@ -47,8 +49,17 @@ class Container(containers.DeclarativeContainer):
         SQLProxyUnitOfWork, postgres_container.container.async_sessionmaker
     )
 
+    xray_grpc_channel = providers.Resource(
+        get_channel,
+        config.ssl_certfile,
+        host=config.xray_host,
+        port=config.xray_port,
+        logger=logger,
+    )
+    xray_client = providers.Singleton(GRPCXrayClient, xray_grpc_channel)
+
     auth_service = providers.Resource(
         LocalAuthService, auth_container.container.security_client
     )
 
-    proxy_service = providers.Factory(ProxyServiceImpl, proxy_uow)
+    proxy_service = providers.Factory(ProxyServiceImpl, proxy_uow, xray_client)

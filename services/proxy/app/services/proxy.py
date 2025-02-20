@@ -1,11 +1,13 @@
+from app.contracts.clients import XrayClient
 from app.contracts.services import ProxyService
 from app.contracts.uow import ProxyUnitOfWork
 from app.schemas.proxy import ProxyInfoUpdateSchema
 
 
 class ProxyServiceImpl(ProxyService):
-    def __init__(self, proxy_uow: ProxyUnitOfWork):
+    def __init__(self, proxy_uow: ProxyUnitOfWork, xray_client: XrayClient):
         self._proxy_uow = proxy_uow
+        self._xray_client = xray_client
 
     async def get_proxy_info(self):
         async with self._proxy_uow as uow:
@@ -29,6 +31,9 @@ class ProxyServiceImpl(ProxyService):
             if info.synced_with_xray:
                 raise ValueError("Info already synced.")
 
+            xray_uuid = await self._xray_client.restart(info.uuid)
+            if xray_uuid != info.uuid:
+                raise RuntimeError("Xray uuid is different from the one transmitted.")
+
             info_update = ProxyInfoUpdateSchema(synced_with_xray=True)
             await uow.proxy.update_proxy_info(info_update)
-            # TODO: Complete restart xray with new uuid

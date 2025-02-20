@@ -24,3 +24,6 @@ class Settings(
     @property
     def scope_queue_name(self) -> str:
         return f"proxy_{uuid.uuid4()}"
+
+    xray_host: str = Field(validate_default="XRAY_HOST")
+    xray_port: str = Field(validate_default="XRAY_PORT")
