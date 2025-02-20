@@ -1,3 +1,6 @@
+from common.events.proxy import ProxyUUIDChangedEvent
+from common.schemas.proxy import ProxyInfo
+
 from app.contracts.clients import ProxyClient
 from app.contracts.services import ProxyService
 from app.contracts.uow import ProxyUnitOfWork
@@ -5,9 +8,15 @@ from app.schemas.proxy import ProxyInfoUpdateSchema
 
 
 class ProxyServiceImpl(ProxyService):
-    def __init__(self, proxy_uow: ProxyUnitOfWork, xray_client: ProxyClient):
+    def __init__(
+        self,
+        proxy_uow: ProxyUnitOfWork,
+        xray_client: ProxyClient,
+        uuid_event: ProxyUUIDChangedEvent,
+    ):
         self._proxy_uow = proxy_uow
         self._xray_client = xray_client
+        self._uuid_event = uuid_event
 
     async def get_proxy_info(self):
         async with self._proxy_uow as uow:
@@ -37,3 +46,5 @@ class ProxyServiceImpl(ProxyService):
 
             info_update = ProxyInfoUpdateSchema(synced_with_xray=True)
             await uow.proxy.update_proxy_info(info_update)
+
+            await self._uuid_event.send(ProxyInfo(uuid=info.uuid))

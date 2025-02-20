@@ -17,13 +17,19 @@ class Settings(
     AdminSettings,
     RabbitMQSettings,
 ):
-    scope_exchange_name: str = Field(validation_alias="SCOPE_EXCHANGE_NAME")
+    exchange_name: str = Field(validation_alias="EXCHANGE_NAME")
     scope_routing_key: str = Field(validation_alias="SCOPE_ROUTING_KEY")
+    uuid_routing_key: str = Field(validate_default="UUID_ROUTING_KEY")
 
     @computed_field
     @property
     def scope_queue_name(self) -> str:
-        return f"proxy_{uuid.uuid4()}"
+        return f"proxy_scope_{uuid.uuid4()}"
+
+    @computed_field
+    @property
+    def uuid_queue_name(self) -> str:
+        return f"proxy_uuid_{uuid.uuid4()}"
 
     xray_host: str = Field(validate_default="XRAY_HOST")
     xray_port: str = Field(validate_default="XRAY_PORT")
