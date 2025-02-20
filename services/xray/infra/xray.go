@@ -25,6 +25,7 @@ func IsValidUUID(uuid string) bool {
 }
 
 func (s *Server) RestartXray(_ context.Context, req *gen.RestartRequest) (*gen.RestartResponse, error) {
+	fmt.Println(req.Uuid)
 	if !IsValidUUID((req.Uuid)) {
 		return nil, errors.New("specified uuid not valid")
 	}

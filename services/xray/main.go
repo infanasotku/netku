@@ -10,10 +10,25 @@ import (
 	"github.com/infanasotku/netku/services/xray/gen"
 	"github.com/infanasotku/netku/services/xray/infra"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/health"
 	healthgrpc "google.golang.org/grpc/health/grpc_health_v1"
 	"google.golang.org/grpc/reflection"
+
+	grpc_logrus "github.com/grpc-ecosystem/go-grpc-middleware/logging/logrus"
+	grpc_ctxtags "github.com/grpc-ecosystem/go-grpc-middleware/tags"
+	"github.com/sirupsen/logrus"
+)
+
+var (
+	logrusLogger = logrus.New()
+	customFunc   = func(code codes.Code) logrus.Level {
+		if code == codes.OK {
+			return logrus.InfoLevel
+		}
+		return logrus.ErrorLevel
+	}
 )
 
 func main() {
@@ -73,7 +88,18 @@ func serve() {
 		log.Fatalf("Failed to load credentials: %v", err)
 	}
 
-	grpcServer := grpc.NewServer(grpc.Creds(creds))
+	logrusEntry := logrus.NewEntry(logrusLogger)
+	opts := []grpc_logrus.Option{
+		grpc_logrus.WithLevels(customFunc),
+	}
+	grpc_logrus.ReplaceGrpcLogger(logrusEntry)
+
+	grpcServer := grpc.NewServer(grpc.Creds(creds), grpc.ChainUnaryInterceptor(grpc_ctxtags.UnaryServerInterceptor(grpc_ctxtags.WithFieldExtractor(grpc_ctxtags.CodeGenRequestFieldExtractor)),
+		grpc_logrus.UnaryServerInterceptor(logrusEntry, opts...)),
+		grpc.ChainStreamInterceptor(
+			grpc_ctxtags.StreamServerInterceptor(grpc_ctxtags.WithFieldExtractor(grpc_ctxtags.CodeGenRequestFieldExtractor)),
+			grpc_logrus.StreamServerInterceptor(logrusEntry, opts...),
+		))
 
 	reflection.Register(grpcServer)
 	healthcheck := health.NewServer()
