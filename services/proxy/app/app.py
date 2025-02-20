@@ -16,7 +16,7 @@ async def init_bus(container: Container) -> MessageBus:
     uuid_event = container.uuid_event()
     auth_service = container.auth_service()
 
-    uuid_event.register_sender(bus.process_out)
+    uuid_event.register_dispatcher(bus.process_out)
 
     scope_event.register_handler(auth_service.process_update)
     bus.register_event(scope_event)

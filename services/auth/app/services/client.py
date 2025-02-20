@@ -69,7 +69,7 @@ class ClientServiceImpl(ClientService):
             creds = ClientCredentials(
                 external_client_id=client_external_id, scopes=scopes
             )
-            await self._scope_event.send(creds)
+            await self._scope_event.dispatch(creds)
 
             return scopes
 
@@ -82,6 +82,6 @@ class ClientServiceImpl(ClientService):
             creds = ClientCredentials(
                 external_client_id=client_external_id, scopes=scopes
             )
-            await self._scope_event.send(creds)
+            await self._scope_event.dispatch(creds)
 
             return scopes

@@ -24,8 +24,8 @@ class BaseEvent(ABC, Generic[EventDataT]):
     def register_handler(self, handler: Callable[[EventDataT], None]):
         self._handler = handler
 
-    def register_sender(self, sender: EventSender):
-        self._sender = sender
+    def register_dispatcher(self, sender: EventSender):
+        self._dispatcher = sender
 
     async def handle(self, payload: str | dict):
         if self._handler is None:
@@ -38,16 +38,16 @@ class BaseEvent(ABC, Generic[EventDataT]):
         else:
             self._handler(data)
 
-    async def send(self, data: EventDataT):
-        if self._sender is None:
+    async def dispatch(self, data: EventDataT):
+        if self._dispatcher is None:
             raise ValueError("Sender not specified")
 
         dump = self.__class__._dumps(data)
 
-        if _is_async_callable(self._sender):
-            await self._sender(dump, name=self.name)
+        if _is_async_callable(self._dispatcher):
+            await self._dispatcher(dump, name=self.name)
         else:
-            self._sender(dump, name=self.name)
+            self._dispatcher(dump, name=self.name)
 
     @staticmethod
     @abstractmethod

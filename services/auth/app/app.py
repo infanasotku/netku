@@ -15,7 +15,7 @@ async def init_bus(container: Container) -> MessageBus:
     bus: MessageBus = await container.message_bus()
     scope_event = container.scope_event()
 
-    scope_event.register_sender(bus.process_out)
+    scope_event.register_dispatcher(bus.process_out)
 
     return bus
 

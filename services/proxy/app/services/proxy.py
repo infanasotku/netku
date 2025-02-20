@@ -47,4 +47,4 @@ class ProxyServiceImpl(ProxyService):
             info_update = ProxyInfoUpdateSchema(synced_with_xray=True)
             await uow.proxy.update_proxy_info(info_update)
 
-            await self._uuid_event.send(ProxyInfo(uuid=info.uuid))
+            await self._uuid_event.dispatch(ProxyInfo(uuid=info.uuid))
