@@ -1,11 +1,11 @@
-from app.contracts.clients import XrayClient
+from app.contracts.clients import ProxyClient
 from app.contracts.services import ProxyService
 from app.contracts.uow import ProxyUnitOfWork
 from app.schemas.proxy import ProxyInfoUpdateSchema
 
 
 class ProxyServiceImpl(ProxyService):
-    def __init__(self, proxy_uow: ProxyUnitOfWork, xray_client: XrayClient):
+    def __init__(self, proxy_uow: ProxyUnitOfWork, xray_client: ProxyClient):
         self._proxy_uow = proxy_uow
         self._xray_client = xray_client
 

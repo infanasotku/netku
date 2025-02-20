@@ -1,3 +1,3 @@
-from app.contracts.clients.xray import XrayClient
+from app.contracts.clients.xray import ProxyClient
 
-__all__ = ["XrayClient"]
+__all__ = ["ProxyClient"]
