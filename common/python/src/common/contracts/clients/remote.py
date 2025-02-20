@@ -8,4 +8,6 @@ class RemoteBaseClient(BaseClient):
     async def check_health(self) -> bool:
         """Checks of remote service.
 
-        :return: `True` if service available, `False` otherwise."""
+        Returns:
+            `True` if service available, `False` otherwise.
+        """

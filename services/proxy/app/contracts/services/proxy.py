@@ -49,6 +49,7 @@ class ProxyService(BaseService):
 
         Raises:
             ValueError: If info already synced or not exist.
+            RuntimeError: If xray restarted with error.
         Returns:
             Synced proxy info.
         """

@@ -11,5 +11,6 @@ class XrayClient(RemoteBaseClient):
 
         If `uuid` not specified - restarts xray with random uuid.
 
-        :return: New uuid, if xray restarted, `None` otherwise.
+        Returns:
+            New uuid, if xray restarted, `None` otherwise.
         """
