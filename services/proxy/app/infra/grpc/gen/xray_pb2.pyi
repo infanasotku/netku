@@ -4,14 +4,20 @@ from typing import ClassVar as _ClassVar, Optional as _Optional
 
 DESCRIPTOR: _descriptor.FileDescriptor
 
-class RestartResponse(_message.Message):
+class XrayInfo(_message.Message):
     __slots__ = ("uuid",)
     UUID_FIELD_NUMBER: _ClassVar[int]
     uuid: str
     def __init__(self, uuid: _Optional[str] = ...) -> None: ...
 
-class RestartRequest(_message.Message):
-    __slots__ = ("uuid",)
+class XrayFullInfo(_message.Message):
+    __slots__ = ("uuid", "running")
     UUID_FIELD_NUMBER: _ClassVar[int]
+    RUNNING_FIELD_NUMBER: _ClassVar[int]
     uuid: str
-    def __init__(self, uuid: _Optional[str] = ...) -> None: ...
+    running: bool
+    def __init__(self, uuid: _Optional[str] = ..., running: bool = ...) -> None: ...
+
+class Null(_message.Message):
+    __slots__ = ()
+    def __init__(self) -> None: ...

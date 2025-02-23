@@ -19,14 +19,16 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Xray_RestartXray_FullMethodName = "/Xray/RestartXray"
+	Xray_RestartXray_FullMethodName     = "/Xray/RestartXray"
+	Xray_CheckXrayHealth_FullMethodName = "/Xray/CheckXrayHealth"
 )
 
 // XrayClient is the client API for Xray service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type XrayClient interface {
-	RestartXray(ctx context.Context, in *RestartRequest, opts ...grpc.CallOption) (*RestartResponse, error)
+	RestartXray(ctx context.Context, in *XrayInfo, opts ...grpc.CallOption) (*XrayInfo, error)
+	CheckXrayHealth(ctx context.Context, in *Null, opts ...grpc.CallOption) (*XrayFullInfo, error)
 }
 
 type xrayClient struct {
@@ -37,10 +39,20 @@ func NewXrayClient(cc grpc.ClientConnInterface) XrayClient {
 	return &xrayClient{cc}
 }
 
-func (c *xrayClient) RestartXray(ctx context.Context, in *RestartRequest, opts ...grpc.CallOption) (*RestartResponse, error) {
+func (c *xrayClient) RestartXray(ctx context.Context, in *XrayInfo, opts ...grpc.CallOption) (*XrayInfo, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(RestartResponse)
+	out := new(XrayInfo)
 	err := c.cc.Invoke(ctx, Xray_RestartXray_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *xrayClient) CheckXrayHealth(ctx context.Context, in *Null, opts ...grpc.CallOption) (*XrayFullInfo, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(XrayFullInfo)
+	err := c.cc.Invoke(ctx, Xray_CheckXrayHealth_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -51,7 +63,8 @@ func (c *xrayClient) RestartXray(ctx context.Context, in *RestartRequest, opts .
 // All implementations must embed UnimplementedXrayServer
 // for forward compatibility.
 type XrayServer interface {
-	RestartXray(context.Context, *RestartRequest) (*RestartResponse, error)
+	RestartXray(context.Context, *XrayInfo) (*XrayInfo, error)
+	CheckXrayHealth(context.Context, *Null) (*XrayFullInfo, error)
 	mustEmbedUnimplementedXrayServer()
 }
 
@@ -62,8 +75,11 @@ type XrayServer interface {
 // pointer dereference when methods are called.
 type UnimplementedXrayServer struct{}
 
-func (UnimplementedXrayServer) RestartXray(context.Context, *RestartRequest) (*RestartResponse, error) {
+func (UnimplementedXrayServer) RestartXray(context.Context, *XrayInfo) (*XrayInfo, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RestartXray not implemented")
+}
+func (UnimplementedXrayServer) CheckXrayHealth(context.Context, *Null) (*XrayFullInfo, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CheckXrayHealth not implemented")
 }
 func (UnimplementedXrayServer) mustEmbedUnimplementedXrayServer() {}
 func (UnimplementedXrayServer) testEmbeddedByValue()              {}
@@ -87,7 +103,7 @@ func RegisterXrayServer(s grpc.ServiceRegistrar, srv XrayServer) {
 }
 
 func _Xray_RestartXray_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(RestartRequest)
+	in := new(XrayInfo)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -99,7 +115,25 @@ func _Xray_RestartXray_Handler(srv interface{}, ctx context.Context, dec func(in
 		FullMethod: Xray_RestartXray_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(XrayServer).RestartXray(ctx, req.(*RestartRequest))
+		return srv.(XrayServer).RestartXray(ctx, req.(*XrayInfo))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Xray_CheckXrayHealth_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Null)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(XrayServer).CheckXrayHealth(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Xray_CheckXrayHealth_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(XrayServer).CheckXrayHealth(ctx, req.(*Null))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -114,6 +148,10 @@ var Xray_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RestartXray",
 			Handler:    _Xray_RestartXray_Handler,
+		},
+		{
+			MethodName: "CheckXrayHealth",
+			Handler:    _Xray_CheckXrayHealth_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

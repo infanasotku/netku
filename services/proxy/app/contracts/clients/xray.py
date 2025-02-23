@@ -14,3 +14,11 @@ class ProxyClient(RemoteBaseClient):
         Returns:
             New uuid, if proxy restarted, `None` otherwise.
         """
+
+    @abstractmethod
+    async def check_engine_health(self) -> UUID | None:
+        """Checks health of proxy engine.
+
+        Returns:
+            Current uuid if engine running, `None` otherwise.
+        """

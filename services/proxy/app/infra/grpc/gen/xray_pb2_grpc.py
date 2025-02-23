@@ -2,6 +2,7 @@
 """Client and server classes corresponding to protobuf-defined services."""
 
 import grpc
+import warnings
 
 from app.infra.grpc.gen import xray_pb2 as app_dot_infra_dot_grpc_dot_gen_dot_xray__pb2
 
@@ -21,7 +22,7 @@ except ImportError:
 if _version_not_supported:
     raise RuntimeError(
         f"The grpc package installed is at version {GRPC_VERSION},"
-        + " but the generated code in app/infra/grpc/gen/xray_pb2_grpc.py depends on"
+        + f" but the generated code in app/infra/grpc/gen/xray_pb2_grpc.py depends on"
         + f" grpcio>={GRPC_GENERATED_VERSION}."
         + f" Please upgrade your grpc module to grpcio>={GRPC_GENERATED_VERSION}"
         + f" or downgrade your generated code using grpcio-tools<={GRPC_VERSION}."
@@ -39,8 +40,14 @@ class XrayStub(object):
         """
         self.RestartXray = channel.unary_unary(
             "/Xray/RestartXray",
-            request_serializer=app_dot_infra_dot_grpc_dot_gen_dot_xray__pb2.RestartRequest.SerializeToString,
-            response_deserializer=app_dot_infra_dot_grpc_dot_gen_dot_xray__pb2.RestartResponse.FromString,
+            request_serializer=app_dot_infra_dot_grpc_dot_gen_dot_xray__pb2.XrayInfo.SerializeToString,
+            response_deserializer=app_dot_infra_dot_grpc_dot_gen_dot_xray__pb2.XrayInfo.FromString,
+            _registered_method=True,
+        )
+        self.CheckXrayHealth = channel.unary_unary(
+            "/Xray/CheckXrayHealth",
+            request_serializer=app_dot_infra_dot_grpc_dot_gen_dot_xray__pb2.Null.SerializeToString,
+            response_deserializer=app_dot_infra_dot_grpc_dot_gen_dot_xray__pb2.XrayFullInfo.FromString,
             _registered_method=True,
         )
 
@@ -54,13 +61,24 @@ class XrayServicer(object):
         context.set_details("Method not implemented!")
         raise NotImplementedError("Method not implemented!")
 
+    def CheckXrayHealth(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details("Method not implemented!")
+        raise NotImplementedError("Method not implemented!")
+
 
 def add_XrayServicer_to_server(servicer, server):
     rpc_method_handlers = {
         "RestartXray": grpc.unary_unary_rpc_method_handler(
             servicer.RestartXray,
-            request_deserializer=app_dot_infra_dot_grpc_dot_gen_dot_xray__pb2.RestartRequest.FromString,
-            response_serializer=app_dot_infra_dot_grpc_dot_gen_dot_xray__pb2.RestartResponse.SerializeToString,
+            request_deserializer=app_dot_infra_dot_grpc_dot_gen_dot_xray__pb2.XrayInfo.FromString,
+            response_serializer=app_dot_infra_dot_grpc_dot_gen_dot_xray__pb2.XrayInfo.SerializeToString,
+        ),
+        "CheckXrayHealth": grpc.unary_unary_rpc_method_handler(
+            servicer.CheckXrayHealth,
+            request_deserializer=app_dot_infra_dot_grpc_dot_gen_dot_xray__pb2.Null.FromString,
+            response_serializer=app_dot_infra_dot_grpc_dot_gen_dot_xray__pb2.XrayFullInfo.SerializeToString,
         ),
     }
     generic_handler = grpc.method_handlers_generic_handler("Xray", rpc_method_handlers)
@@ -89,8 +107,38 @@ class Xray(object):
             request,
             target,
             "/Xray/RestartXray",
-            app_dot_infra_dot_grpc_dot_gen_dot_xray__pb2.RestartRequest.SerializeToString,
-            app_dot_infra_dot_grpc_dot_gen_dot_xray__pb2.RestartResponse.FromString,
+            app_dot_infra_dot_grpc_dot_gen_dot_xray__pb2.XrayInfo.SerializeToString,
+            app_dot_infra_dot_grpc_dot_gen_dot_xray__pb2.XrayInfo.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True,
+        )
+
+    @staticmethod
+    def CheckXrayHealth(
+        request,
+        target,
+        options=(),
+        channel_credentials=None,
+        call_credentials=None,
+        insecure=False,
+        compression=None,
+        wait_for_ready=None,
+        timeout=None,
+        metadata=None,
+    ):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            "/Xray/CheckXrayHealth",
+            app_dot_infra_dot_grpc_dot_gen_dot_xray__pb2.Null.SerializeToString,
+            app_dot_infra_dot_grpc_dot_gen_dot_xray__pb2.XrayFullInfo.FromString,
             options,
             channel_credentials,
             insecure,

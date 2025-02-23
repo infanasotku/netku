@@ -24,17 +24,19 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1d\x61pp/infra/grpc/gen/xray.proto\"\x1f\n\x0fRestartResponse\x12\x0c\n\x04uuid\x18\x01 \x01(\t\"\x1e\n\x0eRestartRequest\x12\x0c\n\x04uuid\x18\x01 \x01(\t2:\n\x04Xray\x12\x32\n\x0bRestartXray\x12\x0f.RestartRequest\x1a\x10.RestartResponse\"\x00\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1d\x61pp/infra/grpc/gen/xray.proto\"\x18\n\x08XrayInfo\x12\x0c\n\x04uuid\x18\x01 \x01(\t\"-\n\x0cXrayFullInfo\x12\x0c\n\x04uuid\x18\x01 \x01(\t\x12\x0f\n\x07running\x18\x02 \x01(\x08\"\x06\n\x04Null2X\n\x04Xray\x12%\n\x0bRestartXray\x12\t.XrayInfo\x1a\t.XrayInfo\"\x00\x12)\n\x0f\x43heckXrayHealth\x12\x05.Null\x1a\r.XrayFullInfo\"\x00\x62\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'app.infra.grpc.gen.xray_pb2', _globals)
 if not _descriptor._USE_C_DESCRIPTORS:
   DESCRIPTOR._loaded_options = None
-  _globals['_RESTARTRESPONSE']._serialized_start=33
-  _globals['_RESTARTRESPONSE']._serialized_end=64
-  _globals['_RESTARTREQUEST']._serialized_start=66
-  _globals['_RESTARTREQUEST']._serialized_end=96
-  _globals['_XRAY']._serialized_start=98
-  _globals['_XRAY']._serialized_end=156
+  _globals['_XRAYINFO']._serialized_start=33
+  _globals['_XRAYINFO']._serialized_end=57
+  _globals['_XRAYFULLINFO']._serialized_start=59
+  _globals['_XRAYFULLINFO']._serialized_end=104
+  _globals['_NULL']._serialized_start=106
+  _globals['_NULL']._serialized_end=112
+  _globals['_XRAY']._serialized_start=114
+  _globals['_XRAY']._serialized_end=202
 # @@protoc_insertion_point(module_scope)

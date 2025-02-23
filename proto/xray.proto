@@ -1,13 +1,18 @@
 syntax = "proto3";
 
-message RestartResponse {
+message XrayInfo {
     string uuid = 1;
 }
 
-message RestartRequest {
+message XrayFullInfo {
     string uuid = 1;
+    bool running = 2;
 }
+
+message Null {}
+
 
 service Xray {
-    rpc RestartXray(RestartRequest) returns (RestartResponse) {}
+    rpc RestartXray(XrayInfo) returns (XrayInfo) {}
+    rpc CheckXrayHealth(Null) returns (XrayFullInfo) {}
 }
