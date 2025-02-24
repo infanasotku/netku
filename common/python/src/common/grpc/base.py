@@ -1,4 +1,5 @@
-from grpc import StatusCode
+import asyncio
+from grpc import StatusCode, ChannelConnectivity
 from grpc.aio import AioRpcError, Channel
 
 from grpc_health.v1.health_pb2 import HealthCheckRequest, HealthCheckResponse
@@ -14,6 +15,15 @@ class BaseGRPCClient(RemoteBaseClient):
         self._channel = channel
 
     async def check_health(self) -> bool:
+        self._channel.get_state(True)
+        wait_coro = self._channel.wait_for_state_change(
+            ChannelConnectivity.TRANSIENT_FAILURE
+        )
+        try:
+            await asyncio.wait_for(wait_coro, timeout=1)
+        except TimeoutError:
+            return False
+
         stub = HealthStub(self._channel)
         try:
             resp: HealthCheckResponse = await stub.Check(
