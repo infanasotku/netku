@@ -8,7 +8,6 @@ services:
     volumes:
       - nginx-html:/app/dist
 
-  # region services
   auth:
     container_name: netku-auth
     restart: always
@@ -34,7 +33,32 @@ services:
 
     networks:
       - netku-network
-  # endregion
+
+  proxy:
+    container_name: netku-proxy
+    restart: always
+    build:
+      context: .
+      dockerfile: docker/proxy.Dockerfile
+
+    volumes:
+      - cert-dir:/etc/cert:ro
+
+    networks:
+      - netku-network
+
+  xray:
+    container_name: netku-xray
+    restart: always
+    build:
+      context: .
+      dockerfile: docker/xray.Dockerfile
+
+    volumes:
+      - cert-dir:/etc/cert:ro
+
+    networks:
+      - netku-network
 
 volumes:
   cert-dir:
