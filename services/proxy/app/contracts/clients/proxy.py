@@ -1,7 +1,13 @@
 from abc import abstractmethod
 from uuid import UUID
+from typing import NamedTuple
 
 from common.contracts.clients import RemoteBaseClient
+
+
+class EngineInfo(NamedTuple):
+    uuid: UUID | None
+    running: bool
 
 
 class ProxyClient(RemoteBaseClient):
@@ -16,9 +22,5 @@ class ProxyClient(RemoteBaseClient):
         """
 
     @abstractmethod
-    async def check_engine_health(self) -> UUID | None:
-        """Checks health of proxy engine.
-
-        Returns:
-            Current uuid if engine running, `None` otherwise.
-        """
+    async def get_engine_info(self) -> EngineInfo:
+        """Checks info of proxy engine."""

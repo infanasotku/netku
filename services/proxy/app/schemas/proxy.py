@@ -11,7 +11,8 @@ class ProxyInfoBaseSchema(BaseSchema):
     last_update: datetime = Field(
         default_factory=now,
     )
-    synced_with_xray: bool = Field(default=False)
+    synced: bool = Field(default=False)
+    running: bool = Field(default=False)
 
 
 class ProxyInfoCreateSchema(ProxyInfoBaseSchema):

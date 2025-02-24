@@ -16,4 +16,4 @@ class BaseMessageBus(ABC):
 
     def register_event(self, event: BaseEvent):
         self._events[event.name] = event
-        event.register_sender(self.process_out)
+        event.register_dispatcher(self.process_out)

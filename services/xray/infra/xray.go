@@ -17,7 +17,7 @@ type Server struct {
 	gen.UnimplementedXrayServer
 	xrayServer *core.Instance
 	xrayConfig *core.Config
-	uuid       *string
+	uuid       string
 }
 
 func IsValidUUID(uuid string) bool {
@@ -47,6 +47,7 @@ func (s *Server) RestartXray(_ context.Context, req *gen.XrayInfo) (*gen.XrayInf
 	}
 
 	s.xrayServer = server
+	s.uuid = req.Uuid
 	err = s.xrayServer.Start()
 
 	if err != nil {
@@ -57,7 +58,7 @@ func (s *Server) RestartXray(_ context.Context, req *gen.XrayInfo) (*gen.XrayInf
 }
 
 func (s *Server) CheckXrayHealth(context.Context, *gen.Null) (*gen.XrayFullInfo, error) {
-	return &gen.XrayFullInfo{Running: s.xrayServer != nil, Uuid: *s.uuid}, nil
+	return &gen.XrayFullInfo{Running: s.xrayServer != nil, Uuid: s.uuid}, nil
 }
 
 // Loads and saves xray config to server.
@@ -68,6 +69,7 @@ func (s *Server) LoadConfig(configFile io.Reader) error {
 	}
 
 	s.xrayConfig = c
+	s.uuid = ""
 
 	return nil
 }

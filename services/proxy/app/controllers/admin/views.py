@@ -18,7 +18,8 @@ class ProxyInfoView(ModelView, model=models.ProxyInfo):
 
     column_list = [
         models.ProxyInfo.uuid,
-        models.ProxyInfo.synced_with_xray,
+        models.ProxyInfo.synced,
+        models.ProxyInfo.running,
         models.ProxyInfo.last_update,
     ]
 
@@ -36,8 +37,10 @@ class ProxyInfoView(ModelView, model=models.ProxyInfo):
         proxy_service: ProxyService = Provide[Container.proxy_service],
     ):
         try:
-            await proxy_service.sync_with_xray()
+            await proxy_service.sync_with_proxy()
         except ValueError:
+            pass
+        except RuntimeError:
             pass
 
         return RedirectResponse(request.url_for("admin:list", identity=self.identity))
@@ -56,7 +59,8 @@ class ProxyInfoView(ModelView, model=models.ProxyInfo):
         return models.ProxyInfo(
             uuid=info.uuid,
             last_update=info.last_update,
-            synced_with_xray=info.synced_with_xray,
+            synced=info.synced,
+            running=info.running,
         )
 
     @inject
@@ -69,10 +73,23 @@ class ProxyInfoView(ModelView, model=models.ProxyInfo):
     ):
         uuid = UUID(data["uuid"])
         info = ProxyInfoUpdateSchema(uuid=uuid)
-        await proxy_service.update_proxy_info(info)
+        old_info = await proxy_service.get_proxy_info()
+        if old_info.uuid != info.uuid:
+            await proxy_service.update_proxy_info(info)
+            await proxy_service.sync_with_proxy()
         # Workarround for custom updating.
         return models.ProxyInfo(
             uuid=info.uuid,
             last_update=info.last_update,
-            synced_with_xray=info.synced_with_xray,
+            synced=info.synced,
+            running=info.running,
         )
+
+    @inject
+    async def list(
+        self,
+        request,
+        proxy_service: ProxyService = Provide[Container.proxy_service],
+    ):
+        await proxy_service.pull_from_proxy()
+        return await super().list(request)

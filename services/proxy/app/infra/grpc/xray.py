@@ -3,8 +3,9 @@ from uuid import UUID, uuid4
 from common.grpc import BaseGRPCClient
 
 from app.infra.grpc.gen.xray_pb2_grpc import XrayStub
-from app.infra.grpc.gen.xray_pb2 import XrayFullInfo, XrayInfo
+from app.infra.grpc.gen.xray_pb2 import XrayFullInfo, XrayInfo, Null
 from app.contracts.clients import ProxyClient
+from app.contracts.clients.proxy import EngineInfo
 
 
 class GRPCXrayClient(BaseGRPCClient, ProxyClient):
@@ -22,13 +23,14 @@ class GRPCXrayClient(BaseGRPCClient, ProxyClient):
         resp: XrayInfo = await stub.RestartXray(XrayInfo(uuid=str(uuid)))
         return UUID(resp.uuid)
 
-    async def check_engine_health(self):
+    async def get_engine_info(self):
         healthy = await self.check_health()
         if not healthy:
-            return
+            return EngineInfo(uuid=None, running=False)
 
         stub = XrayStub(self._channel)
-        resp: XrayFullInfo = await stub.CheckXrayHealth()
+        resp: XrayFullInfo = await stub.CheckXrayHealth(Null())
 
-        if resp.running:
-            return resp.uuid
+        uuid = UUID(resp.uuid) if resp.uuid != "" else None
+
+        return EngineInfo(uuid=uuid, running=resp.running)

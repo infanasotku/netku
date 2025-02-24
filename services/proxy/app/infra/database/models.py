@@ -11,4 +11,5 @@ class ProxyInfo(Base):
     uuid: Mapped[UUID] = mapped_column(nullable=True)
     last_update: Mapped[datetime] = mapped_column(nullable=False)
 
-    synced_with_xray: Mapped[bool] = mapped_column(nullable=False, default=False)
+    synced: Mapped[bool] = mapped_column(nullable=False, default=False)
+    running: Mapped[bool] = mapped_column(nullable=False, default=False)

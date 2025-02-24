@@ -42,7 +42,7 @@ class ProxyService(BaseService):
         """
 
     @abstractmethod
-    async def sync_with_xray(self) -> ProxyInfoSchema:
+    async def sync_with_proxy(self) -> ProxyInfoSchema:
         """Syncs saved proxy info with xray by restarting it.
 
         Sends corresponding event about info changing.
@@ -52,4 +52,12 @@ class ProxyService(BaseService):
             RuntimeError: If xray restarted with error.
         Returns:
             Synced proxy info.
+        """
+
+    @abstractmethod
+    async def pull_from_proxy(self) -> ProxyInfoSchema:
+        """Pulls full proxy info and saves it in db.
+
+        Returns:
+            Pulled info.
         """
