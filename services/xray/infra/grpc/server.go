@@ -1,4 +1,4 @@
-package infra
+package grpc
 
 import (
 	"bytes"
@@ -9,11 +9,11 @@ import (
 	"log"
 	"regexp"
 
-	"github.com/infanasotku/netku/services/xray/gen"
+	"github.com/infanasotku/netku/services/xray/infra/grpc/gen"
 	"github.com/xtls/xray-core/core"
 )
 
-type Server struct {
+type XrayServer struct {
 	gen.UnimplementedXrayServer
 	xrayServer *core.Instance
 	xrayConfig *core.Config
@@ -25,7 +25,7 @@ func IsValidUUID(uuid string) bool {
 	return r.MatchString(uuid)
 }
 
-func (s *Server) RestartXray(_ context.Context, req *gen.XrayInfo) (*gen.XrayInfo, error) {
+func (s *XrayServer) RestartXray(_ context.Context, req *gen.XrayInfo) (*gen.XrayInfo, error) {
 	fmt.Println(req.Uuid)
 	if !IsValidUUID((req.Uuid)) {
 		return nil, errors.New("specified uuid not valid")
@@ -57,12 +57,12 @@ func (s *Server) RestartXray(_ context.Context, req *gen.XrayInfo) (*gen.XrayInf
 	return &gen.XrayInfo{Uuid: convertedId}, nil
 }
 
-func (s *Server) CheckXrayHealth(context.Context, *gen.Null) (*gen.XrayFullInfo, error) {
+func (s *XrayServer) CheckXrayHealth(context.Context, *gen.Null) (*gen.XrayFullInfo, error) {
 	return &gen.XrayFullInfo{Running: s.xrayServer != nil, Uuid: s.uuid}, nil
 }
 
 // Loads and saves xray config to server.
-func (s *Server) LoadConfig(configFile io.Reader) error {
+func (s *XrayServer) LoadConfig(configFile io.Reader) error {
 	c, err := core.LoadConfig("json", configFile)
 	if err != nil {
 		return errors.New(fmt.Sprintln("Failed to load config file: ", err))
