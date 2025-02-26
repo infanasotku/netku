@@ -6,6 +6,7 @@ import (
 
 	grpc_logrus "github.com/grpc-ecosystem/go-grpc-middleware/logging/logrus"
 	grpc_ctxtags "github.com/grpc-ecosystem/go-grpc-middleware/tags"
+	"github.com/infanasotku/netku/services/xray/contracts"
 	"github.com/infanasotku/netku/services/xray/infra/grpc/gen"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
@@ -57,18 +58,10 @@ func CreateGPRCServer(logger *logrus.Logger, withReflection bool) (*grpc.Server,
 	return grpcServer, nil
 }
 
-func BindXrayServer(server *grpc.Server, config *XrayConfig) error {
-	xray_server := XrayServer{}
-
-	err := configureXrayServer(&xray_server, config)
-
-	if err != nil {
-		return fmt.Errorf("failed to configure xray server: %v", err)
-	}
+func BindXrayServer(server *grpc.Server, xrayService contracts.XrayService, logger *logrus.Logger) {
+	xray_server := XrayServer{xrayService: xrayService, logger: logger}
 
 	gen.RegisterXrayServer(server, &xray_server)
-
-	return nil
 }
 
 func BindHealthCheck(server *grpc.Server) {
