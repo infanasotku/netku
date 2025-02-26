@@ -1,7 +1,7 @@
 xray-generate-go:
-	protoc --go_out=services/xray/ \
+	protoc --go_out=services/xray/infra/grpc/ \
 	--go_opt=Mproto/xray.proto=./gen \
-	--go-grpc_out=services/xray/ \
+	--go-grpc_out=services/xray/infra/grpc/ \
 	--go-grpc_opt=Mproto/xray.proto=./gen \
 	proto/xray.proto
 

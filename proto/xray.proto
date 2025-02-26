@@ -4,15 +4,6 @@ message XrayInfo {
     string uuid = 1;
 }
 
-message XrayFullInfo {
-    string uuid = 1;
-    bool running = 2;
-}
-
-message Null {}
-
-
 service Xray {
     rpc RestartXray(XrayInfo) returns (XrayInfo) {}
-    rpc CheckXrayHealth(Null) returns (XrayFullInfo) {}
 }

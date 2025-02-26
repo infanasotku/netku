@@ -24,7 +24,3 @@ func (s *XrayServer) RestartXray(context context.Context, req *gen.XrayInfo) (*g
 	err := s.xrayService.RestartEngine(context, req.Uuid)
 	return &gen.XrayInfo{Uuid: req.Uuid}, err
 }
-
-func (s *XrayServer) CheckXrayHealth(context.Context, *gen.Null) (*gen.XrayFullInfo, error) {
-	return &gen.XrayFullInfo{Running: false, Uuid: ""}, nil
-}
