@@ -11,6 +11,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/infanasotku/netku/services/xray/contracts"
 	"github.com/infanasotku/netku/services/xray/infra/caching"
 	"github.com/infanasotku/netku/services/xray/infra/config"
 	"github.com/infanasotku/netku/services/xray/infra/grpc"
@@ -60,10 +61,15 @@ func serve(logger *logrus.Logger, s *services.XrayService) {
 }
 
 // Redis keep engine alive status
-func keepEngineStatus(ctx context.Context, s *services.XrayService, logger *logrus.Logger) {
+func keepEngineStatus(ctx context.Context, s contracts.XrayService, logger *logrus.Logger) {
 	parsedTTL, _ := strconv.Atoi(os.Getenv("ENGINE_TTL"))
 	interval := time.Duration(parsedTTL/2) * time.Second
 
+	err := s.CreateInfoWithTTL(ctx)
+	if err != nil {
+		logger.Fatalf("Error while creating info: %v", err)
+		return
+	}
 	logger.Infoln("Keeping engine status started.")
 
 	for {
@@ -101,8 +107,9 @@ func createXrayService() (*services.XrayService, error) {
 		SSLCertfilePath: os.Getenv("SSL_CERTFILE"),
 		SSLKeyFilePath:  os.Getenv("SSL_KEYFILE"),
 	}
+	grpcAddr := os.Getenv("EXTERNAL_ADDR")
 
 	xrayService := services.XrayService{}
-	err = xrayService.Init(redisXrayClient, xrayConfig)
+	err = xrayService.Init(redisXrayClient, xrayConfig, grpcAddr)
 	return &xrayService, err
 }

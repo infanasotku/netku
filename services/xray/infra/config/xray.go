@@ -11,6 +11,11 @@ func checkXrayEnvs() error {
 		return errors.New("GRPC_PORT not specified")
 	}
 
+	_, ok = os.LookupEnv("EXTERNAL_ADDR")
+	if !ok {
+		return errors.New("EXTERNAL_ADDR not specified")
+	}
+
 	_, ok = os.LookupEnv("XRAY_CONFIG_DIR")
 	if !ok {
 		return errors.New("XRAY_CONFIG_DIR not specified")

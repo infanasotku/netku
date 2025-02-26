@@ -16,18 +16,26 @@ type RedisXrayCachingClient struct {
 	location *time.Location
 }
 
+func getHashKey(uuid string) string {
+	return "xrayEngines:" + uuid
+}
+
+func (c *RedisXrayCachingClient) CreateWithTTL(context context.Context, extraFields ...interface{}) error {
+	hashKey := getHashKey(c.engineID)
+	created := time.Now().In(c.location).String()
+
+	fields := append(extraFields, "created", created)
+	_, err := c.client.HSet(context, hashKey, fields...).Result()
+	return err
+}
+
 func (c *RedisXrayCachingClient) RefreshTTL(context context.Context) error {
-	hashKey := "engines:" + c.engineID
+	hashKey := getHashKey(c.engineID)
 
-	lastUpdate := time.Now().In(c.location).String()
+	keys, err := c.client.Exists(context, hashKey).Result()
 
-	_, err := c.client.HGet(context, hashKey, "created").Result()
-
-	if err != nil {
-		_, err = c.client.HSet(context, hashKey, "created", lastUpdate).Result()
-		if err != nil {
-			return fmt.Errorf("engine hash not set: %v", err)
-		}
+	if err != nil || keys == 0 {
+		return fmt.Errorf("engine hash not exist: %v", err)
 	}
 	_, err = c.client.Expire(context, hashKey, c.infoTTL).Result()
 	if err != nil {
@@ -38,13 +46,17 @@ func (c *RedisXrayCachingClient) RefreshTTL(context context.Context) error {
 }
 
 func (c *RedisXrayCachingClient) SetXrayInfo(context context.Context, info *contracts.XrayInfo) error {
-	hashKey := "engines:" + c.engineID
+	hashKey := getHashKey(c.engineID)
 	running := "true"
 	if !info.Running {
 		running = "false"
 	}
 
-	_, err := c.client.HSet(context, hashKey, "uuid", info.XrayUUID, "running", running).Result()
+	_, err := c.client.HSet(
+		context, hashKey,
+		"uuid", info.XrayUUID,
+		"running", running,
+	).Result()
 	if err != nil {
 		return fmt.Errorf("xray info not set: %v", err)
 	}

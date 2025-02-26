@@ -31,10 +31,14 @@ type XrayService struct {
 	info          *contracts.XrayInfo
 }
 
-func (s *XrayService) Init(cachingClient contracts.XrayCachingClient, config *XrayConfig) error {
+func (s *XrayService) Init(cachingClient contracts.XrayCachingClient, config *XrayConfig, grpcAddr string) error {
 	s.cachingClient = cachingClient
-	s.info = &contracts.XrayInfo{Running: false}
+	s.info = &contracts.XrayInfo{Running: false, GRPCAddr: grpcAddr}
 	return s.configureXrayEngine(config)
+}
+
+func (s *XrayService) CreateInfoWithTTL(context context.Context) error {
+	return s.cachingClient.CreateWithTTL(context, "addr", s.info.GRPCAddr)
 }
 
 func (s *XrayService) RefreshTTL(context context.Context) error {
