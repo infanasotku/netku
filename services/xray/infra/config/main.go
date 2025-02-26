@@ -6,11 +6,24 @@ import (
 	"github.com/joho/godotenv"
 )
 
-func ConfigureEnvs() error {
+func checkEnvs() error {
 	err := checkXrayEnvs()
-	if err == nil {
-		err = checkRedisEnvs()
+	if err != nil {
+		return err
 	}
+	err = checkRedisEnvs()
+	if err != nil {
+		return err
+	}
+	err = checkTimeEnvs()
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func ConfigureEnvs() error {
+	err := checkEnvs()
 
 	if err != nil {
 		err = godotenv.Overload()
@@ -18,10 +31,7 @@ func ConfigureEnvs() error {
 			return fmt.Errorf("error while loading .env file: %v", err)
 		}
 
-		err = checkXrayEnvs()
-		if err == nil {
-			err = checkRedisEnvs()
-		}
+		err = checkEnvs()
 		if err != nil {
 			return fmt.Errorf("error while reading env: %v", err)
 		}

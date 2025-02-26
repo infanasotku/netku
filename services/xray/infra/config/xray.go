@@ -6,9 +6,9 @@ import (
 )
 
 func checkXrayEnvs() error {
-	_, ok := os.LookupEnv("GPRC_PORT")
+	_, ok := os.LookupEnv("GRPC_PORT")
 	if !ok {
-		return errors.New("GPRC_PORT not specified")
+		return errors.New("GRPC_PORT not specified")
 	}
 
 	_, ok = os.LookupEnv("XRAY_CONFIG_DIR")

@@ -11,9 +11,14 @@ func checkRedisEnvs() error {
 		return errors.New("REDIS_ADDR not specified")
 	}
 
-	_, ok = os.LookupEnv("REDIS_SECRET")
+	_, ok = os.LookupEnv("REDIS_PASS")
 	if !ok {
-		return errors.New("REDIS_SECRET not specified")
+		return errors.New("REDIS_PASS not specified")
+	}
+
+	_, ok = os.LookupEnv("ENGINE_TTL")
+	if !ok {
+		return errors.New("ENGINE_TTL not specified")
 	}
 
 	return nil
