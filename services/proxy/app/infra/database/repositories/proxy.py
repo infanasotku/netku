@@ -26,7 +26,7 @@ class SQLProxyInfoRepository(ProxyInfoRepository, SQLBaseRepository):
 
         return converters.proxy_to_proxy_info_schema(info)
 
-    async def update_by_id(self, id, proxy_update):
+    async def update(self, id, proxy_update):
         info = self.get_by_id(id)
 
         if info is None:

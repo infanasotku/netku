@@ -25,7 +25,7 @@ class ProxyInfoRepository(BaseRepository):
         """
 
     @abstractmethod
-    async def update_by_id(
+    async def update(
         self, id: int, proxy_update: ProxyInfoUpdateSchema
     ) -> ProxyInfoSchema:
         """Updates proxy info by `id` if it exist in db.
