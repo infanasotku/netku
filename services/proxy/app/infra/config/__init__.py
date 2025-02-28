@@ -7,6 +7,7 @@ from common.config import (
     LocalAuthSettings,
     AdminSettings,
     RabbitMQSettings,
+    RedisSettings,
 )
 
 
@@ -16,6 +17,7 @@ class Settings(
     LocalAuthSettings,
     AdminSettings,
     RabbitMQSettings,
+    RedisSettings,
 ):
     exchange_name: str = Field(validation_alias="EXCHANGE_NAME")
     scope_routing_key: str = Field(validation_alias="SCOPE_ROUTING_KEY")
