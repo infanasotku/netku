@@ -62,3 +62,9 @@ class SQLProxyInfoRepository(ProxyInfoRepository, SQLBaseRepository):
 
     async def delete_by_key(self, key):
         await self._delete_by(ProxyInfo.key, key)
+
+    async def delete_all(self):
+        d = delete(ProxyInfo)
+
+        await self._session.execute(d)
+        await self._session.flush()

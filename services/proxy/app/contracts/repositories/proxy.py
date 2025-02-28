@@ -48,3 +48,7 @@ class ProxyInfoRepository(BaseRepository):
         Raises:
             ValueError: If info not exist.
         """
+
+    @abstractmethod
+    async def delete_all(self):
+        """Delete all records in db."""
