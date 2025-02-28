@@ -1,7 +1,7 @@
 from app.contracts.clients.proxy_engine import ProxyEngineClient
 
 
-class ProxyClientPull:
+class GRPCProxyClientPull:
     def __init__(self):
         self._pull: dict[str, ProxyEngineClient] = {}
 
