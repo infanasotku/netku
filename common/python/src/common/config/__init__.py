@@ -11,6 +11,7 @@ from common.config.network import NetworkSettings
 from common.config.admin import AdminSettings
 from common.config.auth import RemoteAuthSettings, LocalAuthSettings
 from common.config.rabbitmq import RabbitMQSettings
+from common.config.redis import RedisSettings
 
 
 SettingsT = TypeVar("SettingsT", bound=BaseSettings)
@@ -33,4 +34,5 @@ __all__ = [
     "RemoteAuthSettings",
     "LocalAuthSettings",
     "RabbitMQSettings",
+    "RedisSettings",
 ]
