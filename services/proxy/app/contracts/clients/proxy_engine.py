@@ -4,7 +4,7 @@ from uuid import UUID
 from common.contracts.clients import RemoteBaseClient
 
 
-class ProxyClient(RemoteBaseClient):
+class ProxyEngineClient(RemoteBaseClient):
     @abstractmethod
     async def restart(self, uuid: UUID | None = None) -> UUID | None:
         """Sends request to proxy for restart.
@@ -18,7 +18,7 @@ class ProxyClient(RemoteBaseClient):
 
 class ProxyClientPull:
     @abstractmethod
-    def register(self, id: str, client: ProxyClient):
+    def register(self, id: str, client: ProxyEngineClient):
         pass
 
     @abstractmethod
@@ -26,5 +26,5 @@ class ProxyClientPull:
         pass
 
     @abstractmethod
-    def get(self, id: str) -> ProxyClient | None:
+    def get(self, id: str) -> ProxyEngineClient | None:
         pass
