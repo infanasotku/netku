@@ -11,3 +11,4 @@ class ProxyInfoSchema(BaseSchema):
     created: datetime
     uuid: UUID
     addr: str
+    key: str

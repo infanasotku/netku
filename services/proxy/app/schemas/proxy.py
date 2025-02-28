@@ -9,6 +9,7 @@ class ProxyInfoCreateSchema(BaseSchema):
     created: datetime
     uuid: UUID
     addr: str
+    key: str
 
 
 class ProxyInfoUpdateSchema(BaseSchema):
