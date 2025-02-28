@@ -14,3 +14,17 @@ class ProxyClient(RemoteBaseClient):
         Returns:
             New uuid, if proxy restarted, `None` otherwise.
         """
+
+
+class ProxyClientPull:
+    @abstractmethod
+    def register(self, id: str, client: ProxyClient):
+        pass
+
+    @abstractmethod
+    def delete(self, id):
+        pass
+
+    @abstractmethod
+    def get(self, id: str) -> ProxyClient | None:
+        pass

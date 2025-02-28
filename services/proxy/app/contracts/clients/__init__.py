@@ -1,3 +1,3 @@
-from app.contracts.clients.proxy import ProxyClient
+from app.contracts.clients.proxy import ProxyClient, ProxyClientPull
 
-__all__ = ["ProxyClient"]
+__all__ = ["ProxyClient", "ProxyClientPull"]
