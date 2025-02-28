@@ -51,5 +51,9 @@ class ProxyService(BaseService):
         """
 
     @abstractmethod
-    async def pull(self):
-        """Pulls info about all engines and saves it to the db."""
+    async def pull(self) -> list[ProxyInfoSchema]:
+        """Pulls info about all engines and saves it to the db.
+
+        Returns:
+            Pulled info.
+        """
