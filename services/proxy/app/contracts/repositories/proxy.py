@@ -12,7 +12,7 @@ from app.schemas.proxy import (
 class ProxyInfoRepository(BaseRepository):
     @abstractmethod
     async def get_by_id(self, id: int) -> ProxyInfoSchema | None:
-        """Finds proxy info by `id`.
+        """Finds proxy info by `ProxyInfoSchema.id`.
         Returns:
             Proxy info if it exist in db, `None` otherwise.
         """
@@ -28,7 +28,7 @@ class ProxyInfoRepository(BaseRepository):
     async def update(
         self, id: int, proxy_update: ProxyInfoUpdateSchema
     ) -> ProxyInfoSchema:
-        """Updates proxy info by `id` if it exist in db.
+        """Updates proxy info by `ProxyInfoSchema.id` if it exist in db.
         Raises:
             ValueError: If info not exist.
         Returns:
@@ -36,8 +36,15 @@ class ProxyInfoRepository(BaseRepository):
         """
 
     @abstractmethod
-    async def delete(self, id: int):
-        """Deletes proxy info by `id`.
+    async def delete_by_id(self, id: int):
+        """Deletes proxy info by `ProxyInfoSchema.id`.
+        Raises:
+            ValueError: If info not exist.
+        """
+
+    @abstractmethod
+    async def delete_by_key(self, key: str):
+        """Deletes proxy info by `ProxyInfoSchema.key`.
         Raises:
             ValueError: If info not exist.
         """
