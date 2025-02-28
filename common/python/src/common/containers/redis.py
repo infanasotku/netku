@@ -8,7 +8,7 @@ from common.containers.base import BaseContainer
 async def _get_connection(
     *, host: str, port: int, password: str | None = None
 ) -> AsyncGenerator[Redis, Any]:
-    conn = Redis(host=host, port=port, password=password)
+    conn = Redis(host=host, port=port, password=password, decode_responses=True)
     await conn.initialize()
 
     yield conn
