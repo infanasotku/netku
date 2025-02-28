@@ -1,9 +1,16 @@
-from app.schemas.proxy import ProxyInfoCreateSchema, ProxyInfoSchema
+from common.schemas.proxy import ProxyInfoSchema
+from app.schemas.proxy import ProxyInfoCreateSchema
 from app.infra.database.models import ProxyInfo
 
 
 def proxy_create_schema_to_proxy_info(proxy_create: ProxyInfoCreateSchema) -> ProxyInfo:
-    return ProxyInfo(uuid=proxy_create.uuid, last_update=proxy_create.last_update)
+    return ProxyInfo(
+        uuid=proxy_create.uuid,
+        key=proxy_create.key,
+        addr=proxy_create.addr,
+        created=proxy_create.created,
+        running=proxy_create.running,
+    )
 
 
 def proxy_to_proxy_info_schema(proxy_info: ProxyInfo) -> ProxyInfoSchema:
