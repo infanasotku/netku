@@ -7,7 +7,7 @@ from common.schemas import BaseSchema
 class ProxyInfoCreateSchema(BaseSchema):
     running: bool = Field(default=False)
     created: datetime
-    uuid: UUID
+    uuid: UUID | None = None
     addr: str
     key: str
 
