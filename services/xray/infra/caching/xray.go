@@ -22,7 +22,7 @@ func getHashKey(uuid string) string {
 
 func (c *RedisXrayCachingClient) CreateWithTTL(context context.Context, extraFields ...interface{}) error {
 	hashKey := getHashKey(c.engineID)
-	created := time.Now().In(c.location).String()
+	created := time.Now().In(c.location).Format(time.RFC3339Nano)
 
 	fields := append(extraFields, "created", created)
 	_, err := c.client.HSet(context, hashKey, fields...).Result()
