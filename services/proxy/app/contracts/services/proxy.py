@@ -1,4 +1,5 @@
 from abc import abstractmethod
+from uuid import UUID
 
 from common.contracts.services import BaseService
 
@@ -27,17 +28,28 @@ class ProxyService(BaseService):
     @abstractmethod
     async def update(
         self,
-        proxy_update: ProxyInfoUpdateSchema,
-        *,
         id: int,
+        proxy_update: ProxyInfoUpdateSchema,
     ) -> ProxyInfoSchema:
         """Updates proxy info if it exist.
         Updates info in db by `id`.
-        Restarts proxy engine with new info.
+        Dispatches `ProxyInfoChangedEvent`.
+
+        Raises:
+            ValueError: If info not exist.
+        Returns:
+            Updated info if it updated success.
+        """
+
+    @abstractmethod
+    async def restart_engine(self, id: int, uuid: UUID):
+        """Restarts proxy engine with new `uuid`.
 
         Raises:
             ValueError: If info not exist.
             RuntimeError: If xray restarted with error.
-        Returns:
-            Updated info if it updated success.
         """
+
+    @abstractmethod
+    async def pull(self):
+        """Pulls info about all engines and saves it to the db."""
