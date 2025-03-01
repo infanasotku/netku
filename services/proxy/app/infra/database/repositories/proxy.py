@@ -33,6 +33,9 @@ class SQLProxyInfoRepository(ProxyInfoRepository, SQLBaseRepository):
     async def get_by_id(self, id):
         return await self._get_by(ProxyInfo.id, id)
 
+    async def get_by_key(self, key):
+        return await self._get_by(ProxyInfo.key, key)
+
     async def create(self, proxy_create):
         info = converters.proxy_create_schema_to_proxy_info(proxy_create)
         self._session.add(info)

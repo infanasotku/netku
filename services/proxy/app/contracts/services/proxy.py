@@ -35,11 +35,11 @@ class ProxyService(BaseService):
     @abstractmethod
     async def update(
         self,
-        id: int,
+        key: str,
         proxy_update: ProxyInfoUpdateSchema,
     ) -> ProxyInfoSchema:
         """Updates proxy info if it exist.
-        Updates info in db by `id`.
+        Updates info in db by `key`.
         Dispatches `ProxyInfoChangedEvent`.
 
         Raises:

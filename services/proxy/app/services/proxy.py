@@ -23,9 +23,9 @@ class ProxyServiceImpl(ProxyService):
         async with self._proxy_uow as uow:
             return await uow.proxy.create(proxy_create)
 
-    async def update(self, id, proxy_update):
+    async def update(self, key, proxy_update):
         async with self._proxy_uow as uow:
-            info = await uow.proxy.get_by_id(id)
+            info = await uow.proxy.get_by_key(key)
 
             if info is None:
                 raise ValueError("Proxy info not exist.")

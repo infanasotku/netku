@@ -18,6 +18,13 @@ class ProxyInfoRepository(BaseRepository):
         """
 
     @abstractmethod
+    async def get_by_key(self, key: str) -> ProxyInfoSchema | None:
+        """Finds proxy info by `ProxyInfoSchema.key`.
+        Returns:
+            Proxy info if it exist in db, `None` otherwise.
+        """
+
+    @abstractmethod
     async def create(self, proxy_create: ProxyInfoCreateSchema) -> ProxyInfoSchema:
         """Creates proxy info.
         Returns:
