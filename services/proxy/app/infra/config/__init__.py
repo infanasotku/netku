@@ -26,3 +26,5 @@ class Settings(
     @property
     def scope_queue_name(self) -> str:
         return f"proxy_scope_{uuid.uuid4()}"
+
+    engines_pattern: str = Field(validation_alias="ENGINES_PATTERN")

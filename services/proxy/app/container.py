@@ -86,7 +86,9 @@ class Container(containers.DeclarativeContainer):
         routing_key=config.uuid_routing_key,
     )
     proxy_caching_client = providers.Resource(
-        RedisProxyCachingClient, redis_container.container.connection, pattern="*:*"
+        RedisProxyCachingClient,
+        redis_container.container.connection,
+        pattern=config.engines_pattern,
     )
 
     # Events
