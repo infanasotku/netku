@@ -39,7 +39,7 @@ class ProxyInfoView(ModelView, model=models.ProxyInfo):
         # Workarround for custom updating.
         return models.ProxyInfo(
             uuid=uuid,
-            last_update=old_info.last_update,
+            created=old_info.created,
             addr=old_info.addr,
             running=old_info.running,
             key=old_info.key,
