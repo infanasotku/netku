@@ -8,7 +8,7 @@ def proxy_create_schema_to_proxy_info(proxy_create: ProxyInfoCreateSchema) -> Pr
         uuid=proxy_create.uuid,
         key=proxy_create.key,
         addr=proxy_create.addr,
-        created=proxy_create.created,
+        created=proxy_create.created.replace(tzinfo=None),
         running=proxy_create.running,
     )
 
