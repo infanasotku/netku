@@ -1,3 +1,4 @@
+from logging import Logger
 from uuid import UUID
 from sqladmin import ModelView
 from dependency_injector.wiring import Provide, inject
@@ -31,16 +32,20 @@ class ProxyInfoView(ModelView, model=models.ProxyInfo):
         pk,
         data,
         proxy_service: ProxyService = Provide[Container.proxy_service],
+        logger: Logger = Provide[Container.logger],
     ):
         uuid = UUID(data["uuid"])
-        old_info = await proxy_service.get_by_id(int(pk))
-        if old_info.uuid != uuid:
+        info = await proxy_service.get_by_id(int(pk))
+
+        if info.uuid != uuid:
+            logger.info(f"Restarting engine [{info.key}].")
             await proxy_service.restart_engine(int(pk), uuid)
+            logger.info(f"Engine [{info.key}] restarted.")
         # Workarround for custom updating.
         return models.ProxyInfo(
             uuid=uuid,
-            created=old_info.created,
-            addr=old_info.addr,
-            running=old_info.running,
-            key=old_info.key,
+            created=info.created,
+            addr=info.addr,
+            running=info.running,
+            key=info.key,
         )
