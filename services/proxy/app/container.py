@@ -122,13 +122,19 @@ async def init_pull(
     container: Container = Provide[Container],
 ) -> AsyncGenerator[None, None]:
     try:
+        logger = container.logger()
         proxy_service: ProxyService = await container.proxy_service()
         client_pull: ProxyClientManager = container.engines_pull()
 
+        logger.info("Pulling engines info.")
         records = await proxy_service.pull()
+        logger.info("Engines info pulled.")
 
         for info in records:
             await client_pull.registrate(info)
+            logger.info(f"Proxy engine [{info.key}] registarted.")
         yield
     finally:
+        logger.info("Stopping proxy clients pull.")
         await client_pull.clear()
+        logger.info("Proxy clients pull stopped.")
