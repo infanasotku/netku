@@ -1,3 +1,4 @@
+import asyncio
 from abc import abstractmethod
 from typing import Protocol, Any
 
@@ -14,10 +15,21 @@ class MessageOutClient(BaseClient):
         """Sends `message` to broker."""
 
 
+def _is_async_callable(obj) -> bool:
+    return asyncio.iscoroutinefunction(obj) or (
+        callable(obj) and asyncio.iscoroutinefunction(obj.__call__)
+    )
+
+
 class MessageInClient(BaseClient):
-    @abstractmethod
+    def __init__(self):
+        self._handler = None
+
     def register(self, handler: MessageHandler):
         """Registers callback for handling messages."""
+        if not _is_async_callable(handler):
+            raise TypeError("Handler must be async.")
+        self._handler = handler
 
     @abstractmethod
     async def run(self):
