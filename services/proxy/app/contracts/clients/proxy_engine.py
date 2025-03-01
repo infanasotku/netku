@@ -1,6 +1,7 @@
 from abc import abstractmethod
 from uuid import UUID
 
+from common.schemas.proxy import ProxyInfoSchema
 from common.contracts.clients import RemoteBaseClient
 
 
@@ -18,13 +19,19 @@ class ProxyEngineClient(RemoteBaseClient):
 
 class ProxyClientPull:
     @abstractmethod
-    def register(self, id: str, client: ProxyEngineClient):
+    def get(self, key: str) -> ProxyEngineClient | None:
         pass
 
+
+class ProxyClientManager(ProxyClientPull):
     @abstractmethod
-    def delete(self, id):
-        pass
+    async def registrate(self, info: ProxyInfoSchema):
+        """Regisrates proxy client by `info`."""
 
     @abstractmethod
-    def get(self, id: str) -> ProxyEngineClient | None:
-        pass
+    async def clear(self):
+        """Clears and turns off all proxy client."""
+
+    @abstractmethod
+    async def delete(self, key: str):
+        """Deletes and turns off proxy client by `key`."""
