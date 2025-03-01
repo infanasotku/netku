@@ -130,6 +130,9 @@ async def init_pull(
         records = await proxy_service.pull()
         logger.info("Engines info pulled.")
 
+        if len(records) == 0:
+            logger.warning("Active proxy engines not found.")
+
         for info in records:
             await client_pull.registrate(info)
             logger.info(f"Proxy engine [{info.key}] registrated.")
