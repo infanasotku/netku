@@ -62,3 +62,7 @@ class ProxyServiceImpl(ProxyService):
                 await uow.proxy.create(ProxyInfoCreateSchema.model_validate(record))
 
         return records
+
+    async def get_by_id(self, id):
+        async with self._proxy_uow as uow:
+            return await uow.proxy.get_by_id(id)

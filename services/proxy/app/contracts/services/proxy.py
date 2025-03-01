@@ -12,6 +12,13 @@ from app.schemas.proxy import (
 
 class ProxyService(BaseService):
     @abstractmethod
+    async def get_by_id(self, id) -> ProxyInfoSchema | None:
+        """Finds proxy info by `ProxyInfoSchema.id`.
+        Returns:
+            Proxy info if it exist in db, `None` otherwise.
+        """
+
+    @abstractmethod
     async def create(self, proxy_create: ProxyInfoCreateSchema) -> ProxyInfoSchema:
         """Creates proxy info.
         Returns:
