@@ -24,20 +24,19 @@ class MessageBus(BaseMessageBus):
     def __init__(
         self,
         logger: Logger,
-        *,
-        client_in: MessageInClient = None,
+        *clients_in: MessageInClient,
         client_out: MessageOutClient = None,
     ):
         super().__init__()
-        self._client_in = client_in
+        self._clients_in = clients_in
         self._client_out = client_out
         self._logger = logger
-        self._task: asyncio.Task = None
+        self._tasks: list[asyncio.Task] = []
         self._id = 0
         self._id_lock = asyncio.Lock()
 
-        if client_in is not None:
-            self._client_in.register(self.process_in)
+        for client_in in self._clients_in:
+            client_in.register(self.process_in)
 
     async def process_in(self, message, *, headers):
         id = await self._get_id()
@@ -83,30 +82,31 @@ class MessageBus(BaseMessageBus):
         info(f"Event [{name}] sended.")
 
     async def run(self):
-        if self._client_in is None:
+        if len(self._clients_in) == 0:
             raise ValueError("Messages-in client is not specified")
 
-        if self._task is not None:
+        if len(self._tasks) != 0:
             raise RuntimeError("Bus already ran")
 
-        self._task = asyncio.create_task(
-            with_logging(self._client_in.run, self._logger)
-        )
+        for client_in in self._clients_in:
+            task = asyncio.create_task(with_logging(client_in.run, self._logger))
+            self._tasks.append(task)
         self._logger.info("Bus started.")
 
     async def stop(self):
-        if self._task is None:
+        if len(self._tasks) == 0:
             raise ValueError("Bus already stopped.")
 
-        try:
-            self._logger.info("Bus stopping.")
-            self._task.cancel()
-            await self._task
-        except asyncio.exceptions.CancelledError:
-            pass
+        self._logger.info("Bus stopping.")
+        for task in self._tasks:
+            try:
+                task.cancel()
+                await task
+            except asyncio.exceptions.CancelledError:
+                continue
 
         self._logger.info("Bus stopped.")
-        self._task = None
+        self._tasks = []
 
     async def _get_id(self):
         async with self._id_lock:

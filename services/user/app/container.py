@@ -37,9 +37,7 @@ class Container(containers.DeclarativeContainer):
         RabbitMQInClient,
         scope_queue,
     )
-    message_bus = providers.Singleton(
-        MessageBus, logger, client_in=scope_message_client
-    )
+    message_bus = providers.Singleton(MessageBus, logger, scope_message_client)
 
     scope_event = providers.Singleton(ScopeChangedEvent)
 
