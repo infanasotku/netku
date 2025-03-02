@@ -16,13 +16,14 @@ from common.messaging.bus import MessageBus
 from common.events.scope import ScopeChangedEvent
 from common.events.proxy import ProxyInfoChangedEvent
 from common.messaging.clients import RabbitMQInClient, RabbitMQOutClient
+from common.caching.redis import RedisInClient
 
 from app.contracts.clients import ProxyClientManager
 from app.contracts.services import ProxyService
 from app.infra.database.uow import SQLProxyUnitOfWork
 from app.infra.grpc.pull import GRPCProxyClientPull, GetChannelContext
 from app.services.proxy import ProxyServiceImpl
-from app.infra.caching import RedisProxyCachingClient
+from app.infra.caching import RedisProxyCachingClient, create_egnine_keys_filter
 
 
 def generate_get_channel_context(
@@ -75,17 +76,27 @@ class Container(containers.DeclarativeContainer):
         routing_key=config.uuid_routing_key,
     )
 
+    filtrate_engine_keys = providers.Singleton(
+        create_egnine_keys_filter, config.engines_pattern
+    )
+
     # Clients
     scope_message_client = providers.Singleton(
         RabbitMQInClient,
         scope_queue,
+    )
+    info_message_client = providers.Singleton(
+        RedisInClient,
+        redis_container.container.connection,
+        config.engines_sub_channels,
+        filtrate_engine_keys,
     )
     proxy_message_client = providers.Factory(
         RabbitMQOutClient,
         exchange,
         routing_key=config.uuid_routing_key,
     )
-    proxy_caching_client = providers.Resource(
+    proxy_caching_client = providers.Singleton(
         RedisProxyCachingClient,
         redis_container.container.connection,
         pattern=config.engines_pattern,
@@ -95,7 +106,8 @@ class Container(containers.DeclarativeContainer):
     message_bus = providers.Singleton(
         MessageBus,
         logger,
-        client_in=scope_message_client,
+        scope_message_client,
+        info_message_client,
         client_out=proxy_message_client,
     )
     scope_event = providers.Singleton(ScopeChangedEvent)

@@ -28,3 +28,9 @@ class Settings(
         return f"proxy_scope_{uuid.uuid4()}"
 
     engines_pattern: str = Field(validation_alias="ENGINES_PATTERN")
+    engines_sub_channels_str: str = Field(validation_alias="ENGINES_SUB_CHANNELS")
+
+    @computed_field
+    @property
+    def engines_sub_channels(self) -> list[str]:
+        return self.engines_sub_channels_str.split()
