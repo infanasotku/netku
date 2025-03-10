@@ -1,3 +1,5 @@
+from datetime import datetime
+import pytz
 from fastapi import HTTPException, Security, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer, SecurityScopes
 
@@ -12,6 +14,13 @@ class Authorization:
     def _verify_scopes(self, scopes: list[str], *, needed_scopes: list[str]) -> bool:
         """Verifies that `scopes` enough for access with `needed_scopes`."""
         return "admin" in scopes or all(scope in scopes for scope in needed_scopes)
+
+    def _compare_time(self, first: datetime, second: datetime) -> bool:
+        utc = pytz.UTC
+        first = first.replace(tzinfo=utc)
+        second = second.replace(tzinfo=utc)
+
+        return first < second
 
     async def __call__(
         self,
@@ -50,6 +59,13 @@ class Authorization:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="Not enough rights",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+
+        if self._compare_time(payload.expire, datetime.now()):
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Token expired",
                 headers={"WWW-Authenticate": "Bearer"},
             )
 
