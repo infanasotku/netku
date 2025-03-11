@@ -3,7 +3,7 @@ from common.events.proxy import ProxyInfoChangedEvent
 from app.contracts.clients import ProxyClientPull, ProxyCachingClient
 from app.contracts.services import ProxyService
 from app.contracts.uow import ProxyUnitOfWork
-from app.schemas.proxy import ProxyInfoCreateSchema
+from app.schemas.proxy import ProxyInfoCreateSchema, ProxyInfoUpdateSchema
 
 
 class ProxyServiceImpl(ProxyService):
@@ -19,30 +19,16 @@ class ProxyServiceImpl(ProxyService):
         self._caching = proxy_caching_client
         self._info_event = info_event
 
-    async def create(self, proxy_create):
+    async def get_by_id(self, id):
         async with self._proxy_uow as uow:
-            return await uow.proxy.create(proxy_create)
-
-    async def update(self, key, proxy_update):
-        async with self._proxy_uow as uow:
-            info = await uow.proxy.get_by_key(key)
-
-            if info is None:
-                raise ValueError("Proxy info not exist.")
-
-            updated = await uow.proxy.update(id, proxy_update)
-            await self._info_event.dispatch(updated)
-
-    async def delete(self, key):
-        async with self._proxy_uow as uow:
-            return await uow.proxy.delete_by_key(key)
+            return await uow.proxy.get_by_id(id)
 
     async def restart_engine(self, id, uuid):
         async with self._proxy_uow as uow:
             info = await uow.proxy.get_by_id(id)
 
             if info is None:
-                raise ValueError("Proxy info not exists.")
+                raise KeyError("Proxy info not exists.")
 
             client = self._pull.get(info.key)
             if client is None:
@@ -63,6 +49,20 @@ class ProxyServiceImpl(ProxyService):
 
         return records
 
-    async def get_by_id(self, id):
+    async def pull_by_key(self, key):
+        info = await self._caching.get_by_key(key)
+        if info is None:
+            raise KeyError("Proxy info not exists in cache.")
+
         async with self._proxy_uow as uow:
-            return await uow.proxy.get_by_id(id)
+            old_info = await uow.proxy.get_by_key(key)
+            if old_info is None:
+                info_create = ProxyInfoCreateSchema.model_validate(info)
+                info = await uow.proxy.create(info_create)
+            else:
+                info_update = ProxyInfoUpdateSchema(
+                    running=info.running, uuid=info.uuid
+                )
+                info = await uow.proxy.update(old_info.id, info_update)
+
+            await self._info_event.dispatch(info)

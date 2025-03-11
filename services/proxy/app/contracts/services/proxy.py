@@ -4,62 +4,45 @@ from uuid import UUID
 from common.contracts.services import BaseService
 
 from common.schemas.proxy import ProxyInfoSchema
-from app.schemas.proxy import (
-    ProxyInfoCreateSchema,
-    ProxyInfoUpdateSchema,
-)
 
 
 class ProxyService(BaseService):
     @abstractmethod
-    async def get_by_id(self, id) -> ProxyInfoSchema | None:
+    async def get_by_id(self, id: int) -> ProxyInfoSchema | None:
         """Finds proxy info by `ProxyInfoSchema.id`.
         Returns:
             Proxy info if it exist in db, `None` otherwise.
         """
 
     @abstractmethod
-    async def create(self, proxy_create: ProxyInfoCreateSchema) -> ProxyInfoSchema:
-        """Creates proxy info.
-        Returns:
-            Created info if it created success.
-        """
-
-    @abstractmethod
-    async def delete(self, key: str):
-        """Deletes proxy info by `ProxyInfoSchema.key`.
-        Raises:
-            ValueError: If info not exist.
-        """
-
-    @abstractmethod
-    async def update(
+    async def pull_by_key(
         self,
         key: str,
-        proxy_update: ProxyInfoUpdateSchema,
     ) -> ProxyInfoSchema:
-        """Updates proxy info if it exist.
-        Updates info in db by `key`.
-        Dispatches `ProxyInfoChangedEvent`.
+        """
+        - Pull proxy info from cache by `key`.
+        - Update info in db by `key`.
+        - Cause `ProxyInfoChangedEvent`.
 
         Raises:
-            ValueError: If info not exist.
+            KeyError: If info not exist.
         Returns:
             Updated info if it updated success.
         """
 
     @abstractmethod
     async def restart_engine(self, id: int, uuid: UUID):
-        """Restarts proxy engine with new `uuid`.
+        """Restart proxy engine with new `uuid`.
 
         Raises:
-            ValueError: If info not exist.
+            KeyError: If info not exist.
             RuntimeError: If xray restarted with error.
         """
 
     @abstractmethod
     async def pull(self) -> list[ProxyInfoSchema]:
-        """Pulls info about all engines and saves it to the db.
+        """Pull info about all engines from cache
+        and saves it to the db.
 
         Returns:
             Pulled info.
