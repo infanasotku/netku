@@ -3,10 +3,10 @@ from uuid import UUID
 
 from pydantic import Field
 
-from common.schemas import BaseSchema
+from common.schemas import BaseSchemaPK
 
 
-class ProxyInfoSchema(BaseSchema):
+class ProxyInfoSchema(BaseSchemaPK):
     running: bool = Field(default=False)
     created: datetime
     uuid: UUID | None = None
