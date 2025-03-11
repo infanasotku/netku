@@ -9,12 +9,6 @@ class RedisProxyCachingClient(ProxyCachingClient):
         self._conn = connection
         self._pattern = pattern
 
-    async def _get_engine_info(self, key: str) -> ProxyInfoSchema:
-        resp = await self._conn.hgetall(key)
-        resp["key"] = key
-
-        return ProxyInfoSchema.model_validate_strings(resp)
-
     async def get_all(self):
         result = []
         cursor = 0
@@ -23,10 +17,18 @@ class RedisProxyCachingClient(ProxyCachingClient):
             cursor, keys = await self._conn.scan(cursor, match=self._pattern, count=100)
 
             for key in keys:
-                info = await self._get_engine_info(key)
+                info = await self.get_by_key(key)
                 result.append(info)
 
             if cursor == 0:
                 break
 
         return result
+
+    async def get_by_key(self, key):
+        resp = await self._conn.hgetall(key)
+        if resp is None:
+            return
+
+        resp["key"] = key
+        return ProxyInfoSchema.model_validate_strings(resp)
