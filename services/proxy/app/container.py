@@ -51,21 +51,27 @@ class Container(containers.DeclarativeContainer):
     config = providers.Configuration()
     logger = providers.Dependency(Logger)
 
-    rabbit_container = providers.Container(RabbitMQContainer, config=config)
+    rabbit_scope_container = providers.Container(RabbitMQContainer, config=config)
+    rabbit_proxy_container = providers.Container(RabbitMQContainer, config=config)
     postgres_container = providers.Container(PostgresContainer, config=config)
     auth_container = providers.Container(LocalAuthContainer, config=config)
     redis_container = providers.Container(RedisContainer, config=config)
 
     # Rabbit
-    exchange = providers.Singleton(
+    scope_exchange = providers.Singleton(
         get_exchange,
-        rabbit_container.container.channel,
+        rabbit_scope_container.container.channel,
+        exchange_name=config.exchange_name,
+    )
+    proxy_exchange = providers.Singleton(
+        get_exchange,
+        rabbit_proxy_container.container.channel,
         exchange_name=config.exchange_name,
     )
     scope_queue = providers.Singleton(
         create_queue,
-        rabbit_container.container.channel,
-        exchange,
+        rabbit_scope_container.container.channel,
+        scope_exchange,
         queue_name=config.scope_queue_name,
         routing_key=config.scope_routing_key,
     )
@@ -87,7 +93,7 @@ class Container(containers.DeclarativeContainer):
     )
     proxy_message_client = providers.Factory(
         RabbitMQOutClient,
-        exchange,
+        proxy_exchange,
         routing_key=config.proxy_routing_key,
     )
     proxy_caching_client = providers.Singleton(

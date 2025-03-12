@@ -70,6 +70,18 @@ def create_app() -> FastAPI:
     settings = generate(Settings, logger)
     container = Container(logger=logger)
     container.config.from_pydantic(settings)
+    rabbit_settings = {
+        "rabbit_user": settings.rabbit_user,
+        "rabbit_pass": settings.rabbit_pass,
+        "rabbit_host": settings.rabbit_host,
+        "rabbit_port": settings.rabbit_port,
+    }
+    container.rabbit_proxy_container.container.config.override(
+        {"rabbit_vhost": settings.rabbit_proxy_vhost, **rabbit_settings}
+    )
+    container.rabbit_scope_container.container.config.override(
+        {"rabbit_vhost": settings.rabbit_scope_vhost, **rabbit_settings}
+    )
     container.wire(
         modules=[
             "app.controllers.admin.main",
