@@ -66,3 +66,4 @@ class ProxyServiceImpl(ProxyService):
                 info = await uow.proxy.update(old_info.id, info_update)
 
             await self._info_event.dispatch(info)
+            return info
