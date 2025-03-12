@@ -45,8 +45,6 @@ class MessageBus(BaseMessageBus):
         warning = partial(log, level=logging.WARNING)
         error = partial(log, level=logging.ERROR)
 
-        info("Recieved event.")
-
         if "x-event-name" not in headers:
             warning("Event name not specified.")
             return
@@ -57,7 +55,6 @@ class MessageBus(BaseMessageBus):
             warning(f"Event [{event_name}] not found.")
             return
 
-        info(f"Handling [{event_name}] event.")
         try:
             event = self._events[event_name]
             await event.handle(message)
@@ -71,15 +68,14 @@ class MessageBus(BaseMessageBus):
                 )
             )
             return
-        info(f"Event {event_name} completed.")
+        info(f"Handled {event_name} event.")
 
     async def process_out(self, payload: str, *, name: str):
         log = partial(self._log, id=None, type=EventType.Out)
         info = partial(log, level=logging.INFO)
 
-        info(f"Sending [{name}] event.")
         await self._client_out.send(payload, headers={"x-event-name": name})
-        info(f"Event [{name}] sended.")
+        info(f"Sended [{name}] event.")
 
     async def run(self):
         if len(self._clients_in) == 0:
