@@ -14,7 +14,7 @@ from common.containers.grpc import get_channel
 from common.auth import LocalAuthService
 from common.messaging.bus import MessageBus
 from common.events.scope import ScopeChangedEvent
-from common.events.proxy import ProxyInfoChangedEvent
+from common.events.proxy import ProxyInfoChangedEvent, ProxyTerminatedEvent
 from common.messaging.clients import RabbitMQInClient, RabbitMQOutClient
 from common.caching.redis import RedisInClient
 
@@ -24,6 +24,7 @@ from app.infra.database.uow import SQLProxyUnitOfWork
 from app.infra.grpc.pull import GRPCProxyClientPull, GetChannelContext
 from app.services.proxy import ProxyServiceImpl
 from app.infra.caching import RedisProxyCachingClient, create_egnine_keys_filter
+from app.infra.events.proxy import KeyHSetEvent, KeyExpiredEvent
 
 
 def generate_get_channel_context(
@@ -68,13 +69,6 @@ class Container(containers.DeclarativeContainer):
         queue_name=config.scope_queue_name,
         routing_key=config.scope_routing_key,
     )
-    uuid_queue = providers.Singleton(
-        create_queue,
-        rabbit_container.container.channel,
-        exchange,
-        queue_name=config.uuid_queue_name,
-        routing_key=config.uuid_routing_key,
-    )
 
     filtrate_engine_keys = providers.Singleton(
         create_egnine_keys_filter, config.engines_pattern
@@ -94,7 +88,7 @@ class Container(containers.DeclarativeContainer):
     proxy_message_client = providers.Factory(
         RabbitMQOutClient,
         exchange,
-        routing_key=config.uuid_routing_key,
+        routing_key=config.proxy_routing_key,
     )
     proxy_caching_client = providers.Singleton(
         RedisProxyCachingClient,
@@ -112,6 +106,9 @@ class Container(containers.DeclarativeContainer):
     )
     scope_event = providers.Singleton(ScopeChangedEvent)
     info_event = providers.Singleton(ProxyInfoChangedEvent)
+    terminated_event = providers.Singleton(ProxyTerminatedEvent)
+    key_hset_event = providers.Singleton(KeyHSetEvent)
+    key_expired_event = providers.Singleton(KeyExpiredEvent)
 
     proxy_uow = providers.Factory(
         SQLProxyUnitOfWork, postgres_container.container.async_sessionmaker
@@ -126,7 +123,12 @@ class Container(containers.DeclarativeContainer):
         LocalAuthService, auth_container.container.security_client
     )
     proxy_service = providers.Factory(
-        ProxyServiceImpl, proxy_uow, engines_pull, proxy_caching_client, info_event
+        ProxyServiceImpl,
+        proxy_uow,
+        engines_pull,
+        proxy_caching_client,
+        info_event,
+        terminated_event,
     )
 
 
