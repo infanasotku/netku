@@ -1,22 +1,25 @@
-from common.schemas.proxy import ProxyInfoSchema
 from app.contracts.services import ProxyService
-from app.schemas.proxy import ProxyInfoUpdateSchema
+from app.infra.events.proxy import KeyEventSchema
+from app.contracts.clients import ProxyClientManager
 
 
 class ProxyStateChangedEventHandler:
-    def __init__(self, proxy_service: ProxyService):
+    def __init__(self, proxy_service: ProxyService, proxy_pull: ProxyClientManager):
         self._service = proxy_service
+        self._pull = proxy_pull
 
-    async def handle(self, info: ProxyInfoSchema):
-        await self._service.update(
-            info.key, ProxyInfoUpdateSchema(running=info.running, uuid=info.uuid)
-        )
+    async def handle(self, payload: KeyEventSchema):
+        info = await self._service.pull_by_key(payload.key)
+        if self._pull.get(payload.key) is None:
+            await self._pull.registrate(info)
 
 
 class ProxyEngineTerminatedEventHandler:
-    def __init__(self, proxy_service: ProxyService):
+    def __init__(self, proxy_service: ProxyService, proxy_pull: ProxyClientManager):
         self._service = proxy_service
-        pass
+        self._pull = proxy_pull
 
-    async def handle(self, info: ProxyInfoSchema):
-        pass  # TODO: complete handle
+    async def handle(self, payload: KeyEventSchema):
+        await self._service.prune_by_key(payload.key)
+        if self._pull.get(payload.key) is not None:
+            await self._pull.delete(payload.key)
