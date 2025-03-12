@@ -27,7 +27,7 @@ class RedisProxyCachingClient(ProxyCachingClient):
 
     async def get_by_key(self, key):
         resp = await self._conn.hgetall(key)
-        if resp is None:
+        if len(resp) == 0:
             return
 
         resp["key"] = key
