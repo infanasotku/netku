@@ -4,7 +4,6 @@ from logging import Logger
 import asyncio
 import logging
 import traceback
-import uuid
 
 from common.contracts.bus import BaseMessageBus
 from common.contracts.clients import MessageInClient, MessageOutClient
@@ -39,8 +38,7 @@ class MessageBus(BaseMessageBus):
             client_in.register(self.process_in)
 
     async def process_in(self, message, *, headers):
-        id = await self._get_id()
-        log = partial(self._log, id=id, type=EventType.In)
+        log = partial(self._log, type=EventType.In)
         info = partial(log, level=logging.INFO)
         warning = partial(log, level=logging.WARNING)
         error = partial(log, level=logging.ERROR)
@@ -68,10 +66,10 @@ class MessageBus(BaseMessageBus):
                 )
             )
             return
-        info(f"Handled {event_name} event.")
+        info(f"Handled [{event_name}] event.")
 
     async def process_out(self, payload: str, *, name: str):
-        log = partial(self._log, id=None, type=EventType.Out)
+        log = partial(self._log, type=EventType.Out)
         info = partial(log, level=logging.INFO)
 
         await self._client_out.send(payload, headers={"x-event-name": name})
@@ -104,19 +102,13 @@ class MessageBus(BaseMessageBus):
         self._logger.info("Bus stopped.")
         self._tasks = []
 
-    async def _get_id(self):
-        async with self._id_lock:
-            return str(uuid.uuid4())
-
     def _log(
         self,
         msg: str,
         *,
         level: int,
         type: EventType,
-        id: str | None = None,
     ):
         type_msg = "[BUS-IN]" if type == EventType.In else "[BUS-OUT]"
-        id_msg = "" if type == EventType.Out else f"[{id}]"
-        wrapped_msg = f"{type_msg}{id_msg}: {msg}"
+        wrapped_msg = f"{type_msg}: {msg}"
         self._logger.log(level, wrapped_msg)
