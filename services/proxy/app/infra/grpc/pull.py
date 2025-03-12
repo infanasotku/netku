@@ -27,7 +27,7 @@ class GRPCProxyClientPull(ProxyClientManager):
 
     async def delete(self, key):
         del self._pull[key]
-        await self._contexts[key].__aexit__()
+        await self._contexts[key].__aexit__(None, None, None)
         del self._contexts[key]
 
     async def clear(self):
