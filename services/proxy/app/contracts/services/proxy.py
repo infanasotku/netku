@@ -47,3 +47,10 @@ class ProxyService(BaseService):
         Returns:
             Pulled info.
         """
+
+    @abstractmethod
+    async def prune_by_key(self, key: str):
+        """Prune info about engine by `key`.
+        - Remove info from db.
+        - Cause `ProxyTerminatedEvent`.
+        """

@@ -1,4 +1,4 @@
-from common.events.proxy import ProxyInfoChangedEvent
+from common.events.proxy import ProxyInfoChangedEvent, ProxyTerminatedEvent
 
 from app.contracts.clients import ProxyClientPull, ProxyCachingClient
 from app.contracts.services import ProxyService
@@ -12,12 +12,14 @@ class ProxyServiceImpl(ProxyService):
         proxy_uow: ProxyUnitOfWork,
         proxy_clients_pull: ProxyClientPull,
         proxy_caching_client: ProxyCachingClient,
-        info_event: ProxyInfoChangedEvent,
+        info_changed_event: ProxyInfoChangedEvent,
+        terminated_event: ProxyTerminatedEvent,
     ):
         self._proxy_uow = proxy_uow
         self._pull = proxy_clients_pull
         self._caching = proxy_caching_client
-        self._info_event = info_event
+        self._info_changed_event = info_changed_event
+        self._terminated_event = terminated_event
 
     async def get_by_id(self, id):
         async with self._proxy_uow as uow:
@@ -65,5 +67,20 @@ class ProxyServiceImpl(ProxyService):
                 )
                 info = await uow.proxy.update(old_info.id, info_update)
 
-            await self._info_event.dispatch(info)
+            await self._info_changed_event.dispatch(info)
             return info
+
+    async def prune_by_key(self, key):
+        info = await self._caching.get_by_key(key)
+        if info is not None:
+            raise KeyError("Proxy info still exists in cache.")
+
+        async with self._proxy_uow as uow:
+            info = await uow.proxy.get_by_key(key)
+            if info is None:
+                raise KeyError("Proxy info not exist in db.")
+            info.running = False
+
+            await uow.proxy.delete_by_key(key)
+
+            await self._terminated_event.dispatch(info)

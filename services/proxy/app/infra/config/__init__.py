@@ -21,6 +21,7 @@ class Settings(
 ):
     exchange_name: str = Field(validation_alias="EXCHANGE_NAME")
     scope_routing_key: str = Field(validation_alias="SCOPE_ROUTING_KEY")
+    proxy_routing_key: str = Field(validation_alias="PROXY_ROUTING_KEY")
 
     @computed_field
     @property
