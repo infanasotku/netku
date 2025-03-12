@@ -38,4 +38,4 @@ class GRPCProxyClientPull(ProxyClientManager):
         self._contexts.clear()
 
     def get(self, id: str) -> ProxyEngineClient:
-        return self._pull[id]
+        return self._pull.get(id)
