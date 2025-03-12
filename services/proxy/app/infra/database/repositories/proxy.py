@@ -16,7 +16,7 @@ class SQLProxyInfoRepository(ProxyInfoRepository, SQLBaseRepository):
         return info
 
     async def _delete_by(self, column: InstrumentedAttribute, value):
-        info = self._get_by(column, value)
+        info = await self._get_by(column, value)
 
         if info is None:
             raise ValueError(f"Info with {value} not exist.")
