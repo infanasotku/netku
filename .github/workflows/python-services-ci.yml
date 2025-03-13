@@ -1,4 +1,4 @@
-name: assistant-ci
+name: python-services-ci
 on:
   pull_request:
     branches:
@@ -7,8 +7,17 @@ on:
 
 jobs:
   build-and-test:
-    name: Build and test assistant
+    name: Build and test python service
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        services: [
+            "common/python",
+            "services/user",
+            "services/proxy",
+            "services/auth",
+          ] # Services
 
     steps:
       - uses: actions/checkout@v4
@@ -17,15 +26,15 @@ jobs:
         with:
           python-version: "3.11"
       - name: Install dev dependencies
-        working-directory: services/assistant
+        working-directory: ${{ matrix.services }}
         run: |
           python -m pip install --upgrade pip
           pip install --no-cache-dir -r requirements-dev.txt
       - name: Run Ruff
-        working-directory: services/assistant
+        working-directory: ${{ matrix.services }}
         run: |
           ruff check .
           ruff format --check .
       - name: Run pytest tests
-        working-directory: services/assistant
+        working-directory: ${{ matrix.services }}
         run: python -m pytest
