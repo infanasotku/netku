@@ -2,7 +2,7 @@ import asyncio
 from typing import Callable, Any
 from redis.asyncio import Redis
 
-from common.contracts.clients import MessageInClient
+from common.contracts.clients import MessageInClient, LeaderElectionClient
 from common.caching.parser import Parser, KeyEventParser
 
 
@@ -50,3 +50,18 @@ class RedisInClient(MessageInClient):
             except asyncio.CancelledError:
                 await pubsub.punsubscribe()
                 raise
+
+
+class RedisLeaderElector(LeaderElectionClient):
+    def __init__(
+        self,
+        connection: Redis,
+        *,
+        expiration: int,
+    ):
+        super().__init__(expiration)
+        self._conn = connection
+
+    async def try_acquire_leadership(self, acquire_id):
+        lock = self._conn.lock(acquire_id, timeout=self._expiration, blocking=False)
+        return await lock.acquire()
