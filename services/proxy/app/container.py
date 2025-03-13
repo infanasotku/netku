@@ -16,7 +16,7 @@ from common.messaging.bus import MessageBus
 from common.events.scope import ScopeChangedEvent
 from common.events.proxy import ProxyInfoChangedEvent, ProxyTerminatedEvent
 from common.messaging.clients import RabbitMQInClient, RabbitMQOutClient
-from common.caching.redis import RedisInClient
+from common.caching.redis import RedisInClient, RedisLeaderElector
 
 from app.contracts.clients import ProxyClientManager
 from app.contracts.services import ProxyService
@@ -101,6 +101,11 @@ class Container(containers.DeclarativeContainer):
         redis_container.container.connection,
         pattern=config.engines_pattern,
     )
+    leader_elector_client = providers.Singleton(
+        RedisLeaderElector,
+        redis_container.container.connection,
+        expiration=config.leadership_ttl,
+    )
 
     # Events
     message_bus = providers.Singleton(
@@ -135,6 +140,7 @@ class Container(containers.DeclarativeContainer):
         proxy_caching_client,
         info_event,
         terminated_event,
+        leader_elector_client,
     )
 
 

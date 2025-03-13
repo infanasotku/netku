@@ -15,15 +15,14 @@ class ProxyService(BaseService):
         """
 
     @abstractmethod
-    async def pull_by_key(
-        self,
-        key: str,
-    ) -> ProxyInfoSchema:
+    async def pull_by_key(self, key: str, *, acquire_prefix: str) -> ProxyInfoSchema:
         """
         - Pull proxy info from cache by `key`.
         - Update info in db by `key`.
-        - Cause `ProxyInfoChangedEvent`.
+        - Cause `ProxyInfoChangedEvent` if instance is leader.
 
+        Args:
+            acquire_prefix (str): prefix for leadership id.
         Raises:
             KeyError: If info not exist.
         Returns:
@@ -49,8 +48,10 @@ class ProxyService(BaseService):
         """
 
     @abstractmethod
-    async def prune_by_key(self, key: str):
+    async def prune_by_key(self, key: str, *, acquire_prefix: str):
         """Prune info about engine by `key`.
         - Remove info from db.
-        - Cause `ProxyTerminatedEvent`.
+        - Cause `ProxyTerminatedEvent` if instance is leader.
+        Args:
+            acquire_prefix (str): prefix for leadership id.
         """
