@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/infanasotku/netku/services/xray/contracts"
 	"github.com/redis/go-redis/v9"
 )
@@ -24,7 +25,7 @@ func (c *RedisXrayCachingClient) CreateWithTTL(context context.Context, extraFie
 	hashKey := getHashKey(c.engineID)
 	created := time.Now().In(c.location).Format(time.RFC3339Nano)
 
-	fields := append(extraFields, "created", created)
+	fields := append(extraFields, "created", created, "event_id", uuid.New().String())
 	_, err := c.client.HSet(context, hashKey, fields...).Result()
 	return err
 }
@@ -56,6 +57,7 @@ func (c *RedisXrayCachingClient) SetXrayInfo(context context.Context, info *cont
 		context, hashKey,
 		"uuid", info.XrayUUID,
 		"running", running,
+		"event_id", uuid.New().String(),
 	).Result()
 	if err != nil {
 		return fmt.Errorf("xray info not set: %v", err)
