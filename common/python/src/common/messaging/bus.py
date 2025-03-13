@@ -1,9 +1,11 @@
 from enum import Enum
 from functools import partial
 from logging import Logger
+from uuid import uuid4
 import asyncio
 import logging
 import traceback
+
 
 from common.contracts.bus import BaseMessageBus
 from common.contracts.clients import MessageInClient, MessageOutClient
@@ -72,7 +74,9 @@ class MessageBus(BaseMessageBus):
         log = partial(self._log, type=EventType.Out)
         info = partial(log, level=logging.INFO)
 
-        await self._client_out.send(payload, headers={"x-event-name": name})
+        await self._client_out.send(
+            payload, headers={"x-event-name": name, "x-event-id": uuid4().hex}
+        )
         info(f"Sended [{name}] event.")
 
     async def run(self):
