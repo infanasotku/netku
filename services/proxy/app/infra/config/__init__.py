@@ -42,3 +42,5 @@ class Settings(
     @property
     def engines_sub_channels(self) -> list[str]:
         return self.engines_sub_channels_str.split()
+
+    leadership_ttl: int = Field(validation_alias="LEADERSHIP_TTL", default=20)
