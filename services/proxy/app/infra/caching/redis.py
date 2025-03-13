@@ -1,7 +1,7 @@
 from redis.asyncio import Redis
 
 from app.contracts.clients import ProxyCachingClient
-from common.schemas.proxy import ProxyInfoSchema
+from app.schemas.proxy import ProxyInfoFullSchema
 
 
 class RedisProxyCachingClient(ProxyCachingClient):
@@ -31,4 +31,4 @@ class RedisProxyCachingClient(ProxyCachingClient):
             return
 
         resp["key"] = key
-        return ProxyInfoSchema.model_validate_strings(resp)
+        return ProxyInfoFullSchema.model_validate_strings(resp)
