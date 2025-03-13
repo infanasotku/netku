@@ -1,5 +1,5 @@
 from common.schemas import BaseSchema
-from common.events.proxy import ProxyTerminatedEvent, BaseEvent
+from common.events.proxy import BaseEvent
 
 
 class KeyEventSchema(BaseSchema):
@@ -20,7 +20,7 @@ class KeyHSetEvent(BaseEvent[KeyEventSchema]):
         return KeyEventSchema.model_validate(payload)
 
 
-class KeyExpiredEvent(ProxyTerminatedEvent):
+class KeyExpiredEvent(BaseEvent[KeyEventSchema]):
     name = "keyevent.expired"
 
     @staticmethod
