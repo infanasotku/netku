@@ -39,6 +39,7 @@ jobs:
   test:
     name: Test python service
     runs-on: ubuntu-latest
+    needs: build
 
     strategy:
       matrix:
