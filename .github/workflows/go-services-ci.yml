@@ -12,7 +12,7 @@ jobs:
 
     strategy:
       matrix:
-        services: ["/services/xray"] # Services
+        services: ["services/xray"] # Services
 
     steps:
       - uses: actions/checkout@v4
