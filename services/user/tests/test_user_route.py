@@ -1,4 +1,3 @@
-from contextlib import asynccontextmanager
 from dependency_injector import providers
 from datetime import datetime, timedelta
 from fastapi.testclient import TestClient
@@ -48,18 +47,7 @@ class AuthServiceStub(AuthService):
 
 
 client = TestClient(router)
-auth_service = AuthServiceStub()
-user_service = UserServiceStub()
 container: Container = app.container
-
-
-@asynccontextmanager
-async def get_user_service():
-    yield user_service
-
-
-async def get_auth_service():
-    return auth_service
 
 
 @pytest.mark.parametrize(
@@ -68,8 +56,8 @@ async def get_auth_service():
 )
 def test_get_user_by_id(id):
     with (
-        container.user_service.override(providers.Factory(get_user_service)),
-        container.auth_service.override(providers.Factory(get_auth_service)),
+        container.user_service.override(providers.Factory(UserServiceStub)),
+        container.auth_service.override(providers.Factory(AuthServiceStub)),
     ):
         response = client.get(f"/{id}", headers={"Authorization": "Bearer test"})
 
@@ -83,8 +71,8 @@ def test_get_user_by_id(id):
 )
 def test_create_user(id):
     with (
-        container.user_service.override(providers.Factory(get_user_service)),
-        container.auth_service.override(providers.Factory(get_auth_service)),
+        container.user_service.override(providers.Factory(UserServiceStub)),
+        container.auth_service.override(providers.Factory(AuthServiceStub)),
     ):
         response = client.post(
             "/",
