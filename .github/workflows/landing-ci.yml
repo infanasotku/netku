@@ -43,8 +43,8 @@ jobs:
         working-directory: clients/landing
         run: npm install --include=dev
       - name: Install Playwright Browsers
-        run: npx playwright install --with-deps chromium
+        run: npx playwright@1.49.0 install --with-deps chromium
 
       - name: Run Playwright tests
         working-directory: clients/landing
-        run: npx playwright test
+        run: npx playwright@1.49.0 test
