@@ -53,6 +53,9 @@ jobs:
       POSTGRES_USER: test
       PUBLIC_KEY_PATH: test
       RABBITMQ_PASS: test
+      RABBITMQ_USER: test
+      SCOPE_ROUTING_KEY: test
+      SCOPE_EXCHANGE_NAME: test
 
     steps:
       - uses: actions/checkout@v4
