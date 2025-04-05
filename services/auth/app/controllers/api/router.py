@@ -14,7 +14,7 @@ from app.infra.config.scopes import Scopes
 router = APIRouter()
 
 
-@router.post("/")
+@router.post("/token")
 @inject
 async def create_token(
     external_client_id: Annotated[str, Body(examples=["johndoe"])],
@@ -40,7 +40,7 @@ async def create_token(
     return token
 
 
-@router.post("/introspect")
+@router.post("/token/introspect")
 @inject
 async def introspect_token(
     token: str = Body(examples=["jwt.token.example"]),

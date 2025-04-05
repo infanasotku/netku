@@ -1,4 +1,3 @@
-from contextlib import asynccontextmanager
 from dependency_injector import providers
 from datetime import datetime, timedelta
 from fastapi.testclient import TestClient
@@ -6,7 +5,7 @@ import pytest
 
 from app import app
 from app.container import Container
-from app.controllers.api.auth.token import router
+from app.controllers.api.router import router
 
 from common.schemas.token import TokenPayload
 from app.contracts.services import ClientService
@@ -35,13 +34,7 @@ class ClientServiceStub(ClientService):
 
 
 client = TestClient(router)
-client_service = ClientServiceStub()
 container: Container = app.container
-
-
-@asynccontextmanager
-async def get_client_service():
-    yield client_service
 
 
 @pytest.mark.parametrize(
@@ -50,10 +43,10 @@ async def get_client_service():
 )
 def test_introspect_token(external_client_id: str):
     with (
-        container.client_service.override(providers.Factory(get_client_service)),
+        container.client_service.override(providers.Factory(ClientServiceStub)),
     ):
         response = client.post(
-            "/introspect",
+            "/token/introspect",
             json=external_client_id,
             headers={"Authorization": "Bearer test"},
         )
@@ -68,10 +61,10 @@ def test_introspect_token(external_client_id: str):
 )
 def test_create_token(external_client_id: str):
     with (
-        container.client_service.override(providers.Factory(get_client_service)),
+        container.client_service.override(providers.Factory(ClientServiceStub)),
     ):
         response = client.post(
-            "/",
+            "/token",
             json={"external_client_id": external_client_id, "client_secret": "test"},
             headers={"Authorization": "Bearer test"},
         )

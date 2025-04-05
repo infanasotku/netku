@@ -39,7 +39,7 @@ def create_app() -> FastAPI:
     container.config.from_pydantic(settings)
     container.wire(
         modules=[
-            "app.controllers.api.auth.token.router",
+            "app.controllers.api.router",
             "app.controllers.admin.views",
             "app.controllers.admin.main",
             "app.controllers.api.dependencies",

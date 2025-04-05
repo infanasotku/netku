@@ -14,9 +14,8 @@ from app.container import Container
 async def Authorization(
     scopes: SecurityScopes,
     credentials: HTTPAuthorizationCredentials = Security(HTTPBearer()),
-    client_service_context: AbstractAsyncContextManager[ClientService] = Depends(
+    client_service: AbstractAsyncContextManager[ClientService] = Depends(
         Provide[Container.client_service]
     ),
 ) -> ClientCredentials:
-    async with client_service_context as client_service:
-        return await auth.Authorization(client_service)(scopes, credentials)
+    return await auth.Authorization(client_service)(scopes, credentials)

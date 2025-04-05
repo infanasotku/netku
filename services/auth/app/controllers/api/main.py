@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from app.controllers.api import auth
+from app.controllers.api import router as auth
 
 
 def create_api() -> FastAPI:

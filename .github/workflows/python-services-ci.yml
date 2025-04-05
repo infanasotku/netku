@@ -45,6 +45,15 @@ jobs:
       matrix:
         services: ["services/user", "services/auth"]
 
+    env:
+      ADMIN_PASSWORD: test
+      ADMIN_USERNAME: test
+      POSTGRES_PASSWORD: test
+      POSTGRES_SCHEMA: test
+      POSTGRES_USER: test
+      PUBLIC_KEY_PATH: test
+      RABBITMQ_PASS: test
+
     steps:
       - uses: actions/checkout@v4
       - name: Setup Python
