@@ -12,12 +12,14 @@ jobs:
 
     strategy:
       matrix:
-        services: [
+        build_services: [
             "common/python",
             "services/user",
             "services/proxy",
             "services/auth",
           ] # Services
+
+        test_services: ["services/user", "services/auth"]
 
     steps:
       - uses: actions/checkout@v4
@@ -26,15 +28,15 @@ jobs:
         with:
           python-version: "3.11"
       - name: Install dev dependencies
-        working-directory: ${{ matrix.services }}
+        working-directory: ${{ matrix.build_services }}
         run: |
           python -m pip install --upgrade pip
           pip install --no-cache-dir -r requirements-dev.txt
       - name: Run Ruff
-        working-directory: ${{ matrix.services }}
+        working-directory: ${{ matrix.build_services }}
         run: |
           ruff check .
           ruff format --check .
       - name: Run pytest tests
-        working-directory: ${{ matrix.services }}
+        working-directory: ${{ matrix.test_services }}
         run: python -m pytest
