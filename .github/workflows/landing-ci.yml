@@ -17,14 +17,14 @@ jobs:
           node-version: "22.2.x"
 
       - name: Install dependencies
-        working-directory: services/landing
+        working-directory: clients/landing
         run: npm install
 
       - name: Run build
-        working-directory: services/landing
+        working-directory: clients/landing
         run: npm run build
       - name: Run prettier
-        working-directory: services/landing
+        working-directory: clients/landing
         run: npx -a prettier -c .
 
   test:
@@ -40,11 +40,11 @@ jobs:
           node-version: "22.2.x"
 
       - name: Install dependencies
-        working-directory: services/landing
+        working-directory: clients/landing
         run: npm install --include=dev
       - name: Install Playwright Browsers
-        run: npx playwright install --with-deps chromium
+        run: npx playwright@1.49.0 install --with-deps chromium
 
       - name: Run Playwright tests
-        working-directory: services/landing
-        run: npx playwright test
+        working-directory: clients/landing
+        run: npx playwright@1.49.0 test

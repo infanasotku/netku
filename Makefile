@@ -1,27 +1,13 @@
 xray-generate-go:
-	protoc --go_out=services/xray/ \
-	--go_opt=Mprotobuf/xray.proto=./gen \
-	--go-grpc_out=services/xray/ \
-	--go-grpc_opt=Mprotobuf/xray.proto=./gen \
-	protobuf/xray.proto
+	protoc --go_out=services/xray/infra/grpc/ \
+	--go_opt=Mproto/xray.proto=./gen \
+	--go-grpc_out=services/xray/infra/grpc/ \
+	--go-grpc_opt=Mproto/xray.proto=./gen \
+	proto/xray.proto
 
 xray-generate-py:
-	python -m grpc_tools.protoc -Iapp/adapters/output/grpc/gen=protobuf/ \
-	--python_out=services/assistant \
-	--grpc_python_out=services/assistant \
-	--pyi_out=services/assistant \
-	protobuf/xray.proto
-
-booking-generate-go:
-	protoc --go_out=services/booking/ \
-	--go_opt=Mprotobuf/booking.proto=./gen \
-	--go-grpc_out=services/booking/ \
-	--go-grpc_opt=Mprotobuf/booking.proto=./gen \
-	protobuf/booking.proto
-
-booking-generate-py:
-	python -m grpc_tools.protoc -Iapp/adapters/output/grpc/gen=protobuf/ \
-	--python_out=services/assistant \
-	--grpc_python_out=services/assistant \
-	--pyi_out=services/assistant \
-	protobuf/booking.proto
+	python -m grpc_tools.protoc -Iapp/infra/grpc/gen=proto/ \
+	--python_out=services/proxy \
+	--grpc_python_out=services/proxy \
+	--pyi_out=services/proxy \
+	proto/xray.proto

@@ -3,69 +3,48 @@
   rel="stylesheet"
 />
 
-## <img src="./services/landing/src/assets/icons/netku-dark.svg" alt="Netku logo" width="30px" style="position: relative;top: 6px;"/> My own server unit.
-
-### Contains:
-
-1. Simple [xray](https://github.com/XTLS/Xray-core) implementation (named **xray**).
-2. Assistant which (named **assistant**):
-   1. Controls xray by grpc.
-   2. Sends any alerts by TG bot.
-3. Business card page for xray fallback (named **landing**).
-4. **NGINX** http server for routing **1.**, **2.** and **3.** (named **server**).
-5. Web automation service for auto booking NSU washing machines (named **booking**).
-
----
+## <img src="./clients/landing/src/assets/icons/netku-dark.svg" alt="Netku logo" width="30px" style="position: relative;top: 6px;"/> My own server unit.
 
 ```mermaid
 ---
-title: Netku architecture
+title: Architecture
 ---
 flowchart TD
-    G@{shape: trap-t, label: "fa:fa-globe Gateway"}
+    G(fa:fa-dungeon Gate)
+    T(fa:fa-message Telegram)
 
+    subgraph Proxy [Proxy graph]
+      X(fa:fa-shield-halved Xray)
+      P(fa:fa-user-tie Proxy)
+      XN(fa:fa-server Nginx)
+      L(fa:fa-eye Landing)
+      Re(fa:fa-database Redis)
+    end
+    G <--> |vless, https| P & X
+    P --> |grpc| X
+    X <--> |fallback| XN
+    XN <--> |static| L
 
-    N(fa:fa-server Nginx)
-    X(fa:fa-shield-halved Xray)
+    Ra(fa:fa-message RabbitMQ)
 
-    NFallback@{ shape: braces, label: "xray fallback?"}
-    Nhttp@{ shape: braces, label: "direct http?"}
+    X <--> Re
+    P <--> Re
+    P <----> Ra
 
+    As(fa:fa-cloud Assistant)
+    U(fa:fa-user User)
+    Au(fa:fa-lock Auth)
+    G1(fa:fa-dungeon Gate)
 
-    L(fa:fa-eye Landing)
-    A(fa:fa-cloud Assistant)
-    B(fa:fa-book Booking)
-    R(fa:fa-message RabbitMQ)
-
-    G <-->|https| X
-    G <--> |vless| X
-
-    G -->|http| N
-    X <--> |fallback| N
-
-
-    N --> Nhttp
-    N <--> NFallback
-
-    Nhttp --> |https 301| G
-
-    NFallback <--> |static| L
-    NFallback <--> |bot webhook| A
-    NFallback <--> |api| A
-
-    A <--> R
-
-    A <-.-> |grpc|X
-    A <-.-> |grpc|B
-
-
+    T <--> As <--> U & Ra
+    U <--> Au <--> Ra
+    Au & U <--> |API| G1
 
 ```
-
-Also see [Assistant architecture](./services/assistant/README.md)
 
 ---
 
 ### Envs:
 
-- You can open [envs](./.env.example) for looking environment variables off app.
+Each service has own env variables.
+You might check them in corresponding folders.

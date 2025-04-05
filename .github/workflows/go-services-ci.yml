@@ -12,7 +12,7 @@ jobs:
 
     strategy:
       matrix:
-        services: ["xray", "booking"] # Services
+        services: ["services/xray"] # Services
 
     steps:
       - uses: actions/checkout@v4
@@ -21,8 +21,8 @@ jobs:
         with:
           go-version: "1.22.6"
       - name: Install dependencies
-        working-directory: services/${{ matrix.services }}
+        working-directory: ${{ matrix.services }}
         run: go mod download
       - name: Run build
-        working-directory: services/${{ matrix.services }}
+        working-directory: ${{ matrix.services }}
         run: go build .
