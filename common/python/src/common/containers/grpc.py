@@ -2,10 +2,11 @@ from logging import Logger
 from typing import Any, AsyncGenerator
 from grpc.aio import Channel, secure_channel, insecure_channel
 import grpc
+import certifi
 
 
 async def get_channel(
-    ssl_certfile: str | None = None,
+    with_cert=True,
     *,
     host: str,
     port: int,
@@ -13,8 +14,8 @@ async def get_channel(
 ) -> AsyncGenerator[Channel, Any]:
     addr = f"{host}:{port}"
 
-    if ssl_certfile is not None:
-        with open(ssl_certfile, "rb") as f:
+    if with_cert:
+        with open(certifi.where(), "rb") as f:
             cert = f.read()
         creds = grpc.ssl_channel_credentials(cert)
         channel = secure_channel(addr, creds)

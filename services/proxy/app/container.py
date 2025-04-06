@@ -28,15 +28,13 @@ from app.infra.events.proxy import KeyHSetEvent, KeyExpiredEvent
 
 
 def generate_get_channel_context(
-    ssl_certfile: str | None = None, logger: Logger | None = None
+    with_cert=True, logger: Logger | None = None
 ) -> GetChannelContext:
     @asynccontextmanager
     async def get_channel_context(addr: str) -> AsyncGenerator[Channel, Any]:
         host, port = addr.split(":")
         try:
-            generator = get_channel(
-                ssl_certfile=ssl_certfile, logger=logger, host=host, port=port
-            )
+            generator = get_channel(with_cert, logger=logger, host=host, port=port)
             yield await anext(generator)
         finally:
             try:
@@ -125,7 +123,7 @@ class Container(containers.DeclarativeContainer):
         SQLProxyUnitOfWork, postgres_container.container.async_sessionmaker
     )
     get_channel_context = providers.Singleton(
-        generate_get_channel_context, config.ssl_certfile, logger
+        generate_get_channel_context, True, logger
     )
     engines_pull = providers.Singleton(GRPCProxyClientPull, get_channel_context)
 
