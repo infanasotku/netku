@@ -16,3 +16,4 @@ aio_pika==9.5.4
 grpcio-health-checking==1.70.0
 grpcio==1.70.0
 redis==5.2.1
+certifi==2025.1.31
