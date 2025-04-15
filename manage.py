@@ -18,37 +18,16 @@ def restart():
     service_name = sys.argv[arg_index + 1]
 
     match service_name:
-        case "assistant":
-            restart_assitant()
         case "landing":
             restart_landing()
         case _:
             print(f"Service {service_name} not exist.")
 
 
-def restart_assitant():
-    exec("docker compose stop assistant")
-    exec("docker compose stop assistant-worker")
-    exec("docker compose stop assistant-scheduler")
-
-    exec("docker compose stop server")
-    exec("docker compose rm -f")
-
-    exec("docker compose build assistant")
-    exec("docker compose build assistant-worker")
-    exec("docker compose build assistant-scheduler")
-
-    exec("docker compose up -d assistant")
-    exec("docker compose up -d assistant-worker")
-    exec("docker compose up -d assistant-scheduler")
-
-    exec("docker compose up -d server")
-
-
 def restart_landing():
     exec("docker compose rm -f")
     exec("docker image rm netku-landing")
-    exec("docker compose up landing")
+    exec("docker compose up landing --remove-orphans")
 
 
 def help():
