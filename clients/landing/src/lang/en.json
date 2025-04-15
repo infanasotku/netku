@@ -4,7 +4,7 @@
       "header": "Author",
       "list": [
         {
-          "content": "Briefly about me",
+          "content": "About me",
           "href": "/"
         },
         {
@@ -53,19 +53,28 @@
     },
     "aboutme": {
       "title": "About me",
-      "fullstack": "fullstack",
+      "backend": "Python Backend Developer",
+      "experience": "over two years",
+      "microservice": "microservice-based",
       "fastapi": "FastAPI",
-      "python": "Python",
-      "go": "Golang",
+      "async": "asynchronous",
+      "docker": "Docker and Docker Compose",
+      "celery": "Celery",
+      "rabbit": "RabbitMQ",
+      "eda": "Event-Driven Architecture",
+      "unit": "unit",
+      "integration": "integration",
+      "pytest": "Pytest",
+      "playwright": "Playwright",
+      "description": "I am a {0} with {1} of commercial experience in building {2} web applications using {3}. My focus is on designing {4} server-side logic, integrating external services, and configuring infrastructure through {5}. I actively use {6} and {7} as part of an {8} and write both {9} and {10} tests with {11} and {12}.",
+      "five": "five members",
       "vue": "Vue.js",
-      "spa": "SPA",
-      "docker": "Docker Compose",
-      "postgres": "PostgreSQL",
-      "tcp": "TCP/IP",
-      "nginx": "Nginx",
-      "ci": "CI/CD",
-      "code": "code",
-      "description": "I am a {0} developer with over 2 years of experience. I specialize in developing server applications using {1}, {2} and {3}. On the frontend, I use {4} to create {5}. I have experience working with microservice architecture, {6} and {7}. I know the {8} stack and understand the network structure. I use {9} for reverse proxying and actively implement {10} in projects for automation. In one of the projects, I manage a team of 2 people, distribute tasks and control the quality of the {11}.",
+      "ts": "Typescript",
+      "py_backend": "Python backend development",
+      "reliable": "reliable",
+      "scalable": "scalable",
+      "description2": "In several projects, I have led a team of up to {0}, conducted code reviews, interviewed candidates, and taken responsibility for the quality of technical solutions. I also have experience with {1} and {2}, but my main expertise is in {3}. My goal is to create {4} and {5} services that are easy to maintain and evolve.",
+
       "note": {
         "title": "Netku in develope",
         "observation": "my services status observation",
