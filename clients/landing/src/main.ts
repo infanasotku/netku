@@ -9,6 +9,8 @@ import en from "@/lang/en.json";
 import ru from "@/lang/ru.json";
 import "@/assets/scss/main.scss";
 
+console.log(__BUILD_VERSION__);
+
 const app = createApp(App);
 
 const i18n = createI18n({
