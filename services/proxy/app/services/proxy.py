@@ -1,3 +1,4 @@
+from typing import cast
 from common.events.proxy import ProxyInfoChangedEvent, ProxyTerminatedEvent
 from common.contracts.clients import LeaderElectionClient
 
@@ -48,9 +49,11 @@ class ProxyServiceImpl(ProxyService):
 
             xray_uuid = await client.restart(uuid)
             if xray_uuid != uuid:
-                raise RuntimeError("Xray uuid is different from the one transmitted.")
+                raise RuntimeError(
+                    f"Xray uuid {xray_uuid} is different from the one transmitted."
+                )
 
-    async def pull(self):
+    async def pull(self):  # type: ignore[misc]
         records = await self._caching.get_all()
 
         async with self._proxy_uow as uow:
@@ -77,7 +80,7 @@ class ProxyServiceImpl(ProxyService):
                 info_update = ProxyInfoUpdateSchema(
                     running=info.running, uuid=info.uuid
                 )
-                info = await uow.proxy.update(old_info.id, info_update)
+                info = await uow.proxy.update(cast(int, old_info.id), info_update)
 
             if await self._is_leader(acquire_id):
                 await self._info_changed_event.dispatch(info)
