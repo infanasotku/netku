@@ -67,9 +67,7 @@ func keepEngineStatus(ctx context.Context, s contracts.XrayService, logger *logr
 
 	err := s.CreateInfoWithTTL(ctx)
 	if err != nil {
-		logger.Errorf("Error while creating info: %v", err)
-		logger.Warning("Xray starting in offline mode.")
-		return
+		logger.Fatalf("Error while creating info: %v", err)
 	}
 	logger.Infoln("Keeping engine status started.")
 
