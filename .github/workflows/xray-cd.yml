@@ -1,0 +1,53 @@
+# Deploys only on closed pull request to master
+# with labels **enhancement** or **bug**.
+
+name: xray-cd
+on:
+  push:
+    # branches:
+    #   - master
+
+jobs:
+  run-common:
+    uses: ./.github/workflows/common.yml
+
+  buildp-and-push:
+    name: Build and push xray image
+      contains(fromJson(needs.run-common.outputs.pr_data).labels.*.name, 'xray') &&
+      (
+      contains(fromJson(needs.run-common.outputs.pr_data).labels.*.name, 'enhancement') ||
+      contains(fromJson(needs.run-common.outputs.pr_data).labels.*.name, 'bug')
+      )
+
+    runs-on: ubuntu-latest
+    needs: run-common
+    environment: staging
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Log in to registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ secrets.REGISTRY_DOMAIN }}
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+
+      - name: Build and push image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: docker/xray.Dockerfile
+          push: true
+          tags: |
+            ${{secrets.REGISTRY_DOMAIN}}:${{ github.sha }}
+
+      # - name: Set up SSH
+      #   run: |
+      #     mkdir -p ~/.ssh
+      #     echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+      #     chmod 600 ~/.ssh/id_rsa
+      #     ssh-keyscan -p ${{ secrets.SSH_PORT }} ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
+
+      # - name: Restart landing
+      #   run: ssh -p ${{ secrets.SSH_PORT }} root@${{ secrets.SERVER_IP }} 'cd ${{ secrets.PROJECT_DIR }} && git pull && python3 manage.py -r landing'
