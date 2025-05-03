@@ -40,7 +40,7 @@ jobs:
           file: docker/xray.Dockerfile
           push: true
           tags: |
-            ${{secrets.REGISTRY_URL}}:${{ github.sha }}
+            ${{secrets.REGISTRY_URL}}/netku/xray:${{ github.sha }}
 
       # - name: Set up SSH
       #   run: |
