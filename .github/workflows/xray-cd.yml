@@ -4,8 +4,8 @@
 name: xray-cd
 on:
   push:
-    # branches:
-    #   - master
+    branches:
+      - master
 
 jobs:
   run-common:
@@ -14,12 +14,12 @@ jobs:
   build-and-push:
     name: Build and push xray image
 
-    # if: |
-    #   contains(fromJson(needs.run-common.outputs.pr_data).labels.*.name, 'xray') &&
-    #   (
-    #     contains(fromJson(needs.run-common.outputs.pr_data).labels.*.name, 'enhancement') ||
-    #     contains(fromJson(needs.run-common.outputs.pr_data).labels.*.name, 'bug')
-    #   )
+    if: |
+      contains(fromJson(needs.run-common.outputs.pr_data).labels.*.name, 'xray') &&
+      (
+        contains(fromJson(needs.run-common.outputs.pr_data).labels.*.name, 'enhancement') ||
+        contains(fromJson(needs.run-common.outputs.pr_data).labels.*.name, 'bug')
+      )
 
     runs-on: ubuntu-latest
     needs: run-common
