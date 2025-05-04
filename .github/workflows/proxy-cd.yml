@@ -4,8 +4,8 @@
 name: proxy-cd
 on:
   push:
-    # branches:
-    #   - master
+    branches:
+      - master
 
 jobs:
   run-common:
