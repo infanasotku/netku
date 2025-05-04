@@ -62,7 +62,7 @@ jobs:
         run: |
           ssh -p ${{ secrets.SSH_PORT }} root@${{ secrets.SERVER_IP }} << 'EOF'
             cd ${{ secrets.PROJECT_DIR }}
-            if grep -q '^PROXY _TAG=' .env; then
+            if grep -q '^PROXY_TAG=' .env; then
               sed -i "s|^PROXY_TAG=.*|PROXY_TAG=${{ github.sha }}|" .env
             else
               echo "PROXY_TAG=${{ github.sha }}" >> .env
