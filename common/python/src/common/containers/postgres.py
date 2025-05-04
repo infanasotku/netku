@@ -12,5 +12,7 @@ class PostgresContainer(BaseContainer):
         connect_args=providers.Dict(
             server_settings=providers.Dict(search_path=BaseContainer.config.psql_schema)
         ),
+        pool_pre_ping=True,
+        pool_recycle=3600,
     )
     async_sessionmaker = providers.Singleton(async_sessionmaker, async_engine)

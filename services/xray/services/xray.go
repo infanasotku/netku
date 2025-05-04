@@ -42,7 +42,13 @@ func (s *XrayService) CreateInfoWithTTL(context context.Context) error {
 }
 
 func (s *XrayService) RefreshTTL(context context.Context) error {
-	return s.cachingClient.RefreshTTL(context)
+	err := s.cachingClient.RefreshTTL(context)
+	if errors.Is(err, contracts.ErrEngineHashNotFound) {
+		return s.CreateInfoWithTTL(context)
+	} else if err != nil {
+		return err
+	}
+	return nil
 }
 
 func (s *XrayService) RestartEngine(context context.Context, uuid string) error {

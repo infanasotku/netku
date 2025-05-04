@@ -36,7 +36,7 @@ func (c *RedisXrayCachingClient) RefreshTTL(context context.Context) error {
 	keys, err := c.client.Exists(context, hashKey).Result()
 
 	if err != nil || keys == 0 {
-		return fmt.Errorf("engine hash not exist: %v", err)
+		return contracts.ErrEngineHashNotFound
 	}
 	_, err = c.client.Expire(context, hashKey, c.infoTTL).Result()
 	if err != nil {

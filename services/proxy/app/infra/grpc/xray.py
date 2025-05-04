@@ -14,10 +14,6 @@ class GRPCXrayClient(BaseGRPCClient, ProxyEngineClient):
         if uuid is None:
             uuid = uuid4()
 
-        healthy = await self.check_health()
-        if not healthy:
-            return
-
         stub = XrayStub(self._channel)
         resp: XrayInfo = await stub.RestartXray(XrayInfo(uuid=str(uuid)))
         return UUID(resp.uuid)
