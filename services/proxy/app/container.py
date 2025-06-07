@@ -162,7 +162,9 @@ async def init_pull(
 
         for info in records:
             await client_pull.registrate(info)
-            logger.info(f"Proxy engine [{info.key}] registrated.")
+            logger.info(
+                f"Proxy engine [{info.key}] registrated{' [running]' if info.running else ''}."
+            )
         yield
     finally:
         logger.info("Stopping proxy clients pull.")
