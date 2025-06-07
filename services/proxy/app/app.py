@@ -1,5 +1,6 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
+from asyncio.exceptions import CancelledError
 
 from common.logging import logger
 from common.config import generate
@@ -62,6 +63,9 @@ def create_lifespan(container: Container):
             await pull_context.__aenter__()
             await bus.run()
             yield
+        except CancelledError:
+            logger = container.logger()
+            logger.warning("Stopping application.")
         finally:
             if bus is not None and bus.running:
                 await bus.stop()
