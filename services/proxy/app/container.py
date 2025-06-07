@@ -18,7 +18,6 @@ from common.events.proxy import ProxyInfoChangedEvent, ProxyTerminatedEvent
 from common.messaging.clients import RabbitMQInClient, RabbitMQOutClient
 from common.caching.redis import RedisInClient, RedisLeaderElector
 
-from app.contracts.clients import ProxyClientManager
 from app.contracts.services import ProxyService
 from app.infra.database.uow import SQLProxyUnitOfWork
 from app.infra.grpc.pull import GRPCProxyClientPull, GetChannelContext
