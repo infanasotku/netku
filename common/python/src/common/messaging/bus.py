@@ -79,11 +79,15 @@ class MessageBus(BaseMessageBus):
         )
         info(f"Sended [{name}] event.")
 
+    @property
+    def running(self):
+        return len(self._tasks) != 0
+
     async def run(self):
         if len(self._clients_in) == 0:
             raise ValueError("Messages-in client is not specified")
 
-        if len(self._tasks) != 0:
+        if self.running:
             raise RuntimeError("Bus already ran")
 
         for client_in in self._clients_in:
@@ -92,7 +96,7 @@ class MessageBus(BaseMessageBus):
         self._logger.info("Bus started.")
 
     async def stop(self):
-        if len(self._tasks) == 0:
+        if not self.running:
             raise ValueError("Bus already stopped.")
 
         self._logger.info("Bus stopping.")

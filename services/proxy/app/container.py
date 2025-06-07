@@ -147,10 +147,11 @@ class Container(containers.DeclarativeContainer):
 async def init_pull(
     container: Container = Provide[Container],
 ) -> AsyncGenerator[None, None]:
+    client_pull = None
+    logger = container.logger()
     try:
-        logger = container.logger()
         proxy_service: ProxyService = await container.proxy_service()
-        client_pull: ProxyClientManager = container.engines_pull()
+        client_pull = container.engines_pull()
 
         logger.info("Pulling engines info.")
         records = await proxy_service.pull()
@@ -165,5 +166,6 @@ async def init_pull(
         yield
     finally:
         logger.info("Stopping proxy clients pull.")
-        await client_pull.clear()
+        if client_pull is not None:
+            await client_pull.clear()
         logger.info("Proxy clients pull stopped.")

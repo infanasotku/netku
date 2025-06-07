@@ -49,8 +49,12 @@ async def init_bus(container: Container) -> MessageBus:
 def create_lifespan(container: Container):
     @asynccontextmanager
     async def lifespan(_):
+        bus = None
+        pull_context = None
         try:
-            await container.init_resources()
+            init = container.init_resources()
+            if init is not None:
+                await init
 
             pull_context = init_pull()
             bus = await init_bus(container)
@@ -59,9 +63,14 @@ def create_lifespan(container: Container):
             await bus.run()
             yield
         finally:
-            await bus.stop()
-            await pull_context.__aexit__(None, None, None)
-            await container.shutdown_resources()
+            if bus is not None and bus.running:
+                await bus.stop()
+            if pull_context is not None:
+                await pull_context.__aexit__(None, None, None)
+
+            shutdown = container.shutdown_resources()
+            if shutdown is not None:
+                await shutdown
 
     return lifespan
 
