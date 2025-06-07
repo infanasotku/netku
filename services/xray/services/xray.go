@@ -38,7 +38,17 @@ func (s *XrayService) Init(cachingClient contracts.XrayCachingClient, config *Xr
 }
 
 func (s *XrayService) CreateInfoWithTTL(context context.Context) error {
-	return s.cachingClient.CreateWithTTL(context, "addr", s.info.GRPCAddr)
+	err := s.cachingClient.CreateWithTTL(context, "addr", s.info.GRPCAddr)
+	if err != nil {
+		return err
+	}
+	if s.info.Running {
+		err = s.cachingClient.SetXrayInfo(context, s.info)
+		if err != nil {
+			return fmt.Errorf("failed to set xray info after creating: %v", err)
+		}
+	}
+	return nil
 }
 
 func (s *XrayService) RefreshTTL(context context.Context) error {
