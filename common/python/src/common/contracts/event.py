@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 import asyncio
-from typing import Callable, Generic, TypeVar, Protocol
+from typing import Callable, Generic, TypeVar, Protocol, Any
 
 from common.schemas.base import BaseSchema
 
@@ -15,13 +15,13 @@ EventDataT = TypeVar("EventDataT", bound=BaseSchema)
 
 
 class EventSender(Protocol):
-    def __call__(self, payload: str, *, name: str): ...
+    def __call__(self, payload: str, *, name: str) -> Any: ...
 
 
 class BaseEvent(ABC, Generic[EventDataT]):
     name: str = "base"
 
-    def register_handler(self, handler: Callable[[EventDataT], None]):
+    def register_handler(self, handler: Callable[[EventDataT], Any]):
         self._handler = handler
 
     def register_dispatcher(self, sender: EventSender):

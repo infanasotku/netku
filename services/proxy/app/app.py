@@ -1,5 +1,6 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
+from asyncio.exceptions import CancelledError
 
 from common.logging import logger
 from common.config import generate
@@ -49,8 +50,12 @@ async def init_bus(container: Container) -> MessageBus:
 def create_lifespan(container: Container):
     @asynccontextmanager
     async def lifespan(_):
+        bus = None
+        pull_context = None
         try:
-            await container.init_resources()
+            init = container.init_resources()
+            if init is not None:
+                await init
 
             pull_context = init_pull()
             bus = await init_bus(container)
@@ -58,10 +63,18 @@ def create_lifespan(container: Container):
             await pull_context.__aenter__()
             await bus.run()
             yield
+        except CancelledError:
+            logger = container.logger()
+            logger.warning("Stopping application.")
         finally:
-            await bus.stop()
-            await pull_context.__aexit__(None, None, None)
-            await container.shutdown_resources()
+            if bus is not None and bus.running:
+                await bus.stop()
+            if pull_context is not None:
+                await pull_context.__aexit__(None, None, None)
+
+            shutdown = container.shutdown_resources()
+            if shutdown is not None:
+                await shutdown
 
     return lifespan
 

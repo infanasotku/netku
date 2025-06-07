@@ -27,6 +27,14 @@ func (c *RedisXrayCachingClient) CreateWithTTL(context context.Context, extraFie
 
 	fields := append(extraFields, "created", created, "event_id", uuid.New().String())
 	_, err := c.client.HSet(context, hashKey, fields...).Result()
+	if err != nil {
+		return fmt.Errorf("xray info not created: %v", err)
+	}
+	_, err = c.client.Expire(context, hashKey, c.infoTTL).Result()
+	if err != nil {
+		return fmt.Errorf("engine hash expiration not set: %v", err)
+	}
+
 	return err
 }
 

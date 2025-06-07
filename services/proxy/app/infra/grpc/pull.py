@@ -1,6 +1,6 @@
 from typing import Protocol, AsyncContextManager
 
-from grpc import Channel
+from grpc.aio import Channel
 
 from common.schemas.proxy import ProxyInfoSchema
 from app.contracts.clients import ProxyEngineClient, ProxyClientManager
@@ -8,7 +8,7 @@ from app.infra.grpc.xray import GRPCXrayClient
 
 
 class GetChannelContext(Protocol):
-    async def __call__(self, addr: str) -> AsyncContextManager[Channel]: ...
+    def __call__(self, addr: str) -> AsyncContextManager[Channel]: ...
 
 
 class GRPCProxyClientPull(ProxyClientManager):
@@ -37,5 +37,5 @@ class GRPCProxyClientPull(ProxyClientManager):
         self._pull.clear()
         self._contexts.clear()
 
-    def get(self, id: str) -> ProxyEngineClient:
-        return self._pull.get(id)
+    def get(self, key: str):
+        return self._pull.get(key)
