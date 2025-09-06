@@ -10,6 +10,7 @@ import (
 	"path"
 	"regexp"
 	"strings"
+	"time"
 
 	"github.com/infanasotku/netku/services/xray/contracts"
 	"github.com/xtls/xray-core/core"
@@ -29,24 +30,21 @@ type XrayService struct {
 	engine        *core.Instance
 	config        *core.Config
 	info          *contracts.XrayInfo
+	location      *time.Location
 }
 
-func (s *XrayService) Init(cachingClient contracts.XrayCachingClient, config *XrayConfig, grpcAddr string) error {
+func (s *XrayService) Init(cachingClient contracts.XrayCachingClient, config *XrayConfig, grpcAddr string, location *time.Location) error {
 	s.cachingClient = cachingClient
 	s.info = &contracts.XrayInfo{Running: false, GRPCAddr: grpcAddr}
+	s.location = location
 	return s.configureXrayEngine(config)
 }
 
 func (s *XrayService) CreateInfoWithTTL(context context.Context) error {
-	err := s.cachingClient.CreateWithTTL(context, "addr", s.info.GRPCAddr)
+	s.info.Created = time.Now().In(s.location).Format(time.RFC3339Nano)
+	err := s.cachingClient.SetXrayInfo(context, s.info)
 	if err != nil {
-		return err
-	}
-	if s.info.Running {
-		err = s.cachingClient.SetXrayInfo(context, s.info)
-		if err != nil {
-			return fmt.Errorf("failed to set xray info after creating: %v", err)
-		}
+		return fmt.Errorf("failed to set xray info: %v", err)
 	}
 	return nil
 }
