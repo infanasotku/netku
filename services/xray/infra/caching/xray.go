@@ -1,41 +1,24 @@
 package caching
 
 import (
-	"context"
-	"fmt"
-	"time"
+    "context"
+    "encoding/json"
+    "fmt"
+    "strconv"
+    "time"
 
-	"github.com/google/uuid"
-	"github.com/infanasotku/netku/services/xray/contracts"
-	"github.com/redis/go-redis/v9"
+    "github.com/infanasotku/netku/services/xray/contracts"
+    "github.com/redis/go-redis/v9"
 )
 
 type RedisXrayCachingClient struct {
 	client   *redis.Client
 	infoTTL  time.Duration
 	engineID string
-	location *time.Location
 }
 
 func getHashKey(uuid string) string {
 	return "xrayEngines:" + uuid
-}
-
-func (c *RedisXrayCachingClient) CreateWithTTL(context context.Context, extraFields ...interface{}) error {
-	hashKey := getHashKey(c.engineID)
-	created := time.Now().In(c.location).Format(time.RFC3339Nano)
-
-	fields := append(extraFields, "created", created, "event_id", uuid.New().String())
-	_, err := c.client.HSet(context, hashKey, fields...).Result()
-	if err != nil {
-		return fmt.Errorf("xray info not created: %v", err)
-	}
-	_, err = c.client.Expire(context, hashKey, c.infoTTL).Result()
-	if err != nil {
-		return fmt.Errorf("engine hash expiration not set: %v", err)
-	}
-
-	return err
 }
 
 func (c *RedisXrayCachingClient) RefreshTTL(context context.Context) error {
@@ -56,17 +39,32 @@ func (c *RedisXrayCachingClient) RefreshTTL(context context.Context) error {
 
 func (c *RedisXrayCachingClient) SetXrayInfo(context context.Context, info *contracts.XrayInfo) error {
 	hashKey := getHashKey(c.engineID)
-	running := "true"
-	if !info.Running {
-		running = "false"
+	running := strconv.FormatBool(info.Running)
+	payload := map[string]any{
+		"running": running,
+		"created": info.Created,
+		"addr":    info.GRPCAddr,
+	}
+	if info.XrayUUID != "" {
+		payload["uuid"] = info.XrayUUID
 	}
 
-	_, err := c.client.HSet(
-		context, hashKey,
-		"uuid", info.XrayUUID,
-		"running", running,
-		"event_id", uuid.New().String(),
-	).Result()
+    // JSON-encode payload for stream; Redis field values cannot be maps
+    payloadJSON, err := json.Marshal(payload)
+    if err != nil {
+        return fmt.Errorf("payload marshal failed: %v", err)
+    }
+
+    _, err = c.client.TxPipelined(context, func(pipe redis.Pipeliner) error {
+        hsetArgs := make([]any, 0, len(payload)*2)
+        for k, v := range payload {
+            hsetArgs = append(hsetArgs, k, v)
+        }
+        pipe.HSet(context, hashKey, hsetArgs...)
+        pipe.XAdd(context, &redis.XAddArgs{Stream: "xray_engines_keyevent_stream", Values: map[string]any{"event": "hset", "key": hashKey, "payload": string(payloadJSON)}})
+        return nil
+    })
+
 	if err != nil {
 		return fmt.Errorf("xray info not set: %v", err)
 	}

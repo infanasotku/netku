@@ -92,8 +92,12 @@ func createXrayService() (*services.XrayService, error) {
 	addr := os.Getenv("REDIS_ADDR")
 	pass := os.Getenv("REDIS_PASS")
 	timezone := os.Getenv("TIMEZONE")
+	loc, err := time.LoadLocation(timezone)
+	if err != nil {
+		return nil, fmt.Errorf("error while loading location: %v", err)
+	}
 
-	redisXrayClient, err := caching.CreateRedisXrayCachingClient(addr, pass, ttl, timezone)
+	redisXrayClient, err := caching.CreateRedisXrayCachingClient(addr, pass, ttl)
 	if err != nil {
 		return nil, fmt.Errorf("error while creating redis xray client: %v", err)
 	}
@@ -109,6 +113,6 @@ func createXrayService() (*services.XrayService, error) {
 	grpcAddr := os.Getenv("EXTERNAL_ADDR")
 
 	xrayService := services.XrayService{}
-	err = xrayService.Init(redisXrayClient, xrayConfig, grpcAddr)
+	err = xrayService.Init(redisXrayClient, xrayConfig, grpcAddr, loc)
 	return &xrayService, err
 }
